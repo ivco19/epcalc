@@ -1,3 +1,25 @@
+Este es un fork del proyecto original [Epidemic Calculator](https://github.com/gabgoh/epcalc)
+de Gabriel Goh. En su primera versión es simplemente una traducción al castellano de la interface web
+para facilitar su uso en Argentina. La idea es jugar con el modelo para enriquecer nuestros análisis de los datos de COVID-19.
+
+Para que funcione simplemente hay que clonar el repo y luego hacer:
+
+```bash
+npm install --no-fund
+```
+ignorar los warnings y luego:
+```bash
+npm run dev
+```
+Luego en un browser ingresar el url: http://localhost:5000/
+
+Puede ser necesario instalar npm, en el caso de archlinux tuve que instalar este [paquete](https://www.archlinux.org/packages/community/any/npm/)
+
+---
+
+A continuacion el README orginal de Dr. Goh:
+
+
 *Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
 
 ---
