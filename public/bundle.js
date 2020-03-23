@@ -26277,7 +26277,7 @@
     	$$invalidate('Time_to_death', Time_to_death     = 32);
     	$$invalidate('logN', logN              = Math.log(44e6));
     	$$invalidate('I0', I0                = 1);
-    	$$invalidate('R0', R0                = 2.5);
+    	$$invalidate('R0', R0                = 5.6);
     	$$invalidate('R0p', R0p                = 1.1);
     	$$invalidate('D_incbation', D_incbation       = 5.2);
     	$$invalidate('D_infectious', D_infectious      = 2.9);
