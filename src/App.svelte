@@ -76,7 +76,7 @@
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 7*12*1e10
+  $: duration          = 80
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -89,6 +89,7 @@
                "CFR":CFR,
                "InterventionTime":InterventionTime,
                "InterventionAmt":InterventionAmt,
+               "duration":duration,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
@@ -106,7 +107,10 @@
       if (t > InterventionTime && t < InterventionTime + duration){
         var beta = (InterventionAmt)*R0/(D_infectious)
       } else if (t > InterventionTime + duration) {
-        var beta = 0.5*R0/(D_infectious)        
+        //Dante: no entiendo por que posterior a la cuarentena el beta Goh
+	//le pone un factor 0.5, revisar...
+        //var beta = 0.5*R0/(D_infectious)        
+        var beta = R0/(D_infectious)        
       } else {
         var beta = R0/(D_infectious)
       }
@@ -298,6 +302,7 @@
       if (!(parsed.CFR === undefined)) {CFR = parseFloat(parsed.CFR)}
       if (!(parsed.InterventionTime === undefined)) {InterventionTime = parseFloat(parsed.InterventionTime)}
       if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
+      if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
       if (!(parsed.P_SEVERE === undefined)) {P_SEVERE = parseFloat(parsed.P_SEVERE)}
     }
@@ -790,9 +795,12 @@
                     cursor:col-resize;
                     height:{height+19}px">
 
+        <!--
         <div style="position:absolute; opacity: 0.5; top:-5px; left:10px; width: 120px">
         <span style="font-size: 13px">{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2) )}</span> ⟶ 
+        <span style="font-size: 13px">Duración {@html math_inline((duration).toFixed(2) )}</span> ⟶ 
         </div>
+	-->
 
         {#if xScaleTime(InterventionTime) >= 100}
           <div style="position:absolute; opacity: 0.5; top:-2px; left:-97px; width: 120px">
@@ -837,15 +845,16 @@
             border-right: 1px dashed black;
             cursor:col-resize;
             height:{height}px">
-            <div style="flex: 0 0 160px; width:200px; position:relative; top:-125px; left: 1px" >
-              <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:150px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
-              <div class="paneltext"  style="height:20px; text-align: right">
-              <div class="paneldesc"> factor de disminución en la tasa de transmisión<br></div>
-              </div>
+            <div style="flex: 0 0 160px; flex-direction:row width:100px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
               <div style="pointer-events: all">
-              <div class="slidertext" on:mousedown={lock_yaxis}>{(InterventionAmt).toFixed(2)}</div>
-              <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
-              </div>
+                <!--<div class="slidertext" on:mousedown={lock_yaxis}>Disminución: {100*(InterventionAmt).toFixed(2)}%-->
+                <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2))}
+                <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
+	        </div>
+                <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)}días</div>
+                <input class="range" type=range bind:value={duration} min=0 max=60 step=1 on:mousedown={lock_yaxis}>
+                </div>
               </div>
             </div>
           </div>
