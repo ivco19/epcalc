@@ -15,6 +15,9 @@ Luego en un browser ingresar el url: http://localhost:5000/
 
 Puede ser necesario instalar npm, en el caso de archlinux tuve que instalar este [paquete](https://www.archlinux.org/packages/community/any/npm/)
 
+NEW: nuevos parámetros para definir la duración de la cuarentena y el ritmo reproductivo posterior a
+esta.
+
 ---
 
 A continuacion el README orginal de Dr. Goh:
