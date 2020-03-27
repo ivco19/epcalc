@@ -1,6 +1,7 @@
 Este es un fork del proyecto original [Epidemic Calculator](https://github.com/gabgoh/epcalc)
 de Gabriel Goh. En su primera versión es simplemente una traducción al castellano de la interface web
-para facilitar su uso en Argentina. La idea es jugar con el modelo para enriquecer nuestros análisis de los datos de COVID-19.
+para facilitar su uso en Argentina (ver modificaciones mas abajo). La idea es jugar con el modelo 
+para enriquecer nuestros análisis de los datos de COVID-19.
 
 Para que funcione simplemente hay que clonar el repo y luego hacer:
 
@@ -15,8 +16,23 @@ Luego en un browser ingresar el url: http://localhost:5000/
 
 Puede ser necesario instalar npm, en el caso de archlinux tuve que instalar este [paquete](https://www.archlinux.org/packages/community/any/npm/)
 
-NEW: nuevos parámetros para definir la duración de la cuarentena y el ritmo reproductivo posterior a
-esta.
+# Nuevos features:
+Se añadieron nuevos parámetros para:
+- Definir la duración de la cuarentena 
+- Controlar el ritmo reproductivo a la salida de la cuarentena.
+- También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
+días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
+en el número de casos confirmados.
+
+- Se añadió con circulos verdes los casos confirmados de COVID-19 en Argentina, para permitir
+visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
+
+- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
+ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
+Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
+un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
+ya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer
+a más personas. 
 
 ---
 

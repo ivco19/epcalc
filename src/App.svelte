@@ -61,8 +61,9 @@
   $: Time_to_death     = 32
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 1
-  $: R0                = 5.6
+  $: I0                = 9
+  $: E0                = 32
+  $: R0                = 3.422
   $: R0p                = 1.1
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
@@ -71,17 +72,19 @@
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
   $: CFR               = 0.02  
-  $: InterventionTime  = 17  
+  $: InterventionTime  = 13  
+  $: retardo  = 4  
   $: InterventionAmt   = 1/3
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 11
+  $: duration          = 30
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
                "I0":I0,
+               "E0":E0,
                "R0":R0,
                "R0p":R0p,
                "D_incbation":D_incbation,
@@ -90,12 +93,13 @@
                "D_recovery_severe":D_recovery_severe,
                "CFR":CFR,
                "InterventionTime":InterventionTime,
+               "retardo":retardo,
                "InterventionAmt":InterventionAmt,
                "duration":duration,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0, R0,R0p, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration) {
+  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration) {
 
     var interpolation_steps = 40
     var steps = 110*interpolation_steps
@@ -106,11 +110,9 @@
     function f(t, x){
 
       // SEIR ODE
-      if (t > InterventionTime && t < InterventionTime + duration){
+      if (t > InterventionTime+retardo && t < InterventionTime+retardo + duration){
         var beta = (InterventionAmt)*R0/(D_infectious)
-      } else if (t > InterventionTime + duration) {
-        //Dante: no entiendo por que posterior a la cuarentena el beta Goh
-	//le pone un factor 0.5, revisar...
+      } else if (t > InterventionTime+retardo + duration) {
         //var beta = 0.5*R0/(D_infectious)        
         var beta = R0p/(D_infectious)        
       } else {
@@ -149,7 +151,7 @@
       return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
     }
 
-    var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
+    var v = [1, E0/(N-E0), I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
     var t = 0
 
     var P  = []
@@ -179,7 +181,7 @@
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0, R0,R0p, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration)
+  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -296,6 +298,7 @@
       parsed = queryString.parse(window.location.search)
       if (!(parsed.logN === undefined)) {logN = parsed.logN}
       if (!(parsed.I0 === undefined)) {I0 = parseFloat(parsed.I0)}
+      if (!(parsed.E0 === undefined)) {E0 = parseFloat(parsed.E0)}
       if (!(parsed.R0 === undefined)) {R0 = parseFloat(parsed.R0)}
       if (!(parsed.R0p === undefined)) {R0p = parseFloat(parsed.R0p)}
       if (!(parsed.D_incbation === undefined)) {D_incbation = parseFloat(parsed.D_incbation)}
@@ -304,6 +307,7 @@
       if (!(parsed.D_recovery_severe === undefined)) {D_recovery_severe = parseFloat(parsed.D_recovery_severe)}
       if (!(parsed.CFR === undefined)) {CFR = parseFloat(parsed.CFR)}
       if (!(parsed.InterventionTime === undefined)) {InterventionTime = parseFloat(parsed.InterventionTime)}
+      if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
       if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
@@ -722,6 +726,7 @@
 
       </div>
 
+
       <div style="position:absolute; left:0px; top:{legendheight*4 + 120+2}px; width: 180px; height: 100px">
         <Arrow height="40" arrowhead="" dasharray="3 2"/>
 
@@ -738,6 +743,17 @@
         </div>
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 10px; position:relative;">Muertes.</div>
       </div>
+
+     <!-- Data points -->
+      <div style="position:absolute; left:0px; top:{legendheight*4+180}px; width: 180px; height: 100px">
+      <svg>
+	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
+        <div class="legend" style="position:absolute;">
+          <div class="legendtitle">Casos Argentina</div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 
@@ -844,18 +860,18 @@
                     height:{height+69}px">
 
         {#if xScaleTime(InterventionTime+duration) >= 100}
-          <div style="position:absolute; opacity: 0.5; top:-20px; right:-125px; width: 120px">
+          <div style="position:absolute; opacity: 0.5; top:-25px; right:-125px; width: 120px">
 	  <span style="font-size: 13px; color:#FF0000">{@html math_inline("\\mathcal{R}_0=" + (R0p).toFixed(2) )}→ </span>
           </div>      
         {/if}
 
-	  <div style="font-size: 13px; color:#FF0000; position:absolute; top:80px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
+	  <div style="font-size: 13px; color:#FF0000; position:absolute; top:105px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
 	   </div>
 
 
-        <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
+       <!-- <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
 
-        </div>
+	</div> -->
 
       </div>
 
@@ -879,8 +895,12 @@
                 <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2))}
                 <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
 	        </div>
-                <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)} días</div>
+                <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)} días
                 <input class="range" type=range bind:value={duration} min=0 max=60 step=1 on:mousedown={lock_yaxis}>
+                </div>
+                <div class="slidertext" on:mousedown={lock_yaxis}>Retardo:{(retardo).toFixed(0)} días
+                <input class="range" type=range bind:value={retardo} min=0 max=10 step=1 on:mousedown={lock_yaxis}>
+                </div>
                 </div>
               </div>
             </div>
@@ -951,10 +971,10 @@
             {/each}
       </div>
     
-    <div style="opacity:{xScaleTime(InterventionTime) >= 192? 1.0 : 0.2}">
+     <div style="opacity:{xScaleTime(InterventionTime) >= 192? 1.0 : 0.2}">  -->
       <div class="tick" style="color: #AAA; position:absolute; pointer-events:all; left:10px; top: 10px">
         <Checkbox color="#CCC" bind:checked={log}/><div style="position: relative; top: 4px; left:20px">escala lineal</div>
-      </div>
+     </div>
     </div>
 
    </div>
@@ -977,7 +997,10 @@
       <input class="range" style="margin-bottom: 8px"type=range bind:value={logN} min={5} max=25 step=0.01>
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales.<br></div>
       <div class="slidertext">{I0}</div>
-      <input class="range" type=range bind:value={I0} min={1} max=10000 step=1>
+      <input class="range" type=range bind:value={I0} min={1} max=100 step=1>
+      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales.<br></div>
+      <div class="slidertext">{E0}</div>
+      <input class="range" type=range bind:value={E0} min={1} max=100 step=1>
     </div>
 
     <div class="column">
@@ -1059,6 +1082,29 @@ propagación en una dada población: <span style="color:#777">{@html ode_eqn}</s
 dinámica de transmisión, este modelo permite cargar mediante parámetros de entrada información
 suplementaria como la tasa de mortalidad y la carga de atención médica.
 </p>
+<p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos parámetros para:</p>
+<p class ="center">- Definir la duración de la cuarentena 
+</p>
+<p class ="center">- Controlar el ritmo reproductivo a la salida de la cuarentena.
+</p>
+<p class ="center">- También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
+días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
+en el número de casos confirmados.
+</p>
+
+<p class ="center">- Se añadió con circulos verdes los casos confirmados de COVID-19 en Argentina, para permitir
+visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
+</p>
+
+<p class ="center">- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
+ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
+Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
+un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
+ya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer
+a más personas. 
+</p>
+
+
 
 <p class = "center">
 Esta calculadora puede utilizarse para medir el riesgo de exposición a la enfermedad para un día determinado de la epidemia:

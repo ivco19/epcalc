@@ -4,6 +4,8 @@
   import { selectAll } from 'd3-selection'
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
+  import pnts from './data.js';
+
 
   const dispatch = createEventDispatcher();
 
@@ -40,11 +42,13 @@
   export let InterventionTime;
   export let colors; 
   export let log = false;
+  export let points=pnts.a;
 
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
   let width  = 750;
   let height = 420;
+
 
   $: xScale = scaleLinear()
     .domain([0, y.length])
@@ -203,7 +207,14 @@
       {/each}
     </g>
 
+    <g class="points">
+      {#each points as point}
+    	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" />
+      {/each}
+    </g>
+
     <g class='bars'>
+
       {#each range(y.length) as i}
         <rect
           on:mouseover={() => showTip(i)}
@@ -282,7 +293,7 @@
   </svg> 
 
   <div style="position: absolute;width:{width+15}px; height: {height}px; position: absolute; top:0px; left:0px; pointer-events: none">
-    
+   
     {#if active >= 0}
       <div style="position:absolute; 
                   pointer-events: none;

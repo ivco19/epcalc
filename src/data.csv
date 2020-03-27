@@ -1,0 +1,110 @@
+Provicia \ día,03/03,04/03,05/03,06/03,07/03,08/03,09/03,10/03,11/03,12/03,13/03,14/03,15/03,16/03,17/03,18/03,19/03,20/03,21/03,22/03,23/3,24/3,25/3,26/03
+CABA Casos Confirmados ,1,1,1,5,6,8,9,10,11,14,16,23,29,34,38,48,56,65,94,106,117,147,166,196
+CABA Casos Recuperados ,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,25,25,38,38,38,53
+CABA Casos Muertos ,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,4
+CABA Casos Activos,1,1,1,5,5,7,8,9,10,13,12,19,25,30,34,43,51,60,67,79,77,107,125,139
+Bs As Casos Confirmados ,,,1,2,2,3,3,4,5,9,10,11,12,13,15,20,35,44,59,67,72,102,132,159
+Bs As  Casos Recuperados ,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,15
+Bs As  Casos Muertos ,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,4
+Bs As  Casos Activos,,,1,2,2,3,3,4,5,9,10,11,12,13,15,20,35,44,57,65,70,99,129,140
+Córdoba Casos Confirmados ,,,,1,1,1,1,1,1,2,2,3,3,3,5,6,9,14,18,26,28,35,50,53
+Córdoba Casos Recuperados ,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+Córdoba Casos Muertos ,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Córdoba Casos Activos,,,,1,1,1,1,1,1,2,2,3,3,3,5,6,9,14,18,26,28,35,50,52
+San Luis Casos Confirmados ,,,,,,,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,6
+San Luis Casos Recuperados ,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+San Luis Casos Muertos ,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+San Luis Casos Activos,,,,,,,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,6
+Chaco Casos Confirmados ,,,,,,,2,2,2,4,4,5,7,10,11,12,14,15,20,27,31,40,52,55
+Chaco Casos Recuperados ,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Chaco Casos Muertos ,,,,,,,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,2,3,4
+Chaco Casos Activos,,,,,,,2,2,2,4,3,4,6,9,10,11,13,14,19,26,30,38,49,51
+Río Negro Casos Confirmados ,,,,,,,1,1,1,1,1,1,1,1,2,2,3,3,4,4,4,4,4,4
+Río Negro Casos Recuperados ,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1
+Río Negro Casos Muertos ,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Río Negro Casos Activos,,,,,,,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3
+Santa Fe Casos Confirmados ,,,,,,,,,,,,1,1,1,1,1,2,2,4,4,17,20,42,54
+Santa Fe  Casos Recuperados ,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0
+Santa Fe  Casos Muertos ,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0
+Santa Fe Casos Activos,,,,,,,,,,,,1,1,1,1,1,2,2,4,4,17,20,42,54
+Tierra del F Casos Confirmados ,,,,,,,,,,,,,2,2,2,2,2,3,6,6,6,10,11,14
+Tierra del F Casos Recuperados ,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0
+Tierra del F Casos Muertos ,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0
+Tierra del F Casos Activos,,,,,,,,,,,,,2,2,2,2,2,3,6,6,6,10,11,14
+Jujuy Casos Confirmados ,,,,,,,,,,,,,,,1,1,1,1,1,1,1,1,1,3
+Jujuy Casos Recuperados ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Jujuy Casos Muertos ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Jujuy Casos Activos,,,,,,,,,,,,,,,1,1,1,1,1,1,1,1,1,3
+Salta Casos Confirmados ,,,,,,,,,,,,,,,1,1,1,1,1,1,1,1,1,1
+Salta Casos Recuperados ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Salta Casos Muertos ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Salta Casos Activos,,,,,,,,,,,,,,,1,1,1,1,1,1,1,1,1,1
+Entre Ríos Casos Confirmados ,,,,,,,,,,,,,,,1,2,2,3,3,3,3,3,6,6
+Entre Ríos Casos Recuperados ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Entre Ríos Casos Muertos ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Entre Ríos Casos Activos,,,,,,,,,,,,,,,1,2,2,3,3,3,3,3,6,6
+Corrientes Casos Confirmados ,,,,,,,,,,,,,,,,,,1,3,3,3,3,3,3
+Corrientes Casos Recuperados ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Corrientes Casos Muertos ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Corrientes Casos Activos,,,,,,,,,,,,,,,,,,1,3,3,3,3,3,3
+Santiago Est Casos Confirmados ,,,,,,,,,,,,,,,,,,1,1,1,1,1,1,1
+Santiago Est Casos Recuperados ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Santiago Est Casos Muertos ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Santiago Est Casos Activos,,,,,,,,,,,,,,,,,,1,1,1,1,1,1,1
+Neuquen Casos Confirmados ,,,,,,,,,,,,,,,,,,2,2,2,2,3,4,7
+Neuquen Casos Recuperados ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Neuquen Casos Muertos ,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+Neuquen Casos Activos,,,,,,,,,,,,,,,,,,2,2,2,2,3,4,7
+Mendoza Casos Confirmados ,,,,,,,,,,,,,,,,,,,5,5,5,5,6,7
+Mendoza Casos Recuperados ,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0
+Mendoza Casos Muertos ,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0
+Mendoza Casos Activos,,,,,,,,,,,,,,,,,,,5,5,5,5,6,7
+Tucumán Casos Confirmados ,,,,,,,,,,,,,,,,,1,1,2,7,7,7,9,9
+Tucumán Casos Recuperados ,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0
+Tucumán Casos Muertos ,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0
+Tucumán Casos Activos,,,,,,,,,,,,,,,,,1,1,2,7,7,7,9,9
+Santa Cruz Casos Confirmados ,,,,,,,,,,,,,,,1,1,1,1,1,1,1,2,7,9
+Santa Cruz Casos Recuperados ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Santa Cruz Casos Muertos ,,,,,,,,,,,,,,,0,0,0,0,0,0,0,0,0,0
+Santa Cruz Casos Activos,,,,,,,,,,,,,,,1,1,1,1,1,1,1,2,7,9
+Chubut Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,,,
+Chubut Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,,,
+Chubut Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,,,
+Chubut Casos Activos,,,,,,,,,,,,,,,,,,,,,,,,
+Misiones Casos Confirmados ,,,,,,,,,,,,,,,,,,,,1,1,1,1,1
+Misiones Casos Recuperados ,,,,,,,,,,,,,,,,,,,,0,0,0,0,0
+Misiones Casos Muertos ,,,,,,,,,,,,,,,,,,,,0,0,0,0,0
+Misiones Casos Activos,,,,,,,,,,,,,,,,,,,,1,1,1,1,1
+Formosa Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,,,
+Formosa Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,,,
+Formosa Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,,,
+Formosa Casos Activos,,,,,,,,,,,,,,,,,,,,,,,,
+Catamarca Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,,,
+Catamarca Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,,,
+Catamarca Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,,,
+Catamarca Casos Activos,,,,,,,,,,,,,,,,,,,,,,,,
+La Rioja Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,,,
+La Rioja Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,,,
+La Rioja Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,,,
+La Rioja Casos Activos,,,,,,,,,,,,,,,,,,,,,,,,
+San Juan Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,,,
+San Juan Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,,,
+San Juan Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,,,
+San Juan Casos Activos,,,,,,,,,,,,,,,,,,,,,,,,
+La Pampa Casos Confirmados ,,,,,,,,,,,,,,,,,,,,,,1,1,1
+La Pampa Casos Recuperados ,,,,,,,,,,,,,,,,,,,,,,0,0,0
+La Pampa Casos Muertos ,,,,,,,,,,,,,,,,,,,,,,0,0,0
+La Pampa Casos Activos,,,,,,,,,,,,,,,,,,,,,,1,1,1
+Total de Casos Confirmados ,1,1,2,8,9,12,17,19,21,31,34,45,56,65,79,97,128,158,225,266,301,387,502,589
+Total de casos ,1,1,2,8,9,12,17,19,21,31,34,45,56,65,79,97,128,158,225,266,301,387,502,589
+tasa de crecimiento,,0,1000,3000,125,333,417,118,105,476,97,324,244,161,215,228,320,234,424,182,132,286,297,173
+Medidas de mitigación ,,,,Licencia para viajeros zona de riesgo+just inasist Ministerio Educa,,,,,Protocolo vuellos de arribo nuevo,Cierre espectaculos masivos y museos,Licencias Sector Pub. Crisis transporte. Aumento licencias trabajadores.,Readecuación calendario educativo y clases virtuales universi,medidas preventivas sector hotelero+ cierre parques nacionales. Clases virtuales en escuelas,trabajo remoto y cierre de fronteras,Adecuación transporte y suspensión partidos +134 linea de aviso incumpim cuarentena,Construccción hospitales emergencia ,,cuarentena total entra en vigencia desde 00:00hs,,,,,,extensión de la cuarentena total 
+Detalle de medidas gubernamentales ,,https://www.argentina.gob.ar/coronavirus/medidas-gobierno,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+https://www.argentina.gob.ar/coronavirus/informe-diario,Fuente oficial ,,,,,,,,,,,,,,,,,,,,,,,
+tasa para el periodo ,265,para 20 días,,,,,,,,,,,,,,,,,,,,,,
+tasa para el periodo ,322,tasa de crecim por día,,,,,,,,,,,,,,,,,,,,,,
+Fuente: Informe oficial,,,,,,,,,,,,,,,,,,,,,,,,
+https://www.argentina.gob.ar/coronavirus/informe-diario,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Las fuentes dicen que la incubación esta entre 4 y 8 días,,,,,https://gabgoh.github.io/COVID/index.html,,,,,,,,,,,,,,,,,,,
