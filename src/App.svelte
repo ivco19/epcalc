@@ -62,16 +62,18 @@
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
   $: I0                = 9
-  $: E0                = 32
-  $: R0                = 3.422
-  $: R0p                = 1.1
+//  $: E0                = 12 //ByV
+  $: E0                = 24 //RQ
+//  $: R0                = 3.39 //ByV
+  $: R0                = 3.5844 //RQ
+  $: R0p                = 3.39
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
   $: D_recovery_mild   = (14 - 2.9)  
   $: D_recovery_severe = (31.5 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
-  $: CFR               = 0.02  
+  $: CFR               = 0.021  
   $: InterventionTime  = 13  
   $: retardo  = 4  
   $: InterventionAmt   = 1/3
@@ -312,6 +314,8 @@
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
       if (!(parsed.P_SEVERE === undefined)) {P_SEVERE = parseFloat(parsed.P_SEVERE)}
+      if (!(parsed.Time_to_death === undefined)) {Time_to_death = parseFloat(parsed.Time_to_death)}
+
     }
   });
 
@@ -348,7 +352,8 @@
   $: active_ = active >= 0 ? active : Iters.length - 1
 
   var Tinc_s = "\\color{#CCC}{T^{-1}_{\\text{inc}}} "
-  var Tinf_s = "\\color{#CCC}{T^{-1}_{\\text{inf}}}"
+  //var Tinf_s = "\\color{#CCC}{T^{-1}_{\\text{inf}}}"
+  var Tinf_s = "\\color{#CCC}{T_{\\text{inf}}}"
   var Rt_s   = "\\color{#CCC}{\\frac{\\mathcal{R}_{t}}{T_{\\text{inf}}}} "
   $: ode_eqn = katex.renderToString("\\frac{d S}{d t}=-" +Rt_s +"\\cdot IS,\\qquad \\frac{d E}{d t}=" +Rt_s +"\\cdot IS- " + Tinc_s + " E,\\qquad \\frac{d I}{d t}=" + Tinc_s + "E-" + Tinf_s+ "I, \\qquad \\frac{d R}{d t}=" + Tinf_s+ "I", {
     throwOnError: false,
@@ -602,7 +607,7 @@
 
 </style>
 
-<h2>Calculadora del modelo epidemiológico SEIR</h2>
+<h2>Calculadora Epidémica SEIR</h2>
 
 <div class="chart" style="display: flex; max-width: 1120px">
 
@@ -749,9 +754,18 @@
       <svg>
 	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Casos Argentina</div>
+          <div class="legendtitle">Confirmados Arg.</div>
         </div>
       </div>
+      <div style="position:absolute; left:0px; top:{legendheight*4+200}px; width: 180px; height: 100px">
+      <svg>
+	<circle cx=7px cy=10px r='4' fill="{colors[1]}"/></svg>
+        <div class="legend" style="position:absolute;">
+          <div class="legendtitle">Desesos Arg.</div>
+        </div>
+      </div>
+
+
 
 
     </div>

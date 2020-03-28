@@ -42,7 +42,8 @@
   export let InterventionTime;
   export let colors; 
   export let log = false;
-  export let points=pnts.a;
+  export let confirmados=pnts.i;
+  export let muertos=pnts.d;
 
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
@@ -208,10 +209,17 @@
     </g>
 
     <g class="points">
-      {#each points as point}
+      {#each confirmados as point}
     	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" />
       {/each}
     </g>
+
+   <g class="points">
+      {#each muertos as point}
+    	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" />
+      {/each}
+    </g>
+
 
     <g class='bars'>
 
