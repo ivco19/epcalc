@@ -61,12 +61,10 @@
   $: Time_to_death     = 32
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 9
-//  $: E0                = 12 //ByV
-  $: E0                = 24 //RQ
-//  $: R0                = 3.39 //ByV
-  $: R0                = 3.5844 //RQ
-  $: R0p                = 3.39
+  $: I0                = 1
+  $: E0                = 17 
+  $: R0                = 3.422
+  $: R0p               = 3.422
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
   $: D_recovery_mild   = (14 - 2.9)  
@@ -74,7 +72,7 @@
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
   $: CFR               = 0.021  
-  $: InterventionTime  = 13  
+  $: InterventionTime  = 18  
   $: retardo  = 4  
   $: InterventionAmt   = 1/3
   $: Time              = 220

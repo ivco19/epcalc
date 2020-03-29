@@ -1,57 +1,11 @@
- system("rm pub?output=csv")
- system("wget https://docs.google.com/spreadsheets/d/e/2PACX-1vTfinng5SDBH9RSJMHJk28dUlW3VVSuvqaBSGzU-fYRTVLCzOkw1MnY17L2tWsSOppHB96fr21Ykbyv/pub?output=csv")
- system("rm data.csv")
- system("mv pub?output=csv data.csv")
+ ## carga de datos desde ivco19 libs
+ ## https://github.com/ivco19/libs
+ ## DOI: 10.13140/RG.2.2.22519.78246
+ source("load_data.R")
+ dd=load_data()
+ ta=dd$activos
 
- dm = read.csv2("data.csv",stringsAsFactors=FALSE)
-
- tm=0
- for(i in 1:96)
- {
-    line=unlist(strsplit(dm[[1]][i],","))
-    flag=sum(unlist(strsplit(line[[1]]," "))=="Muertos")
-    if(flag==1)
-    {
-      dline=as.integer(line[(2:26)])
-      dline[is.na(dline)] <- 0
-      tm=tm+dline
-    }
- }
-
- tc=0
- for(i in 1:96)
- {
-    line=unlist(strsplit(dm[[1]][i],","))
-    flag=sum(unlist(strsplit(line[[1]]," "))=="Confirmados")
-    if(flag==1)
-    {
-      dline=as.integer(line[(2:26)])
-      dline[is.na(dline)] <- 0
-      tc=tc+dline
-    }
- }
-
- tr=0
- for(i in 1:96)
- {
-    line=unlist(strsplit(dm[[1]][i],","))
-    flag=sum(unlist(strsplit(line[[1]]," "))=="Recuperados")
-    if(flag==1)
-    {
-      dline=as.integer(line[(2:26)])
-      dline[is.na(dline)] <- 0
-      tr=tr+dline
-    }
- }
-
- plot(tc,log="y")
- lines(tm)
- lines(tr,col="red")
-
- dd=data.frame(d=tm,c=tc,r=tr)
- write.table(dd,file="minimal_data.dat")
-
- dat=tc[5:length(tc)]
+ dat=ta[1:length(ta)]
  outa="export default {	i: ["
  ll=length(dat)
  for(i in 1:(ll-1))
@@ -75,7 +29,8 @@
  outa=c(outa,line)
  outa=c(outa,"],")
 
- dat=tm[5:length(tm)]
+ tm=dd$muertos
+ dat=tm[1:length(tm)]
  h=" d: ["
  outa=c(outa,h)
  ll=length(dat)
@@ -100,7 +55,8 @@
  outa=c(outa,line)
  outa=c(outa,"],")
 
- dat=tr[5:length(tr)]
+ tr=dd$recuperados
+ dat=tr[1:length(tr)]
  h=" r: ["
  outa=c(outa,h)
  ll=length(dat)

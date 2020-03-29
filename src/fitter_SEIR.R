@@ -57,7 +57,7 @@ library(minpack.lm)
  
  #vamos a fitear beta y de ahí sacar r0
  W = 4e7        # susceptible hosts
- X = 9           # infectious hosts
+ X = 1           # infectious hosts
  Y = 0           # recovered hosts
  Z = 12           # exposed hosts
  N = W + X + Y + Z
@@ -70,41 +70,48 @@ library(minpack.lm)
 
  d<-read.table("minimal_data.dat")
  # infectious hosts over time
- dias=length(d$c)
- betass=seq(0.3,5,by=0.01)
- zetass=seq(10,300,by=1)
+ dias=length(d$activos)
+ betass=seq(0.8,2.0,by=0.01)
+ zetass=seq(0,100,by=1)
 
  min=1e60
  bmin=1.17 #valor de Vane
  #R0 2.38 valor que paso pancho
  #bmin=1.236 #valor de rodrigo
  #bmin=2.38*gamma_value #2.38 valor que paso pancho
+
+ #rango donde ajustar el modelo
+ #fitpnts=5:(dias)
+ fitpnts=5:24
  zmin=-1.0
  for(zeta in zetass)
  {
-        #vamos a fitear beta y de ahí sacar r0
-        W = 4e7        # susceptible hosts
-        X = 9           # infectious hosts
-        Y = 0           # recovered hosts
-        Z = zeta        # exposed hosts
-        N = W + X + Y + Z
-        initial_values = c (S = W/N, E = Z/N, I = X/N, R = Y/N)
-      
-        parameter_list = c (beta = bmin, gamma = gamma_value, delta = delta_value)
-        output = lsoda (initial_values, timepoints, seir_model, parameter_list)
-     	ivec=output[,"I"]
-     	ivec=ivec[1:(dias-4)]*N
-     	difer=sqrt(sum((d$c[5:dias]-ivec)*(d$c[5:dias]-ivec)))
-     	if(difer<min)
-     	{
-     	        min=difer
-     	        zmin=zeta
-     	}
+     for(b in betass)
+     {
+            #vamos a fitear beta y de ahí sacar r0
+            W = 4e7        # susceptible hosts
+            X = 1           # infectious hosts
+            Y = 0           # recovered hosts
+            Z = zeta        # exposed hosts
+            N = W + X + Y + Z
+            initial_values = c (S = W/N, E = Z/N, I = X/N, R = Y/N)
+          
+            parameter_list = c (beta = b, gamma = gamma_value, delta = delta_value)
+            output = lsoda (initial_values, timepoints, seir_model, parameter_list)
+            ivec=((output[,"I"])[fitpnts])*N
+            difer=sqrt(sum((d$activos[fitpnts]-ivec)*(d$activos[fitpnts]-ivec)))
+            if(difer<min)
+            {
+                min=difer
+                zmin=zeta
+                bmin=b
+            }
+     }
  }
 
  #vamos a fitear beta y de ahí sacar r0
  W = 4e7        # susceptible hosts
- X = 9           # infectious hosts
+ X = 1           # infectious hosts
  Y = 0           # recovered hosts
  Z = zmin        # exposed hosts
  N = W + X + Y + Z
@@ -112,21 +119,24 @@ library(minpack.lm)
  Ro = bmin / gamma_value
  parameter_list = c (beta = bmin, gamma = gamma_value, delta = delta_value)
  output = lsoda (initial_values, timepoints, seir_model, parameter_list)
- ivec=output[,"I"]
  print(c("R0 ",as.character(Ro)))
  print(c("bmin ",as.character(bmin)))
  print(c("zmin ",as.character(zmin)))
- dat=d$c[5:dias]
- mod=ivec[1:(dias-4)]*N
+ ivec=output[,"I"]
+ modI=ivec[1:dias]*N
 
  l1=paste0("R0 ",as.character(Ro))
  l2=paste0("beta ",as.character(bmin))
  l3=paste0("N de Expuestos inicial ",as.character(zmin))
  l4=paste0("Periodo infeccioso ",as.character(infectious_period))
  pdf("fit.pdf")
- plot(1:length(d$c),d$c,log="y",ylim=c(1,max(c(mod,dat))),xlab="Días",ylab="N Casos Confirmados")
- lines(5:length(d$c),mod[mod>0],col="red")
+ plot(1:length(d$activos),d$activos,log="y",ylim=c(1,max(c(modI,d$activos))),xlab="Días",ylab="Casos Activos")
+ lines(1:length(d$activos[modI>0]),modI[modI>0],col="red")
  legend("bottomright",c(l1,l2,l3,l4))
+
+ plot(1:length(d$activos),d$activos,ylim=c(1,max(c(modI,d$activos))),xlab="Días",ylab="Casos Activos")
+ lines(1:length(d$activos[modI>0]),modI[modI>0],col="red")
+ legend("topleft",c(l1,l2,l3,l4))
  dev.off()
 
  #ivec=output[,"R"]
