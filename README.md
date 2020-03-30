@@ -14,7 +14,13 @@ npm run dev
 ```
 Luego en un browser ingresar el url: http://localhost:5000/
 
-Puede ser necesario instalar npm, en el caso de archlinux tuve que instalar este [paquete](https://www.archlinux.org/packages/community/any/npm/)
+Puede ser necesario instalar *npm*, Para instalarlo segun tu distro usar 
+
+- **Arch**: https://www.archlinux.org/packages/community/any/npm/
+- **Ubuntu**
+  ```bash
+  $ sudo apt install npm
+  ```
 
 # Nuevos features:
 Se añadieron nuevos parámetros para:
