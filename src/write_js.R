@@ -5,8 +5,8 @@
  dd=load_data()
  ta=dd$activos
 
- dat=ta[1:length(ta)]
- outa="export default {	i: ["
+ dat=ta
+ outa="export default { i: ["
  ll=length(dat)
  for(i in 1:(ll-1))
  {
@@ -20,7 +20,7 @@
      outa=c(outa,line)
  }
  hx="{ x: "
- line=paste0(hx,as.character(ll))
+ line=paste0(hx,as.character(ll-1))
  hy=", y: "
  line=paste0(line,hy)
  line=paste0(line,as.character(dat[ll]))
@@ -30,7 +30,7 @@
  outa=c(outa,"],")
 
  tm=dd$muertos
- dat=tm[1:length(tm)]
+ dat=tm
  h=" d: ["
  outa=c(outa,h)
  ll=length(dat)
@@ -46,7 +46,7 @@
      outa=c(outa,line)
  }
  hx="{ x: "
- line=paste0(hx,as.character(ll))
+ line=paste0(hx,as.character(ll-1))
  hy=", y: "
  line=paste0(line,hy)
  line=paste0(line,as.character(dat[ll]))
@@ -56,7 +56,7 @@
  outa=c(outa,"],")
 
  tr=dd$recuperados
- dat=tr[1:length(tr)]
+ dat=tr
  h=" r: ["
  outa=c(outa,h)
  ll=length(dat)
@@ -72,7 +72,7 @@
      outa=c(outa,line)
  }
  hx="{ x: "
- line=paste0(hx,as.character(ll))
+ line=paste0(hx,as.character(ll-1))
  hy=", y: "
  line=paste0(line,hy)
  line=paste0(line,as.character(dat[ll]))

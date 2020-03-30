@@ -9,13 +9,11 @@ load_data <- function()
 	#de casos confirmados, recuperados, activos y muertos por dia. En la salida 
 	#la función devuelve un data.frame con las series temporales de estos totales.
  
-        #borrado de posible version anterior
-	system("rm pub?output=csv")
- 
 	#donwload
 	system("wget https://docs.google.com/spreadsheets/d/e/2PACX-1vTfinng5SDBH9RSJMHJk28dUlW3VVSuvqaBSGzU-fYRTVLCzOkw1MnY17L2tWsSOppHB96fr21Ykbyv/pub?output=csv")
-        #renombrado a data.csv
+        #borrado de posible version anterior
 	system("rm data.csv")
+        #renombrado a data.csv
 	system("mv pub?output=csv data.csv")
 
 	#numero de filas (24 (provincias)* 4 (muertos, confirmados, recuperados y activos)

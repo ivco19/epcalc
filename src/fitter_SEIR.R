@@ -1,70 +1,112 @@
 library(minpack.lm)
  library (deSolve) 
- seir_model = function (current_timepoint, state_values, parameters)
+ seir_model = function (t, state_values, parameters)
  {
  
    # create state variables (local variables)
  
-   S = state_values [1]        # susceptibles
- 
-   E = state_values [2]        # exposed
- 
-   I = state_values [3]        # infectious
- 
-   R = state_values [4]        # recovered
- 
-   
+   S        = state_values[1]   # susceptibles
+   E        = state_values[2]   # exposed
+   I        = state_values[3]   # infectious
+   Mild     = state_values[4]   # Recovering (Mild)     
+   Severe   = state_values[5]   # Recovering (Severe at home)
+   Severe_H = state_values[6]   # Recovering (Severe in hospital)
+   Fatal    = state_values[7]   # Recovering (Fatal)
+   R_Mild   = state_values[8]   # Recovered                       
+   R_Severe = state_values[9]   # Recovered
+   R_Fatal  = state_values[10]  # Dead
  
    with ( 
- 
      as.list (parameters),     # variable names within parameters can be used 
  
           {
+      
+		  if ((t > InterventionTime+retardo) && t < (InterventionTime+retardo + duration))
+		  {
+                       var beta = (InterventionAmt)*R0*gamma
+                  } 
+		  else if(t > InterventionTime+retardo + duration)
+		  {
+		       var beta = R0p*gamma
+		  } 
+		  else 
+		  {
+		       var beta = R0*gamma
+                  }
+      		  # compute derivatives
  
-            # compute derivatives
  
-            dS = (-beta * S * I)
  
-            dE = (beta * S * I) - (delta * E)
- 
-            dI = (delta * E) - (gamma * I)
- 
-            dR = (gamma * I)
- 
-            
+            p_mild   = 1 - p_severe -p_fatal
+
+            dS        = -beta*I*S
+            dE        =  beta*I*S - a*E
+            dI        =  a*E - gamma*I
+            dMild     =  p_mild*gamma*I   - (1/D_recovery_mild)*Mild
+            dSevere   =  p_severe*gamma*I - (1/D_hospital_lag)*Severe
+            dSevere_H =  (1/D_hospital_lag)*Severe - (1/D_recovery_severe)*Severe_H
+            dFatal    =  p_fatal*gamma*I  - (1/D_death)*Fatal
+            dR_Mild   =  (1/D_recovery_mild)*Mild
+            dR_Severe =  (1/D_recovery_severe)*Severe_H
+            dR_Fatal  =  (1/D_death)*Fatal
+
+  
  
             # combine results
  
-            results = c (dS, dE, dI, dR)
+            results = c (dS,dE,dI,dMild,dSevere,dSevere_H,
+                         dFatal,dR_Mild,dR_Severe,dR_Fatal)
  
-            list (results)
- 
+            list(results)
           }
- 
      )
- 
  }
 
- contact_rate = 10                     # number of contacts per day
- transmission_probability = 0.07       # transmission probability
- infectious_period = 2.9                 # infectious period
- latent_period = 5.2                     # latent period
- beta_value = contact_rate * transmission_probability
-  gamma_value = 1 / infectious_period
-  delta_value = 1 / latent_period
- 
- 
+ #auxilar
+ Time_to_death     = 32
+ D_incbation       = 5.2       
+ D_infectious      = 2.9 
+
+ #ic
+ I0                = 1
+ E0                = 17 
+
+ #parameters
+ R0                = 3.422
+ R0p               = 3.422
+ D_recovery_mild   = (14 - 2.9)  
+ D_recovery_severe = (31.5 - 2.9)
+ D_hospital_lag    = 5
+ D_death           = Time_to_death - D_infectious 
+ p_fatal           = 0.021  #CFR o mu 
+ InterventionTime  = 18  
+ retardo  = 4  
+ InterventionAmt   = 1/3
+ p_severe          = 0.2
+ duration          = 30
  
  #vamos a fitear beta y de ahí sacar r0
- W = 4e7        # susceptible hosts
- X = 1           # infectious hosts
- Y = 0           # recovered hosts
- Z = 12           # exposed hosts
+ W = 4e7  # susceptible hosts
+ X = X0   # infectious hosts
+ Y = 0    # recovered hosts
+ Z = E0   # exposed hosts
  N = W + X + Y + Z
  timepoints = seq (0, 50, by=1)
- #initial_values = c (S = W/N, E = X/N, I = Y/N, R = Z/N)#original
- initial_values = c (S = W/N, E = Z/N, I = X/N, R = Y/N)#corri un bug?
- parameter_list = c (beta = beta_value, gamma = gamma_value, delta = delta_value)
+ initial_values = c (S = W/N, E = Z/N, I = X/N, R = Y/N)
+ parameter_list = c (
+           R0                = R0_value
+           R0p               = R0p_value
+           D_recovery_mild   = D_recovery_mild_value
+           D_recovery_severe = D_recovery_severe_value
+           D_hospital_lag    = D_hospital_lag_value
+           D_death           = D_death_value
+           p_fatal           = p_fatal_value
+           InterventionTime  = InterventionTime_value
+           retardo           = retardo_value
+           InterventionAmt   = InterventionAmt_value
+           p_severe          = p_severe_value
+           duration          = duration_value
+ )
  Ro = beta_value / gamma_value
  output = lsoda (initial_values, timepoints, seir_model, parameter_list)
 
@@ -128,7 +170,7 @@ library(minpack.lm)
  l1=paste0("R0 ",as.character(Ro))
  l2=paste0("beta ",as.character(bmin))
  l3=paste0("N de Expuestos inicial ",as.character(zmin))
- l4=paste0("Periodo infeccioso ",as.character(infectious_period))
+ l4=paste0("Periodo infeccioso ",as.character(D_infectious))
  pdf("fit.pdf")
  plot(1:length(d$activos),d$activos,log="y",ylim=c(1,max(c(modI,d$activos))),xlab="Días",ylab="Casos Activos")
  lines(1:length(d$activos[modI>0]),modI[modI>0],col="red")

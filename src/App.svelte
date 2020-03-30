@@ -74,7 +74,7 @@
   $: CFR               = 0.021  
   $: InterventionTime  = 18  
   $: retardo  = 4  
-  $: InterventionAmt   = 1/3
+  $: InterventionAmt   = 0.3331385
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
