@@ -4,25 +4,18 @@ load_data <- function()
 	#https://github.com/ivco19/libs
 	#descarga la base de datos en formato csv con los datos de Argentina
 	#DOI: 10.13140/RG.2.2.22519.78246
-	#Luego de ejecutada crea un archivo data.csv con el RAW data
-	#y un archivo minimal_data.dat con los totales a nivel nacional del número
+	#Luego de ejecutada crea un archivo minimal_data.dat con los totales a nivel nacional del número
 	#de casos confirmados, recuperados, activos y muertos por dia. En la salida 
 	#la función devuelve un data.frame con las series temporales de estos totales.
  
 	#donwload
-	system("wget https://docs.google.com/spreadsheets/d/e/2PACX-1vTfinng5SDBH9RSJMHJk28dUlW3VVSuvqaBSGzU-fYRTVLCzOkw1MnY17L2tWsSOppHB96fr21Ykbyv/pub?output=csv")
-        #borrado de posible version anterior
-	system("rm data.csv")
-        #renombrado a data.csv
-	system("mv pub?output=csv data.csv")
+	file="https://raw.githubusercontent.com/ivco19/libs/master/databases/cases.csv"
+       	dm = read.csv2(url(file),stringsAsFactors=FALSE)
 
 	#numero de filas (24 (provincias)* 4 (muertos, confirmados, recuperados y activos)
 	Nf=96
 
-
-       	dm = read.csv2("data.csv",stringsAsFactors=FALSE)
-
-        line=unlist(strsplit(dm[[1]][i],","))
+        line=unlist(strsplit(dm[[1]][1],","))
 	#numero de días desde el primer caso confirmado
 	Nd=length(line) 
 
