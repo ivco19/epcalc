@@ -58,23 +58,23 @@
   }
 
 
-  $: Time_to_death     = 32
+  $: Time_to_death     = 17
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
   $: I0                = 1
-  $: E0                = 17 
-  $: R0                = 3.422
-  $: R0p               = 3.422
+  $: E0                = 15 
+  $: R0                = 3.567
+  $: R0p               = 1.7
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
-  $: D_recovery_mild   = (14 - 2.9)  
-  $: D_recovery_severe = (31.5 - 2.9)
+  $: D_recovery_mild   = (8 - 2.9)  
+  $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
   $: CFR               = 0.021  
   $: InterventionTime  = 18  
-  $: retardo  = 4  
-  $: InterventionAmt   = 0.3331385
+  $: retardo  = 2  
+  $: InterventionAmt   = 2.436/R0 //0.3331385
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -113,7 +113,6 @@
       if (t > InterventionTime+retardo && t < InterventionTime+retardo + duration){
         var beta = (InterventionAmt)*R0/(D_infectious)
       } else if (t > InterventionTime+retardo + duration) {
-        //var beta = 0.5*R0/(D_infectious)        
         var beta = R0p/(D_infectious)        
       } else {
         var beta = R0/(D_infectious)
@@ -151,7 +150,7 @@
       return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
     }
 
-    var v = [1, E0/(N-E0), I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
+    var v = [1, E0/(N-E0-I0), I0/(N-E0-I0), 0, 0, 0, 0, 0, 0, 0]
     var t = 0
 
     var P  = []
@@ -405,6 +404,45 @@
   $: milestones = get_milestones(P)
   $: log = true
 
+
+  function download_all_csv(){
+    download_csv({ filename: "chart-data.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'], data:P, scale_factor:1 });
+    download_csv({ filename: "chart-data-full.csv",header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N});
+  }
+  function download_csv(args) {
+    var data, filename, link;
+    var csv = "Día,";
+
+    if(args.header.length!=args.data[0].length){ throw 'header doesn\'t match data';}
+    for(var i=0;i<args.header.length;i++){
+      csv+=args.header[i]+',';
+    }
+    csv+='\n';
+
+    for(var i = 0; i < args.data.length; i++){
+      csv+=2*i+',';
+      for(var j=0;j<args.data[i].length;j++){
+        csv+=Math.round(args.data[i][j]*args.scale_factor)+',';
+      }
+      csv+='\n';
+    }
+
+    if (csv == null) return;
+
+    filename = args.filename || 'chart-data.csv';
+
+    if (!csv.match(/^data:text\/csv/i)) {
+      csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+
+    data = encodeURI(csv);
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link); // Required for FF
+    link.click();
+    document.body.removeChild(link);
+  }
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.css" integrity="sha384-bsHo4/LA+lkZv61JspMDQB9QP1TtO4IgOf2yYS+J6VdAYLVyx1c3XKcsHh0Vy8Ws" crossorigin="anonymous">
@@ -606,6 +644,7 @@
 </style>
 
 <h2>Calculadora Epidémica SEIR</h2>
+<button id="downloadCSV" on:click={download_all_csv}>Descargar como CSV</button>
 
 <div class="chart" style="display: flex; max-width: 1120px">
 
@@ -662,11 +701,11 @@
         <Arrow height="41"/>   
 
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Infectados</div>
+          <div class="legendtitle">Infecciosos</div>
           <div style="padding-top: 5px; padding-bottom: 1px">
           <div class="legendtextnum"><span style="font-size:12px; padding-right:3px; color:#CCC">∑</span> <i>{formatNumber(Math.round(N*Iters[active_][2]))} 
                                   ({ (100*Iters[active_][2]).toFixed(2) }%)</div>
-          <div class="legendtextnum"><span style="font-size:12px; padding-right:2px; color:#CCC">Δ</span> <i>{formatNumber(Math.round(N*get_d(active_)[2])) } / días</i>
+          <div class="legendtextnum"><span style="font-size:12px; padding-right:2px; color:#CCC">Δ</span> <i>{formatNumber(Math.round(N*get_d(active_)[2])) } / Día</i>
                                  </div>
           </div>
         </div>
@@ -759,7 +798,7 @@
       <svg>
 	<circle cx=7px cy=10px r='4' fill="{colors[1]}"/></svg>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Desesos Arg.</div>
+          <div class="legendtitle">Decesos Arg.</div>
         </div>
       </div>
 
@@ -784,6 +823,7 @@
              N={N}
              ymax={lock ? Plock: Pmax}
              InterventionTime={InterventionTime}
+	     retardo={retardo}
              colors={colors}
              log={!log}/>
       </div>
