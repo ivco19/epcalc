@@ -63,7 +63,7 @@
   $: N                 = Math.exp(logN)
   $: I0                = 1
   $: E0                = 15 
-  $: R0                = 3.567
+  $: R0                = 3.57
   $: R0p               = 1.7
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
@@ -74,7 +74,7 @@
   $: CFR               = 0.021  
   $: InterventionTime  = 18  
   $: retardo  = 2  
-  $: InterventionAmt   = 2.436/R0 //0.3331385
+  $: InterventionAmt   = 2.407/R0 //0.3331385
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -1034,25 +1034,31 @@
 </div>
 
 
-<div style="height:320px;">
+<!-- <div style="height:220px;">
   <div class="minorTitle">
     <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Dinámica de transmisión</div>
-    <div style="flex: 0 0 20; width:120px"></div>
+    <div style="flex: 0 0 20; width:20px"></div>
     <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
-  </div>
-  <div class = "row">
+  </div>-->
+  <p class = "center">
+    <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Dinámica de transmisión</div>
+  <div class="row">
+    <div style="flex: 0 0 20; width:20px"></div>
 
     <div class="column">
       <div class="paneltitle">Parámetros de Población</div>
       <div class="paneldesc" style="height:30px">Tamaño poblacional.<br></div>
       <div class="slidertext">{format(",")(Math.round(N))}</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={logN} min={5} max=25 step=0.01>
+      <input style="margin-bottom: 8px"type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales.<br></div>
       <div class="slidertext">{I0}</div>
       <input class="range" type=range bind:value={I0} min={1} max=100 step=1>
+      <input type=number bind:value={I0} min={1} max=100 step=1>
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales.<br></div>
       <div class="slidertext">{E0}</div>
       <input class="range" type=range bind:value={E0} min={1} max=100 step=1>
+      <input type=number bind:value={E0} min={1} max=100 step=1>
     </div>
 
     <div class="column">
@@ -1060,6 +1066,7 @@
       <div class="paneldesc">Número promedio de casos nuevos que genera un individuo a lo largo de un período infeccioso. <br></div>
       <div class="slidertext">{R0}</div>
       <input class="range" type=range bind:value={R0} min=0.01 max=10 step=0.01> 
+      <input type=number bind:value={R0} min=0.01 max=10 step=0.01>
     </div>
 
 
@@ -1068,9 +1075,11 @@
       <div class="paneldesc" style="height:50px">Duración del periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
       <div class="slidertext">{(D_incbation).toFixed(2)} días</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={D_incbation} min={0.15} max=24 step=0.0001>
+      <input style="margin-bottom: 8px"type=number bind:value={D_incbation} min={0.15} max=24 step=0.0001>
       <div class="paneldesc" style="height:50px; border-top: 1px solid #EEE; padding-top: 10px">Intervalo donde el paciente es infeccioso, {@html math_inline("T_{\\text{inf}}")}.<br></div>
       <div class="slidertext">{D_infectious} días</div>
       <input class="range" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
+      <input type=number bind:value={D_infectious} min={0} max=24 step=0.01>
     </div>
 
    <div class="column">
@@ -1078,30 +1087,37 @@
       <div class="paneldesc" style="height:30px">Tasa luego de la cuarentena </div>
       <div class="slidertext">{R0p}</div>
       <input class="range" type=range bind:value={R0p} min=0.01 max=10 step=0.01> 
+      <input type=number bind:value={R0p} min={0.01} max=10 step=0.01>
     </div>
+</div>
 
-
-
-    <div style="flex: 0 0 20; width:20px"></div>
+  <p class = "center">
+    <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
+  <div class="row">
+   <div style="flex: 0 0 20; width:20px"></div> 
 
     <div class="column">
       <div class="paneltitle">Estadística de Morbilidad</div>
       <div class="paneldesc" style="height:30px">Tasa de mortandad.<br></div>
       <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:60px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo desde el final de la incubación a la muerte.<br></div>
+      <input style="margin-bottom: 8px" type=number bind:value={CFR} min={0} max=1 step=0.0001>
+      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo desde el final de la incubación a la muerte.<br></div>
       <div class="slidertext">{Time_to_death} días</div>
       <input class="range" type=range bind:value={Time_to_death} min={(D_infectious)+0.1} max=100 step=0.01>
+      <input type=number bind:value={Time_to_death} min={(D_infectious)+0.1} max=100 step=0.01>
     </div>
 
     <div class="column">
       <div class="paneltitle">Tiempos de Recuperación</div>
-      <div class="paneldesc" style="height:50px">Duración de la estadía en el hospital<br></div>
+      <div class="paneldesc" style="height:30px">Duración de la estadía en el hospital<br></div>
       <div class="slidertext">{D_recovery_severe} días</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={D_recovery_severe} min={0.1} max=100 step=0.01>
-      <div class="paneldesc" style="height:50px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo de recuperación en casos leves<br></div>
+      <input style="margin-bottom: 8px" type=number bind:value={D_recovery_severe} min={0.1} max=100 step=0.01>
+      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo de recuperación en casos leves<br></div>
       <div class="slidertext">{D_recovery_mild} días</div>
       <input class="range" type=range bind:value={D_recovery_mild} min={0.5} max=100 step=0.01>
+      <input type=number bind:value={D_recovery_mild} min={0.5} max=100 step=0.01>
     </div>
 
     <div class="column">
@@ -1109,14 +1125,14 @@
       <div class="paneldesc" style="height:30px">Tasa de hospitalización.<br></div>
       <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>      
+      <input style="margin-bottom: 8px"type=number bind:value={P_SEVERE} min={0} max=1 step=0.0001>
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo de hospitalización.<br></div>
       <div class="slidertext">{D_hospital_lag} días</div>
       <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01>
+      <input type=number bind:value={D_hospital_lag} min={0.5} max=100 step=0.01/>
     </div>
 
-  </div>
 </div>
-
 <div style="position: relative; height: 12px"></div>
 
 <p class = "center"> 
@@ -1137,15 +1153,23 @@ suplementaria como la tasa de mortalidad y la carga de atención médica.
 <p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos parámetros para:</p>
 <p class ="center">- Definir la duración de la cuarentena 
 </p>
-<p class ="center">- Controlar el ritmo reproductivo a la salida de la cuarentena.
+<p class ="center">- Controlar el ritmo reproductivo durante y a la salida de la cuarentena.
 </p>
 <p class ="center">- También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
 días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
-en el número de casos confirmados.
+en el número de casos confirmados. Si dispusieramos de los datos de cuando se desarrollaron los
+síntomas de los casos activos esta traslación del eje temporal no sería necesaria. Debido a esto la
+serie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo.
 </p>
 
-<p class ="center">- Se añadió con circulos verdes los casos confirmados de COVID-19 en Argentina, para permitir
+<p class ="center">- Se añadió en forma de puntos los casos confirmados y las muertes de COVID-19 en Argentina, para permitir
 visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
+Los datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.
+El código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en
+python se encuentra en este repositorio: https://github.com/ivco19/libs
+Los datos poseen el siguiente DOI:
+
+Luczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. https://doi.org/10.13140/RG.2.2.22519...
 </p>
 
 <p class ="center">- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
