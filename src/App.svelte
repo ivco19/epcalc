@@ -1136,6 +1136,8 @@
 <div style="position: relative; height: 12px"></div>
 
 <p class = "center"> 
+Este proyecto se encuentra en el marco de las actividades llevadas a cabo por el grupo
+<a href="https://ivco19.github.io/">Arcovid19</a>.
 La presente calculadora implementa el modelo clásico epidemiológico &mdash 
 <b><a href="https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SEIR_model">SEIR</a></b> (<b>S</b>usceptible → <span style="color:{colors[4]}"><b>E</b></span>xposed → <span style="color:{colors[3]}"><b>I</b></span>nfected → <span><b>R</b></span>emoved, en inglés), y esta basada en el trabajo del 
 <a href="https://gabgoh.github.io/">Dr. Gabriel Goh</a> (<a href="https://github.com/gabgoh/epcalc">código fuente original</a>).
@@ -1150,26 +1152,31 @@ propagación en una dada población: <span style="color:#777">{@html ode_eqn}</s
 dinámica de transmisión, este modelo permite cargar mediante parámetros de entrada información
 suplementaria como la tasa de mortalidad y la carga de atención médica.
 </p>
-<p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos parámetros para:</p>
+<p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos varias mejoras, el
+código fuente es libre y puede descargarse desde el siguiente <a
+href="https://github.com/ivco19/epcalc"> repositorio GIT</a>. Algunas de las modificaciones son:</p>
 <p class ="center">- Definir la duración de la cuarentena 
 </p>
 <p class ="center">- Controlar el ritmo reproductivo durante y a la salida de la cuarentena.
 </p>
-<p class ="center">- También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
+<p class ="center">- Debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
 días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
-en el número de casos confirmados. Si dispusieramos de los datos de cuando se desarrollaron los
-síntomas de los casos activos esta traslación del eje temporal no sería necesaria. Debido a esto la
-serie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo.
+en el número de casos activos (ver figura 1 en <a
+href="https://jamanetwork.com/journals/jama/fullarticle/2762130">Wu y McGoogan</a>). Si dispusieramos en los datos oficiales del día cuando se desarrollaron los
+síntomas de cada caso ésta traslación del eje temporal no sería necesaria. Debido a esto la
+serie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo (ya que los
+fallecidos se supone que no tienen demora en ser informados).
 </p>
 
-<p class ="center">- Se añadió en forma de puntos los casos confirmados y las muertes de COVID-19 en Argentina, para permitir
+<p class ="center">- Se añadió en forma de puntos los casos activos y las muertes de COVID-19 en Argentina, para permitir
 visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
 Los datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.
 El código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en
-python se encuentra en este repositorio: https://github.com/ivco19/libs
+python se encuentra en este <a href="https://github.com/ivco19/libs">repositorio</a>
 Los datos poseen el siguiente DOI:
 
-Luczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. https://doi.org/10.13140/RG.2.2.22519...
+Luczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. 
+<a href="https://doi.org/10.13140/RG.2.2.22519.78246">https://doi.org/10.13140/RG.2.2.22519.78246</a>
 </p>
 
 <p class ="center">- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
@@ -1178,6 +1185,15 @@ Encontré que no solo debía ajustar el parámetro R0, si no que además era nec
 un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
 ya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer
 a más personas. 
+</p>
+
+<p class ="center">
+Gracias a la generosidad de Mario Lamfri (CONAE) quien lleva un proyecto paralelo a este para el
+ministerio de salud de la provincia de Córdoba, se añadió la facilidad de poder descargar los datos
+del modelo a un archivo csv, que facilita su manipulacion en planillas de cálculo. Mario también nos
+ayudó a mejorar la interface de entrada permitiendo el ingreso de texto. El desarrollo de esta
+calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga
+y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. 
 </p>
 
 
