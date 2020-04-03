@@ -2,7 +2,7 @@
   
   import { scaleLinear } from "d3-scale";
   // import { Date } from "d3-time"
-  import Chart from './Chart.svelte';
+  import Area from './Area.svelte';
   import { onMount } from 'svelte';
   import { selectAll } from 'd3-selection'
   import { drag } from 'd3-drag';
@@ -811,7 +811,7 @@
   <div style="flex: 0 0 890px; width:890px; height: {height+128}px; position:relative;">
 
     <div style="position:relative; top:60px; left: 10px">
-      <Chart bind:checked={checked}
+      <Area bind:checked={checked}
              bind:active={active}
              y = {P} 
              xmax = {Xmax} 
@@ -1188,12 +1188,13 @@ a más personas.
 </p>
 
 <p class ="center">
-Gracias a la generosidad de Mario Lamfri (CONAE) quien lleva un proyecto paralelo a este para el
-ministerio de salud de la provincia de Córdoba, se añadió la facilidad de poder descargar los datos
-del modelo a un archivo csv, que facilita su manipulacion en planillas de cálculo. Mario también nos
-ayudó a mejorar la interface de entrada permitiendo el ingreso de texto. El desarrollo de esta
-calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga
-y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. 
+Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de
+CONAE, quien lleva un proyecto paralelo a este para el ministerio de salud de la provincia de
+Córdoba, se añadió la facilidad de poder descargar los datos del modelo a un archivo csv, que
+facilita su manipulacion en planillas de cálculo. También nos ayudó a mejorar la interface de
+entrada permitiendo el ingreso de texto. El desarrollo de esta calculadora no hubiese sido posible
+sin los aportes significativos de Juan Cabral, Rodrigo Quiroga, y todo el equipo de 
+<a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el apoyo y asesoría de Mario Lamfri.
 </p>
 
 
