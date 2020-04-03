@@ -3119,30 +3119,18 @@
 
     function get_each_context_3(ctx, list, i) {
     	const child_ctx = Object.create(ctx);
-    	child_ctx.point = list[i];
-    	return child_ctx;
-    }
-
-    function get_each_context_4(ctx, list, i) {
-    	const child_ctx = Object.create(ctx);
-    	child_ctx.point = list[i];
-    	return child_ctx;
-    }
-
-    function get_each_context_5(ctx, list, i) {
-    	const child_ctx = Object.create(ctx);
     	child_ctx.i = list[i];
     	return child_ctx;
     }
 
-    function get_each_context_6(ctx, list, i) {
+    function get_each_context_4(ctx, list, i) {
     	const child_ctx = Object.create(ctx);
     	child_ctx.tick = list[i];
     	return child_ctx;
     }
 
     // (195:6) {#each yScale.ticks(5) as tick}
-    function create_each_block_6(ctx) {
+    function create_each_block_4(ctx) {
     	var g, line, text_1, t0_value = Number.isInteger(ctx.Math.log10(ctx.tick)) ? formatNumber(ctx.tick) : (ctx.log ? "": formatNumber(ctx.tick)) + "", t0, t1_value = (ctx.tick == ctx.yScale.ticks(5)[0]) ? " ": "" + "", t1, g_class_value, g_transform_value;
 
     	const block = {
@@ -3195,12 +3183,12 @@
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_6.name, type: "each", source: "(195:6) {#each yScale.ticks(5) as tick}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_4.name, type: "each", source: "(195:6) {#each yScale.ticks(5) as tick}", ctx });
     	return block;
     }
 
     // (205:6) {#each xScaleTime.ticks() as i}
-    function create_each_block_5(ctx) {
+    function create_each_block_3(ctx) {
     	var g, text_1, t0_value = ctx.i == 0 ? "Día ":"" + "", t0, t1_value = ctx.i + "", t1, g_transform_value;
 
     	const block = {
@@ -3245,95 +3233,11 @@
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_5.name, type: "each", source: "(205:6) {#each xScaleTime.ticks() as i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_3.name, type: "each", source: "(205:6) {#each xScaleTime.ticks() as i}", ctx });
     	return block;
     }
 
-    // (213:6) {#each confirmados as point}
-    function create_each_block_4(ctx) {
-    	var circle, circle_cx_value, circle_cy_value, circle_fill_value;
-
-    	const block = {
-    		c: function create() {
-    			circle = svg_element("circle");
-    			attr_dev(circle, "cx", circle_cx_value = ctx.xScaleTime(ctx.point.x));
-    			attr_dev(circle, "cy", circle_cy_value = ctx.yScale(ctx.point.y));
-    			attr_dev(circle, "r", "4");
-    			attr_dev(circle, "fill", circle_fill_value = ctx.colors[2]);
-    			add_location(circle, file, 213, 5, 4652);
-    		},
-
-    		m: function mount(target, anchor) {
-    			insert_dev(target, circle, anchor);
-    		},
-
-    		p: function update(changed, ctx) {
-    			if ((changed.xScaleTime || changed.confirmados) && circle_cx_value !== (circle_cx_value = ctx.xScaleTime(ctx.point.x))) {
-    				attr_dev(circle, "cx", circle_cx_value);
-    			}
-
-    			if ((changed.yScale || changed.confirmados) && circle_cy_value !== (circle_cy_value = ctx.yScale(ctx.point.y))) {
-    				attr_dev(circle, "cy", circle_cy_value);
-    			}
-
-    			if ((changed.colors) && circle_fill_value !== (circle_fill_value = ctx.colors[2])) {
-    				attr_dev(circle, "fill", circle_fill_value);
-    			}
-    		},
-
-    		d: function destroy(detaching) {
-    			if (detaching) {
-    				detach_dev(circle);
-    			}
-    		}
-    	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_4.name, type: "each", source: "(213:6) {#each confirmados as point}", ctx });
-    	return block;
-    }
-
-    // (219:6) {#each muertos as point}
-    function create_each_block_3(ctx) {
-    	var circle, circle_cx_value, circle_cy_value, circle_fill_value;
-
-    	const block = {
-    		c: function create() {
-    			circle = svg_element("circle");
-    			attr_dev(circle, "cx", circle_cx_value = ctx.xScaleTime(ctx.point.x+ctx.retardo));
-    			attr_dev(circle, "cy", circle_cy_value = ctx.yScale(ctx.point.y));
-    			attr_dev(circle, "r", "4");
-    			attr_dev(circle, "fill", circle_fill_value = ctx.colors[1]);
-    			add_location(circle, file, 219, 5, 4820);
-    		},
-
-    		m: function mount(target, anchor) {
-    			insert_dev(target, circle, anchor);
-    		},
-
-    		p: function update(changed, ctx) {
-    			if ((changed.xScaleTime || changed.muertos || changed.retardo) && circle_cx_value !== (circle_cx_value = ctx.xScaleTime(ctx.point.x+ctx.retardo))) {
-    				attr_dev(circle, "cx", circle_cx_value);
-    			}
-
-    			if ((changed.yScale || changed.muertos) && circle_cy_value !== (circle_cy_value = ctx.yScale(ctx.point.y))) {
-    				attr_dev(circle, "cy", circle_cy_value);
-    			}
-
-    			if ((changed.colors) && circle_fill_value !== (circle_fill_value = ctx.colors[1])) {
-    				attr_dev(circle, "fill", circle_fill_value);
-    			}
-    		},
-
-    		d: function destroy(detaching) {
-    			if (detaching) {
-    				detach_dev(circle);
-    			}
-    		}
-    	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_3.name, type: "each", source: "(219:6) {#each muertos as point}", ctx });
-    	return block;
-    }
-
-    // (254:10) {:else}
+    // (255:10) {:else}
     function create_else_block(ctx) {
     	var rect, rect_x_value, rect_y_value, rect_height_value, dispose;
 
@@ -3363,7 +3267,7 @@
     			attr_dev(rect, "height", rect_height_value = (func_1)());
     			set_style(rect, "fill", ctx.colors[ctx.j]);
     			set_style(rect, "opacity", (ctx.active == ctx.i ? 0.9: 0.6));
-    			add_location(rect, file, 254, 14, 6033);
+    			add_location(rect, file, 255, 14, 6054);
 
     			dispose = [
     				listen_dev(rect, "mouseover", mouseover_handler_2),
@@ -3411,11 +3315,11 @@
     			run_all(dispose);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_else_block.name, type: "else", source: "(254:10) {:else}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_else_block.name, type: "else", source: "(255:10) {:else}", ctx });
     	return block;
     }
 
-    // (241:10) {#if !log}
+    // (242:10) {#if !log}
     function create_if_block_1(ctx) {
     	var rect, rect_x_value, rect_y_value, rect_height_value, dispose;
 
@@ -3437,7 +3341,7 @@
     			attr_dev(rect, "height", rect_height_value = ctx.Math.max(height - ctx.padding.bottom - ctx.yScale(ctx.y[ctx.i][ctx.j]*ctx.checked[ctx.j] ),0));
     			set_style(rect, "fill", ctx.colors[ctx.j]);
     			set_style(rect, "opacity", (ctx.active == ctx.i ? 0.9: 0.6));
-    			add_location(rect, file, 241, 14, 5437);
+    			add_location(rect, file, 242, 14, 5458);
 
     			dispose = [
     				listen_dev(rect, "mouseover", mouseover_handler_1),
@@ -3485,11 +3389,11 @@
     			run_all(dispose);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block_1.name, type: "if", source: "(241:10) {#if !log}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block_1.name, type: "if", source: "(242:10) {#if !log}", ctx });
     	return block;
     }
 
-    // (240:8) {#each range(colors.length) as j}
+    // (241:8) {#each range(colors.length) as j}
     function create_each_block_2(ctx) {
     	var if_block_anchor;
 
@@ -3533,11 +3437,11 @@
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_2.name, type: "each", source: "(240:8) {#each range(colors.length) as j}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_2.name, type: "each", source: "(241:8) {#each range(colors.length) as j}", ctx });
     	return block;
     }
 
-    // (227:6) {#each range(y.length) as i}
+    // (228:6) {#each range(y.length) as i}
     function create_each_block_1(ctx) {
     	var rect, rect_x_value, rect_width_value, each_1_anchor, dispose;
 
@@ -3573,7 +3477,7 @@
     			attr_dev(rect, "height", height);
     			set_style(rect, "fill", "white");
     			set_style(rect, "opacity", "0");
-    			add_location(rect, file, 227, 8, 5004);
+    			add_location(rect, file, 228, 8, 5025);
 
     			dispose = [
     				listen_dev(rect, "mouseover", mouseover_handler),
@@ -3639,11 +3543,11 @@
     			run_all(dispose);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(227:6) {#each range(y.length) as i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block_1.name, type: "each", source: "(228:6) {#each range(y.length) as i}", ctx });
     	return block;
     }
 
-    // (288:6) {#each range(data.length) as i}
+    // (289:6) {#each range(data.length) as i}
     function create_each_block(ctx) {
     	var rect, rect_x_value, rect_y_value, rect_height_value;
 
@@ -3658,7 +3562,7 @@
     			set_style(rect, "fill", "black");
     			set_style(rect, "opacity", "0.5");
     			set_style(rect, "box-shadow", "4px 10px 5px 2px rgba(0,0,0,0.75)");
-    			add_location(rect, file, 288, 8, 7361);
+    			add_location(rect, file, 289, 8, 7382);
     		},
 
     		m: function mount(target, anchor) {
@@ -3689,11 +3593,11 @@
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(288:6) {#each range(data.length) as i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(289:6) {#each range(data.length) as i}", ctx });
     	return block;
     }
 
-    // (306:4) {#if active >= 0}
+    // (307:4) {#if active >= 0}
     function create_if_block(ctx) {
     	var div, svg, path, path_fill_value;
 
@@ -3705,21 +3609,21 @@
     			attr_dev(path, "d", "M 0 0 L 10 0 L 5 10 z");
     			attr_dev(path, "fill", path_fill_value = ctx.lock ? '#555':'#AAA');
     			attr_dev(path, "stroke-width", "3");
-    			add_location(path, file, 313, 10, 8366);
+    			add_location(path, file, 314, 10, 8387);
     			set_style(svg, "position", "absolute");
     			set_style(svg, "top", "-12px");
     			set_style(svg, "left", "0px");
     			attr_dev(svg, "height", "10");
     			attr_dev(svg, "width", "10");
     			attr_dev(svg, "class", "svelte-1hzt5y0");
-    			add_location(svg, file, 312, 10, 8280);
+    			add_location(svg, file, 313, 10, 8301);
     			set_style(div, "position", "absolute");
     			set_style(div, "pointer-events", "none");
     			set_style(div, "width", "100px");
     			set_style(div, "left", "" + ctx.xScale(ctx.active) + "px");
     			set_style(div, "top", "" + ctx.Math.max(ctx.yScale(ctx.sum(ctx.y[ctx.active], ctx.checked)),0) + "px");
     			attr_dev(div, "class", "tip");
-    			add_location(div, file, 306, 6, 7908);
+    			add_location(div, file, 307, 6, 7929);
     		},
 
     		m: function mount(target, anchor) {
@@ -3748,30 +3652,14 @@
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block.name, type: "if", source: "(306:4) {#if active >= 0}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block.name, type: "if", source: "(307:4) {#if active >= 0}", ctx });
     	return block;
     }
 
     function create_fragment(ctx) {
-    	var div1, svg, g0, g1, g2, g3, g4, g5, t, div0;
+    	var div1, svg, g0, g1, g2, g3, t, div0;
 
-    	let each_value_6 = ctx.yScale.ticks(5);
-
-    	let each_blocks_5 = [];
-
-    	for (let i = 0; i < each_value_6.length; i += 1) {
-    		each_blocks_5[i] = create_each_block_6(get_each_context_6(ctx, each_value_6, i));
-    	}
-
-    	let each_value_5 = ctx.xScaleTime.ticks();
-
-    	let each_blocks_4 = [];
-
-    	for (let i = 0; i < each_value_5.length; i += 1) {
-    		each_blocks_4[i] = create_each_block_5(get_each_context_5(ctx, each_value_5, i));
-    	}
-
-    	let each_value_4 = ctx.confirmados;
+    	let each_value_4 = ctx.yScale.ticks(5);
 
     	let each_blocks_3 = [];
 
@@ -3779,7 +3667,7 @@
     		each_blocks_3[i] = create_each_block_4(get_each_context_4(ctx, each_value_4, i));
     	}
 
-    	let each_value_3 = ctx.muertos;
+    	let each_value_3 = ctx.xScaleTime.ticks();
 
     	let each_blocks_2 = [];
 
@@ -3811,35 +3699,23 @@
     			svg = svg_element("svg");
     			g0 = svg_element("g");
 
-    			for (let i = 0; i < each_blocks_5.length; i += 1) {
-    				each_blocks_5[i].c();
-    			}
-
-    			g1 = svg_element("g");
-
-    			for (let i = 0; i < each_blocks_4.length; i += 1) {
-    				each_blocks_4[i].c();
-    			}
-
-    			g2 = svg_element("g");
-
     			for (let i = 0; i < each_blocks_3.length; i += 1) {
     				each_blocks_3[i].c();
     			}
 
-    			g3 = svg_element("g");
+    			g1 = svg_element("g");
 
     			for (let i = 0; i < each_blocks_2.length; i += 1) {
     				each_blocks_2[i].c();
     			}
 
-    			g4 = svg_element("g");
+    			g2 = svg_element("g");
 
     			for (let i = 0; i < each_blocks_1.length; i += 1) {
     				each_blocks_1[i].c();
     			}
 
-    			g5 = svg_element("g");
+    			g3 = svg_element("g");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
@@ -3853,14 +3729,10 @@
     			add_location(g0, file, 193, 4, 3904);
     			attr_dev(g1, "class", "axis x-axis svelte-1hzt5y0");
     			add_location(g1, file, 203, 4, 4357);
-    			attr_dev(g2, "class", "points");
-    			add_location(g2, file, 211, 4, 4593);
-    			attr_dev(g3, "class", "points");
-    			add_location(g3, file, 217, 3, 4765);
-    			attr_dev(g4, "class", "bars");
-    			add_location(g4, file, 224, 4, 4943);
-    			attr_dev(g5, "class", "bars");
-    			add_location(g5, file, 286, 4, 7298);
+    			attr_dev(g2, "class", "bars");
+    			add_location(g2, file, 225, 4, 4964);
+    			attr_dev(g3, "class", "bars");
+    			add_location(g3, file, 287, 4, 7319);
     			set_style(svg, "position", "absolute");
     			set_style(svg, "height", "" + height + "px");
     			attr_dev(svg, "class", "svelte-1hzt5y0");
@@ -3872,7 +3744,7 @@
     			set_style(div0, "top", "0px");
     			set_style(div0, "left", "0px");
     			set_style(div0, "pointer-events", "none");
-    			add_location(div0, file, 303, 2, 7743);
+    			add_location(div0, file, 304, 2, 7764);
     			set_style(div1, "width", "" + (width+15) + "px");
     			set_style(div1, "height", "" + height + "px");
     			set_style(div1, "position", "relative");
@@ -3889,38 +3761,26 @@
     			append_dev(div1, svg);
     			append_dev(svg, g0);
 
-    			for (let i = 0; i < each_blocks_5.length; i += 1) {
-    				each_blocks_5[i].m(g0, null);
+    			for (let i = 0; i < each_blocks_3.length; i += 1) {
+    				each_blocks_3[i].m(g0, null);
     			}
 
     			append_dev(svg, g1);
 
-    			for (let i = 0; i < each_blocks_4.length; i += 1) {
-    				each_blocks_4[i].m(g1, null);
+    			for (let i = 0; i < each_blocks_2.length; i += 1) {
+    				each_blocks_2[i].m(g1, null);
     			}
 
     			append_dev(svg, g2);
 
-    			for (let i = 0; i < each_blocks_3.length; i += 1) {
-    				each_blocks_3[i].m(g2, null);
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].m(g2, null);
     			}
 
     			append_dev(svg, g3);
 
-    			for (let i = 0; i < each_blocks_2.length; i += 1) {
-    				each_blocks_2[i].m(g3, null);
-    			}
-
-    			append_dev(svg, g4);
-
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				each_blocks_1[i].m(g4, null);
-    			}
-
-    			append_dev(svg, g5);
-
     			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(g5, null);
+    				each_blocks[i].m(g3, null);
     			}
 
     			append_dev(div1, t);
@@ -3930,51 +3790,7 @@
 
     		p: function update(changed, ctx) {
     			if (changed.yScale || changed.padding || changed.Math || changed.formatNumber || changed.log) {
-    				each_value_6 = ctx.yScale.ticks(5);
-
-    				let i;
-    				for (i = 0; i < each_value_6.length; i += 1) {
-    					const child_ctx = get_each_context_6(ctx, each_value_6, i);
-
-    					if (each_blocks_5[i]) {
-    						each_blocks_5[i].p(changed, child_ctx);
-    					} else {
-    						each_blocks_5[i] = create_each_block_6(child_ctx);
-    						each_blocks_5[i].c();
-    						each_blocks_5[i].m(g0, null);
-    					}
-    				}
-
-    				for (; i < each_blocks_5.length; i += 1) {
-    					each_blocks_5[i].d(1);
-    				}
-    				each_blocks_5.length = each_value_6.length;
-    			}
-
-    			if (changed.xScaleTime || changed.height) {
-    				each_value_5 = ctx.xScaleTime.ticks();
-
-    				let i;
-    				for (i = 0; i < each_value_5.length; i += 1) {
-    					const child_ctx = get_each_context_5(ctx, each_value_5, i);
-
-    					if (each_blocks_4[i]) {
-    						each_blocks_4[i].p(changed, child_ctx);
-    					} else {
-    						each_blocks_4[i] = create_each_block_5(child_ctx);
-    						each_blocks_4[i].c();
-    						each_blocks_4[i].m(g1, null);
-    					}
-    				}
-
-    				for (; i < each_blocks_4.length; i += 1) {
-    					each_blocks_4[i].d(1);
-    				}
-    				each_blocks_4.length = each_value_5.length;
-    			}
-
-    			if (changed.xScaleTime || changed.confirmados || changed.yScale || changed.colors) {
-    				each_value_4 = ctx.confirmados;
+    				each_value_4 = ctx.yScale.ticks(5);
 
     				let i;
     				for (i = 0; i < each_value_4.length; i += 1) {
@@ -3985,7 +3801,7 @@
     					} else {
     						each_blocks_3[i] = create_each_block_4(child_ctx);
     						each_blocks_3[i].c();
-    						each_blocks_3[i].m(g2, null);
+    						each_blocks_3[i].m(g0, null);
     					}
     				}
 
@@ -3995,8 +3811,8 @@
     				each_blocks_3.length = each_value_4.length;
     			}
 
-    			if (changed.xScaleTime || changed.muertos || changed.retardo || changed.yScale || changed.colors) {
-    				each_value_3 = ctx.muertos;
+    			if (changed.xScaleTime || changed.height) {
+    				each_value_3 = ctx.xScaleTime.ticks();
 
     				let i;
     				for (i = 0; i < each_value_3.length; i += 1) {
@@ -4007,7 +3823,7 @@
     					} else {
     						each_blocks_2[i] = create_each_block_3(child_ctx);
     						each_blocks_2[i].c();
-    						each_blocks_2[i].m(g3, null);
+    						each_blocks_2[i].m(g1, null);
     					}
     				}
 
@@ -4029,7 +3845,7 @@
     					} else {
     						each_blocks_1[i] = create_each_block_1(child_ctx);
     						each_blocks_1[i].c();
-    						each_blocks_1[i].m(g4, null);
+    						each_blocks_1[i].m(g2, null);
     					}
     				}
 
@@ -4051,7 +3867,7 @@
     					} else {
     						each_blocks[i] = create_each_block(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(g5, null);
+    						each_blocks[i].m(g3, null);
     					}
     				}
 
@@ -4082,10 +3898,6 @@
     			if (detaching) {
     				detach_dev(div1);
     			}
-
-    			destroy_each(each_blocks_5, detaching);
-
-    			destroy_each(each_blocks_4, detaching);
 
     			destroy_each(each_blocks_3, detaching);
 
@@ -22924,8 +22736,8 @@
     }
 
     function create_fragment$3(ctx) {
-    	var link, t0, h2, t2, button, t4, div83, div56, div55, div0, b0, br0, t6, t7_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "", t7, t8, div7, span0, t9, t10, div5, div1, t12, div4, div2, span1, t14, i0, t15_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][0])) + "", t15, t16, t17_value = (100*ctx.Iters[ctx.active_][0]).toFixed(2) + "", t17, t18, t19, div3, span2, t21, i1, t22_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[0])) + "", t22, t23, t24, div6, t26, div14, updating_checked, t27, t28, div12, div8, t30, div11, div9, span3, t32, i2, t33_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][1])) + "", t33, t34, t35_value = (100*ctx.Iters[ctx.active_][1]).toFixed(2) + "", t35, t36, t37, div10, span4, t39, i3, t40_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[1])) + "", t40, t41, t42, div13, t44, div21, updating_checked_1, t45, t46, div19, div15, t48, div18, div16, span5, t50, i4, t51_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][2])) + "", t51, t52, t53_value = (100*ctx.Iters[ctx.active_][2]).toFixed(2) + "", t53, t54, t55, div17, span6, t57, i5, t58_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[2])) + "", t58, t59, t60, div20, t61, i6, t63, t64, div28, t65, t66, div26, div22, t68, div25, div23, span7, t70, i7, t71_value = formatNumber$1(ctx.Math.round(ctx.N* (1-ctx.Iters[ctx.active_][0]-ctx.Iters[ctx.active_][1]-ctx.Iters[ctx.active_][2])+ctx.I0 )) + "", t71, t72, t73_value = ((100*(1-ctx.Iters[ctx.active_][0]-ctx.Iters[ctx.active_][1]-ctx.Iters[ctx.active_][2]-ctx.I0/ctx.N))).toFixed(2) + "", t73, t74, t75, div24, span8, t77, i8, t78_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.get_d(ctx.active_)[3]+ctx.get_d(ctx.active_)[4]+ctx.get_d(ctx.active_)[5]+ctx.get_d(ctx.active_)[6]+ctx.get_d(ctx.active_)[7])
-    	  )) + "", t78, t79, t80, div27, t82, div34, updating_checked_2, t83, t84, div32, div29, t86, div31, div30, span9, t88, i9, t89_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.Iters[ctx.active_][7]+ctx.Iters[ctx.active_][8]) )) + "", t89, t90, t91_value = (100*(ctx.Iters[ctx.active_][7]+ctx.Iters[ctx.active_][8])).toFixed(2) + "", t91, t92, t93, div33, t95, div41, t96, updating_checked_3, t97, div39, div35, t99, div37, div36, span10, t101, i10, t102_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.Iters[ctx.active_][5]+ctx.Iters[ctx.active_][6]) )) + "", t102, t103, t104_value = (100*(ctx.Iters[ctx.active_][5]+ctx.Iters[ctx.active_][6])).toFixed(2) + "", t104, t105, t106, div38, span11, t108, i11, t109_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.get_d(ctx.active_)[5]+ctx.get_d(ctx.active_)[6]))) + "", t109, t110, t111, div40, t113, div48, t114, updating_checked_4, t115, div46, div42, t117, div45, div43, span12, t119, i12, t120_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][9])) + "", t120, t121, t122_value = (100*ctx.Iters[ctx.active_][9]).toFixed(2) + "", t122, t123, t124, div44, span13, t126, i13, t127_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[9])) + "", t127, t128, t129, div47, t131, div51, svg0, circle0, t132, div50, div49, t134, div54, svg1, circle1, t135, div53, div52, t137, div82, div57, updating_checked_5, updating_active, t138, div58, t139, div59, t140, div66, div65, show_if_1 = ctx.xScaleTime(ctx.InterventionTime) >= 100, t141, div63, div60, t142, t143_value = format("d")(ctx.InterventionTime) + "", t143, t144, span14, div61, t146, div62, svg2, g1, g0, path, t147, div64, t148, div69, div68, show_if = ctx.xScaleTime(ctx.InterventionTime+ctx.duration) >= 100, t149, div67, t150, t151_value = format("d")(ctx.InterventionTime+ctx.duration) + "", t151, t152, div77, div76, div75, div74, div73, div70, html_tag, raw0_value = math_inline("\\mathcal{R}_t=" + (ctx.R0*ctx.InterventionAmt).toFixed(2)) + "", t153, input0, t154, div71, t155, t156_value = (ctx.duration).toFixed(0) + "", t156, t157, input1, t158, div72, t159, t160_value = (ctx.retardo).toFixed(0) + "", t160, t161, input2, t162, div78, t163, div81, t164, div80, updating_checked_6, div79, t166, p0, div84, t168, div108, div85, t169, div93, div86, t171, div87, t172, br1, t173, div88, t174_value = format(",")(ctx.Math.round(ctx.N)) + "", t174, t175, input3, t176, input4, t177, div89, t178, br2, t179, div90, t180, t181, input5, t182, input6, input6_updating = false, t183, div91, t184, br3, t185, div92, t186, t187, input7, t188, input8, input8_updating = false, t189, div97, div94, t190, html_tag_1, raw1_value = math_inline("\\mathcal{R}_0") + "", t191, div95, t192, br4, t193, div96, t194, t195, input9, t196, input10, input10_updating = false, t197, div103, div98, t199, div99, t200, html_tag_2, raw2_value = math_inline("T_{\\text{inc}}") + "", t201, br5, t202, div100, t203_value = (ctx.D_incbation).toFixed(2) + "", t203, t204, t205, input11, t206, input12, input12_updating = false, t207, div101, t208, html_tag_3, raw3_value = math_inline("T_{\\text{inf}}") + "", t209, br6, t210, div102, t211, t212, t213, input13, t214, input14, input14_updating = false, t215, div107, div104, html_tag_4, raw4_value = math_inline("\\mathcal{R}_0") + "", t216, t217, div105, t219, div106, t220, t221, input15, t222, input16, input16_updating = false, t223, p1, div109, t225, div129, div110, t226, div116, div111, t228, div112, t229, br7, t230, div113, t231_value = (ctx.CFR*100).toFixed(2) + "", t231, t232, t233, input17, t234, input18, input18_updating = false, t235, div114, t236, br8, t237, div115, t238, t239, t240, input19, input19_min_value, t241, input20, input20_updating = false, input20_min_value, t242, div122, div117, t244, div118, t245, br9, t246, div119, t247, t248, t249, input21, t250, input22, input22_updating = false, t251, div120, t252, br10, t253, div121, t254, t255, t256, input23, t257, input24, input24_updating = false, t258, div128, div123, t260, div124, t261, br11, t262, div125, t263_value = (ctx.P_SEVERE*100).toFixed(2) + "", t263, t264, t265, input25, t266, input26, input26_updating = false, t267, div126, t268, br12, t269, div127, t270, t271, t272, input27, t273, input28, input28_updating = false, t274, div130, t275, p2, t276, a0, t278, b1, a1, t280, b2, t282, span15, b3, t284, span16, b4, t286, span17, b5, t288, a2, t290, a3, t292, a4, t294, a5, t296, span18, t297, t298, p3, t299, a6, t301, t302, p4, t304, p5, t306, p6, t307, a7, t309, t310, p7, t311, a8, t313, a9, t315, p8, t317, p9, t318, a10, t320, t321, p10, t322, t323_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "", t323, t324, a11, t326, input29, t327, t328_value = ((1-(ctx.Math.pow(1 - (ctx.Iters[ctx.active_][2])*(0.45/100), ctx.p_num_ind)))*100).toFixed(5) + "", t328, t329, a12, t331, a13, t333, t334, p11, t336, div131, table, tr0, th0, t337, th1, t339, th2, t340, br13, t341, html_tag_5, raw6_value = math_inline("\\mathcal{R}_0") + "", t342, th3, t343, br14, t344, html_tag_6, raw7_value = math_inline("T_{\\text{inc}}") + "", t345, t346, th4, t347, br15, t348, html_tag_7, raw8_value = math_inline("T_{\\text{inf}}") + "", t349, t350, tr1, td0, a14, t352, td1, t354, td2, t356, td3, t358, td4, t360, tr2, td5, a15, t362, td6, t364, td7, t366, td8, t368, td9, t370, tr3, td10, a16, t372, td11, t374, td12, t376, td13, t378, td14, t380, tr4, td15, a17, t382, td16, t384, td17, t386, td18, t387, td19, t388, tr5, td20, a18, t390, td21, t392, td22, t394, td23, t396, td24, t397, tr6, td25, a19, t399, td26, t401, td27, t403, td28, t405, td29, t407, tr7, td30, a20, t409, td31, t411, td32, t413, td33, t415, td34, t417, tr8, td35, a21, t419, td36, t421, td37, t422, td38, t424, td39, t425, tr9, td40, a22, t427, td41, t429, td42, t431, td43, t432, td44, t433, tr10, td45, a23, t435, td46, t437, td47, t438, td48, t440, td49, t442, td50, t443, tr11, td51, a24, t445, td52, t447, td53, t449, td54, t450, td55, t451, p12, t452, a25, t454, a26, t456, t457, p13, b6, br16, t459, html_tag_8, raw9_value = math_inline("I,R") + "", t460, i14, t462, i15, t464, i16, t466, t467, div134, div133, div132, t469, form, textarea, current, dispose;
+    	var link, t0, h2, t2, button, t4, div77, div50, div49, div0, b0, br0, t6, t7_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "", t7, t8, div7, span0, t9, t10, div5, div1, t12, div4, div2, span1, t14, i0, t15_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][0])) + "", t15, t16, t17_value = (100*ctx.Iters[ctx.active_][0]).toFixed(2) + "", t17, t18, t19, div3, span2, t21, i1, t22_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[0])) + "", t22, t23, t24, div6, t26, div14, updating_checked, t27, t28, div12, div8, t30, div11, div9, span3, t32, i2, t33_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][1])) + "", t33, t34, t35_value = (100*ctx.Iters[ctx.active_][1]).toFixed(2) + "", t35, t36, t37, div10, span4, t39, i3, t40_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[1])) + "", t40, t41, t42, div13, t44, div21, updating_checked_1, t45, t46, div19, div15, t48, div18, div16, span5, t50, i4, t51_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][2])) + "", t51, t52, t53_value = (100*ctx.Iters[ctx.active_][2]).toFixed(2) + "", t53, t54, t55, div17, span6, t57, i5, t58_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[2])) + "", t58, t59, t60, div20, t61, i6, t63, t64, div28, t65, t66, div26, div22, t68, div25, div23, span7, t70, i7, t71_value = formatNumber$1(ctx.Math.round(ctx.N* (1-ctx.Iters[ctx.active_][0]-ctx.Iters[ctx.active_][1]-ctx.Iters[ctx.active_][2])+ctx.I0 )) + "", t71, t72, t73_value = ((100*(1-ctx.Iters[ctx.active_][0]-ctx.Iters[ctx.active_][1]-ctx.Iters[ctx.active_][2]-ctx.I0/ctx.N))).toFixed(2) + "", t73, t74, t75, div24, span8, t77, i8, t78_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.get_d(ctx.active_)[3]+ctx.get_d(ctx.active_)[4]+ctx.get_d(ctx.active_)[5]+ctx.get_d(ctx.active_)[6]+ctx.get_d(ctx.active_)[7])
+    	  )) + "", t78, t79, t80, div27, t82, div34, updating_checked_2, t83, t84, div32, div29, t86, div31, div30, span9, t88, i9, t89_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.Iters[ctx.active_][7]+ctx.Iters[ctx.active_][8]) )) + "", t89, t90, t91_value = (100*(ctx.Iters[ctx.active_][7]+ctx.Iters[ctx.active_][8])).toFixed(2) + "", t91, t92, t93, div33, t95, div41, t96, updating_checked_3, t97, div39, div35, t99, div37, div36, span10, t101, i10, t102_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.Iters[ctx.active_][5]+ctx.Iters[ctx.active_][6]) )) + "", t102, t103, t104_value = (100*(ctx.Iters[ctx.active_][5]+ctx.Iters[ctx.active_][6])).toFixed(2) + "", t104, t105, t106, div38, span11, t108, i11, t109_value = formatNumber$1(ctx.Math.round(ctx.N*(ctx.get_d(ctx.active_)[5]+ctx.get_d(ctx.active_)[6]))) + "", t109, t110, t111, div40, t113, div48, t114, updating_checked_4, t115, div46, div42, t117, div45, div43, span12, t119, i12, t120_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.Iters[ctx.active_][9])) + "", t120, t121, t122_value = (100*ctx.Iters[ctx.active_][9]).toFixed(2) + "", t122, t123, t124, div44, span13, t126, i13, t127_value = formatNumber$1(ctx.Math.round(ctx.N*ctx.get_d(ctx.active_)[9])) + "", t127, t128, t129, div47, t131, div76, div51, updating_checked_5, updating_active, t132, div52, t133, div53, t134, div60, div59, show_if_1 = ctx.xScaleTime(ctx.InterventionTime) >= 100, t135, div57, div54, t136, t137_value = format("d")(ctx.InterventionTime) + "", t137, t138, span14, div55, t140, div56, svg, g1, g0, path, t141, div58, t142, div63, div62, show_if = ctx.xScaleTime(ctx.InterventionTime+ctx.duration) >= 100, t143, div61, t144, t145_value = format("d")(ctx.InterventionTime+ctx.duration) + "", t145, t146, div71, div70, div69, div68, div67, div64, html_tag, raw0_value = math_inline("\\mathcal{R}_t=" + (ctx.R0*ctx.InterventionAmt).toFixed(2)) + "", t147, input0, t148, div65, t149, t150_value = (ctx.duration).toFixed(0) + "", t150, t151, input1, t152, div66, t153, t154_value = (ctx.retardo).toFixed(0) + "", t154, t155, input2, t156, div72, t157, div75, t158, div74, updating_checked_6, div73, t160, p0, div78, t162, div102, div79, t163, div87, div80, t165, div81, t166, br1, t167, div82, t168_value = format(",")(ctx.Math.round(ctx.N)) + "", t168, t169, input3, t170, input4, t171, div83, t172, br2, t173, div84, t174, t175, input5, t176, input6, input6_updating = false, t177, div85, t178, br3, t179, div86, t180, t181, input7, t182, input8, input8_updating = false, t183, div91, div88, t184, html_tag_1, raw1_value = math_inline("\\mathcal{R}_0") + "", t185, div89, t186, br4, t187, div90, t188, t189, input9, t190, input10, input10_updating = false, t191, div97, div92, t193, div93, t194, html_tag_2, raw2_value = math_inline("T_{\\text{inc}}") + "", t195, br5, t196, div94, t197_value = (ctx.D_incbation).toFixed(2) + "", t197, t198, t199, input11, t200, input12, input12_updating = false, t201, div95, t202, html_tag_3, raw3_value = math_inline("T_{\\text{inf}}") + "", t203, br6, t204, div96, t205, t206, t207, input13, t208, input14, input14_updating = false, t209, div101, div98, html_tag_4, raw4_value = math_inline("\\mathcal{R}_0") + "", t210, t211, div99, t213, div100, t214, t215, input15, t216, input16, input16_updating = false, t217, p1, div103, t219, div123, div104, t220, div110, div105, t222, div106, t223, br7, t224, div107, t225_value = (ctx.CFR*100).toFixed(2) + "", t225, t226, t227, input17, t228, input18, input18_updating = false, t229, div108, t230, br8, t231, div109, t232, t233, t234, input19, input19_min_value, t235, input20, input20_updating = false, input20_min_value, t236, div116, div111, t238, div112, t239, br9, t240, div113, t241, t242, t243, input21, t244, input22, input22_updating = false, t245, div114, t246, br10, t247, div115, t248, t249, t250, input23, t251, input24, input24_updating = false, t252, div122, div117, t254, div118, t255, br11, t256, div119, t257_value = (ctx.P_SEVERE*100).toFixed(2) + "", t257, t258, t259, input25, t260, input26, input26_updating = false, t261, div120, t262, br12, t263, div121, t264, t265, t266, input27, t267, input28, input28_updating = false, t268, div124, t269, p2, t270, a0, t272, b1, a1, t274, b2, t276, span15, b3, t278, span16, b4, t280, span17, b5, t282, a2, t284, a3, t286, a4, t288, a5, t290, span18, t291, t292, p3, t293, a6, t295, t296, p4, t298, p5, t300, p6, t301, a7, t303, t304, p7, t305, a8, t307, a9, t309, p8, t311, p9, t312, a10, t314, t315, p10, t316, t317_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "", t317, t318, a11, t320, input29, t321, t322_value = ((1-(ctx.Math.pow(1 - (ctx.Iters[ctx.active_][2])*(0.45/100), ctx.p_num_ind)))*100).toFixed(5) + "", t322, t323, a12, t325, a13, t327, t328, p11, t330, div125, table, tr0, th0, t331, th1, t333, th2, t334, br13, t335, html_tag_5, raw6_value = math_inline("\\mathcal{R}_0") + "", t336, th3, t337, br14, t338, html_tag_6, raw7_value = math_inline("T_{\\text{inc}}") + "", t339, t340, th4, t341, br15, t342, html_tag_7, raw8_value = math_inline("T_{\\text{inf}}") + "", t343, t344, tr1, td0, a14, t346, td1, t348, td2, t350, td3, t352, td4, t354, tr2, td5, a15, t356, td6, t358, td7, t360, td8, t362, td9, t364, tr3, td10, a16, t366, td11, t368, td12, t370, td13, t372, td14, t374, tr4, td15, a17, t376, td16, t378, td17, t380, td18, t381, td19, t382, tr5, td20, a18, t384, td21, t386, td22, t388, td23, t390, td24, t391, tr6, td25, a19, t393, td26, t395, td27, t397, td28, t399, td29, t401, tr7, td30, a20, t403, td31, t405, td32, t407, td33, t409, td34, t411, tr8, td35, a21, t413, td36, t415, td37, t416, td38, t418, td39, t419, tr9, td40, a22, t421, td41, t423, td42, t425, td43, t426, td44, t427, tr10, td45, a23, t429, td46, t431, td47, t432, td48, t434, td49, t436, td50, t437, tr11, td51, a24, t439, td52, t441, td53, t443, td54, t444, td55, t445, p12, t446, a25, t448, a26, t450, t451, p13, b6, br16, t453, html_tag_8, raw9_value = math_inline("I,R") + "", t454, i14, t456, i15, t458, i16, t460, t461, div128, div127, div126, t463, form, textarea, current, dispose;
 
     	var checkbox0 = new Checkbox({
     		props: { color: "#CCC" },
@@ -23187,9 +22999,9 @@
     			button = element("button");
     			button.textContent = "Descargar como CSV";
     			t4 = space();
-    			div83 = element("div");
-    			div56 = element("div");
-    			div55 = element("div");
+    			div77 = element("div");
+    			div50 = element("div");
+    			div49 = element("div");
     			div0 = element("div");
     			b0 = element("b");
     			b0.textContent = "Día";
@@ -23410,619 +23222,603 @@
     			div47 = element("div");
     			div47.textContent = "Muertes.";
     			t131 = space();
+    			div76 = element("div");
     			div51 = element("div");
-    			svg0 = svg_element("svg");
-    			circle0 = svg_element("circle");
-    			t132 = space();
-    			div50 = element("div");
-    			div49 = element("div");
-    			div49.textContent = "Confirmados Arg.";
-    			t134 = space();
-    			div54 = element("div");
-    			svg1 = svg_element("svg");
-    			circle1 = svg_element("circle");
-    			t135 = space();
-    			div53 = element("div");
-    			div52 = element("div");
-    			div52.textContent = "Decesos Arg.";
-    			t137 = space();
-    			div82 = element("div");
-    			div57 = element("div");
     			chart.$$.fragment.c();
-    			t138 = space();
-    			div58 = element("div");
-    			t139 = space();
-    			div59 = element("div");
-    			t140 = space();
-    			div66 = element("div");
-    			div65 = element("div");
-    			if (if_block0) if_block0.c();
-    			t141 = space();
-    			div63 = element("div");
+    			t132 = space();
+    			div52 = element("div");
+    			t133 = space();
+    			div53 = element("div");
+    			t134 = space();
     			div60 = element("div");
-    			t142 = text("Día\n\t  de intervención ");
-    			t143 = text(t143_value);
-    			t144 = space();
+    			div59 = element("div");
+    			if (if_block0) if_block0.c();
+    			t135 = space();
+    			div57 = element("div");
+    			div54 = element("div");
+    			t136 = text("Día\n\t  de intervención ");
+    			t137 = text(t137_value);
+    			t138 = space();
     			span14 = element("span");
-    			div61 = element("div");
-    			div61.textContent = "(deslizar)";
-    			t146 = space();
-    			div62 = element("div");
-    			svg2 = svg_element("svg");
+    			div55 = element("div");
+    			div55.textContent = "(deslizar)";
+    			t140 = space();
+    			div56 = element("div");
+    			svg = svg_element("svg");
     			g1 = svg_element("g");
     			g0 = svg_element("g");
     			path = svg_element("path");
-    			t147 = space();
-    			div64 = element("div");
-    			t148 = space();
+    			t141 = space();
+    			div58 = element("div");
+    			t142 = space();
+    			div63 = element("div");
+    			div62 = element("div");
+    			if (if_block1) if_block1.c();
+    			t143 = space();
+    			div61 = element("div");
+    			t144 = text("Final ");
+    			t145 = text(t145_value);
+    			t146 = space();
+    			div71 = element("div");
+    			div70 = element("div");
     			div69 = element("div");
     			div68 = element("div");
-    			if (if_block1) if_block1.c();
-    			t149 = space();
     			div67 = element("div");
-    			t150 = text("Final ");
-    			t151 = text(t151_value);
-    			t152 = space();
-    			div77 = element("div");
-    			div76 = element("div");
-    			div75 = element("div");
-    			div74 = element("div");
-    			div73 = element("div");
-    			div70 = element("div");
-    			t153 = space();
+    			div64 = element("div");
+    			t147 = space();
     			input0 = element("input");
-    			t154 = space();
-    			div71 = element("div");
-    			t155 = text("Duración:");
-    			t156 = text(t156_value);
-    			t157 = text(" días\n                ");
+    			t148 = space();
+    			div65 = element("div");
+    			t149 = text("Duración:");
+    			t150 = text(t150_value);
+    			t151 = text(" días\n                ");
     			input1 = element("input");
-    			t158 = space();
-    			div72 = element("div");
-    			t159 = text("Retardo:");
-    			t160 = text(t160_value);
-    			t161 = text(" días\n                ");
+    			t152 = space();
+    			div66 = element("div");
+    			t153 = text("Retardo:");
+    			t154 = text(t154_value);
+    			t155 = text(" días\n                ");
     			input2 = element("input");
-    			t162 = space();
-    			div78 = element("div");
+    			t156 = space();
+    			div72 = element("div");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t163 = space();
-    			div81 = element("div");
-    			t164 = text("-->\n      ");
-    			div80 = element("div");
+    			t157 = space();
+    			div75 = element("div");
+    			t158 = text("-->\n      ");
+    			div74 = element("div");
     			checkbox7.$$.fragment.c();
-    			div79 = element("div");
-    			div79.textContent = "escala lineal";
-    			t166 = space();
+    			div73 = element("div");
+    			div73.textContent = "escala lineal";
+    			t160 = space();
     			p0 = element("p");
-    			div84 = element("div");
-    			div84.textContent = "Dinámica de transmisión";
-    			t168 = space();
-    			div108 = element("div");
-    			div85 = element("div");
-    			t169 = space();
-    			div93 = element("div");
-    			div86 = element("div");
-    			div86.textContent = "Parámetros de Población";
-    			t171 = space();
+    			div78 = element("div");
+    			div78.textContent = "Dinámica de transmisión";
+    			t162 = space();
+    			div102 = element("div");
+    			div79 = element("div");
+    			t163 = space();
     			div87 = element("div");
-    			t172 = text("Tamaño poblacional.");
+    			div80 = element("div");
+    			div80.textContent = "Parámetros de Población";
+    			t165 = space();
+    			div81 = element("div");
+    			t166 = text("Tamaño poblacional.");
     			br1 = element("br");
-    			t173 = space();
-    			div88 = element("div");
-    			t174 = text(t174_value);
-    			t175 = space();
+    			t167 = space();
+    			div82 = element("div");
+    			t168 = text(t168_value);
+    			t169 = space();
     			input3 = element("input");
-    			t176 = space();
+    			t170 = space();
     			input4 = element("input");
-    			t177 = space();
-    			div89 = element("div");
-    			t178 = text("Número de infecciones iniciales.");
+    			t171 = space();
+    			div83 = element("div");
+    			t172 = text("Número de infecciones iniciales.");
     			br2 = element("br");
-    			t179 = space();
-    			div90 = element("div");
-    			t180 = text(ctx.I0);
-    			t181 = space();
+    			t173 = space();
+    			div84 = element("div");
+    			t174 = text(ctx.I0);
+    			t175 = space();
     			input5 = element("input");
-    			t182 = space();
+    			t176 = space();
     			input6 = element("input");
+    			t177 = space();
+    			div85 = element("div");
+    			t178 = text("Número de expuestos iniciales.");
+    			br3 = element("br");
+    			t179 = space();
+    			div86 = element("div");
+    			t180 = text(ctx.E0);
+    			t181 = space();
+    			input7 = element("input");
+    			t182 = space();
+    			input8 = element("input");
     			t183 = space();
     			div91 = element("div");
-    			t184 = text("Número de expuestos iniciales.");
-    			br3 = element("br");
+    			div88 = element("div");
+    			t184 = text("Ritmo reproductivo básico ");
     			t185 = space();
-    			div92 = element("div");
-    			t186 = text(ctx.E0);
-    			t187 = space();
-    			input7 = element("input");
-    			t188 = space();
-    			input8 = element("input");
-    			t189 = space();
-    			div97 = element("div");
-    			div94 = element("div");
-    			t190 = text("Ritmo reproductivo básico ");
-    			t191 = space();
-    			div95 = element("div");
-    			t192 = text("Número promedio de casos nuevos que genera un individuo a lo largo de un período infeccioso. ");
+    			div89 = element("div");
+    			t186 = text("Número promedio de casos nuevos que genera un individuo a lo largo de un período infeccioso. ");
     			br4 = element("br");
-    			t193 = space();
-    			div96 = element("div");
-    			t194 = text(ctx.R0);
-    			t195 = space();
+    			t187 = space();
+    			div90 = element("div");
+    			t188 = text(ctx.R0);
+    			t189 = space();
     			input9 = element("input");
-    			t196 = space();
+    			t190 = space();
     			input10 = element("input");
-    			t197 = space();
-    			div103 = element("div");
-    			div98 = element("div");
-    			div98.textContent = "Tiempos de Transmisión";
-    			t199 = space();
-    			div99 = element("div");
-    			t200 = text("Duración del periodo de incubación, ");
-    			t201 = text(".");
+    			t191 = space();
+    			div97 = element("div");
+    			div92 = element("div");
+    			div92.textContent = "Tiempos de Transmisión";
+    			t193 = space();
+    			div93 = element("div");
+    			t194 = text("Duración del periodo de incubación, ");
+    			t195 = text(".");
     			br5 = element("br");
-    			t202 = space();
-    			div100 = element("div");
-    			t203 = text(t203_value);
-    			t204 = text(" días");
-    			t205 = space();
+    			t196 = space();
+    			div94 = element("div");
+    			t197 = text(t197_value);
+    			t198 = text(" días");
+    			t199 = space();
     			input11 = element("input");
-    			t206 = space();
+    			t200 = space();
     			input12 = element("input");
-    			t207 = space();
-    			div101 = element("div");
-    			t208 = text("Intervalo donde el paciente es infeccioso, ");
-    			t209 = text(".");
+    			t201 = space();
+    			div95 = element("div");
+    			t202 = text("Intervalo donde el paciente es infeccioso, ");
+    			t203 = text(".");
     			br6 = element("br");
-    			t210 = space();
-    			div102 = element("div");
-    			t211 = text(ctx.D_infectious);
-    			t212 = text(" días");
-    			t213 = space();
+    			t204 = space();
+    			div96 = element("div");
+    			t205 = text(ctx.D_infectious);
+    			t206 = text(" días");
+    			t207 = space();
     			input13 = element("input");
-    			t214 = space();
+    			t208 = space();
     			input14 = element("input");
+    			t209 = space();
+    			div101 = element("div");
+    			div98 = element("div");
+    			t210 = text(" post-intervención");
+    			t211 = space();
+    			div99 = element("div");
+    			div99.textContent = "Tasa luego de la cuarentena";
+    			t213 = space();
+    			div100 = element("div");
+    			t214 = text(ctx.R0p);
     			t215 = space();
-    			div107 = element("div");
-    			div104 = element("div");
-    			t216 = text(" post-intervención");
-    			t217 = space();
-    			div105 = element("div");
-    			div105.textContent = "Tasa luego de la cuarentena";
-    			t219 = space();
-    			div106 = element("div");
-    			t220 = text(ctx.R0p);
-    			t221 = space();
     			input15 = element("input");
-    			t222 = space();
+    			t216 = space();
     			input16 = element("input");
-    			t223 = space();
+    			t217 = space();
     			p1 = element("p");
-    			div109 = element("div");
-    			div109.textContent = "Dinámica Clínica";
-    			t225 = space();
-    			div129 = element("div");
+    			div103 = element("div");
+    			div103.textContent = "Dinámica Clínica";
+    			t219 = space();
+    			div123 = element("div");
+    			div104 = element("div");
+    			t220 = space();
     			div110 = element("div");
-    			t226 = space();
+    			div105 = element("div");
+    			div105.textContent = "Estadística de Morbilidad";
+    			t222 = space();
+    			div106 = element("div");
+    			t223 = text("Tasa de mortandad.");
+    			br7 = element("br");
+    			t224 = space();
+    			div107 = element("div");
+    			t225 = text(t225_value);
+    			t226 = text(" %");
+    			t227 = space();
+    			input17 = element("input");
+    			t228 = space();
+    			input18 = element("input");
+    			t229 = space();
+    			div108 = element("div");
+    			t230 = text("Tiempo desde el final de la incubación a la muerte.");
+    			br8 = element("br");
+    			t231 = space();
+    			div109 = element("div");
+    			t232 = text(ctx.Time_to_death);
+    			t233 = text(" días");
+    			t234 = space();
+    			input19 = element("input");
+    			t235 = space();
+    			input20 = element("input");
+    			t236 = space();
     			div116 = element("div");
     			div111 = element("div");
-    			div111.textContent = "Estadística de Morbilidad";
-    			t228 = space();
+    			div111.textContent = "Tiempos de Recuperación";
+    			t238 = space();
     			div112 = element("div");
-    			t229 = text("Tasa de mortandad.");
-    			br7 = element("br");
-    			t230 = space();
-    			div113 = element("div");
-    			t231 = text(t231_value);
-    			t232 = text(" %");
-    			t233 = space();
-    			input17 = element("input");
-    			t234 = space();
-    			input18 = element("input");
-    			t235 = space();
-    			div114 = element("div");
-    			t236 = text("Tiempo desde el final de la incubación a la muerte.");
-    			br8 = element("br");
-    			t237 = space();
-    			div115 = element("div");
-    			t238 = text(ctx.Time_to_death);
-    			t239 = text(" días");
+    			t239 = text("Duración de la estadía en el hospital");
+    			br9 = element("br");
     			t240 = space();
-    			input19 = element("input");
-    			t241 = space();
-    			input20 = element("input");
-    			t242 = space();
+    			div113 = element("div");
+    			t241 = text(ctx.D_recovery_severe);
+    			t242 = text(" días");
+    			t243 = space();
+    			input21 = element("input");
+    			t244 = space();
+    			input22 = element("input");
+    			t245 = space();
+    			div114 = element("div");
+    			t246 = text("Tiempo de recuperación en casos leves");
+    			br10 = element("br");
+    			t247 = space();
+    			div115 = element("div");
+    			t248 = text(ctx.D_recovery_mild);
+    			t249 = text(" días");
+    			t250 = space();
+    			input23 = element("input");
+    			t251 = space();
+    			input24 = element("input");
+    			t252 = space();
     			div122 = element("div");
     			div117 = element("div");
-    			div117.textContent = "Tiempos de Recuperación";
-    			t244 = space();
+    			div117.textContent = "Estadística hospitalaria";
+    			t254 = space();
     			div118 = element("div");
-    			t245 = text("Duración de la estadía en el hospital");
-    			br9 = element("br");
-    			t246 = space();
-    			div119 = element("div");
-    			t247 = text(ctx.D_recovery_severe);
-    			t248 = text(" días");
-    			t249 = space();
-    			input21 = element("input");
-    			t250 = space();
-    			input22 = element("input");
-    			t251 = space();
-    			div120 = element("div");
-    			t252 = text("Tiempo de recuperación en casos leves");
-    			br10 = element("br");
-    			t253 = space();
-    			div121 = element("div");
-    			t254 = text(ctx.D_recovery_mild);
-    			t255 = text(" días");
-    			t256 = space();
-    			input23 = element("input");
-    			t257 = space();
-    			input24 = element("input");
-    			t258 = space();
-    			div128 = element("div");
-    			div123 = element("div");
-    			div123.textContent = "Estadística hospitalaria";
-    			t260 = space();
-    			div124 = element("div");
-    			t261 = text("Tasa de hospitalización.");
+    			t255 = text("Tasa de hospitalización.");
     			br11 = element("br");
-    			t262 = space();
-    			div125 = element("div");
-    			t263 = text(t263_value);
-    			t264 = text(" %");
-    			t265 = space();
+    			t256 = space();
+    			div119 = element("div");
+    			t257 = text(t257_value);
+    			t258 = text(" %");
+    			t259 = space();
     			input25 = element("input");
-    			t266 = space();
+    			t260 = space();
     			input26 = element("input");
-    			t267 = space();
-    			div126 = element("div");
-    			t268 = text("Tiempo de hospitalización.");
+    			t261 = space();
+    			div120 = element("div");
+    			t262 = text("Tiempo de hospitalización.");
     			br12 = element("br");
-    			t269 = space();
-    			div127 = element("div");
-    			t270 = text(ctx.D_hospital_lag);
-    			t271 = text(" días");
-    			t272 = space();
+    			t263 = space();
+    			div121 = element("div");
+    			t264 = text(ctx.D_hospital_lag);
+    			t265 = text(" días");
+    			t266 = space();
     			input27 = element("input");
-    			t273 = space();
+    			t267 = space();
     			input28 = element("input");
-    			t274 = space();
-    			div130 = element("div");
-    			t275 = space();
+    			t268 = space();
+    			div124 = element("div");
+    			t269 = space();
     			p2 = element("p");
-    			t276 = text("Este proyecto se encuentra en el marco de las actividades llevadas a cabo por el grupo\n");
+    			t270 = text("Este proyecto se encuentra en el marco de las actividades llevadas a cabo por el grupo\n");
     			a0 = element("a");
     			a0.textContent = "Arcovid19";
-    			t278 = text(".\nLa presente calculadora implementa el modelo clásico epidemiológico — \n");
+    			t272 = text(".\nLa presente calculadora implementa el modelo clásico epidemiológico — \n");
     			b1 = element("b");
     			a1 = element("a");
     			a1.textContent = "SEIR";
-    			t280 = text(" (");
+    			t274 = text(" (");
     			b2 = element("b");
     			b2.textContent = "S";
-    			t282 = text("usceptible → ");
+    			t276 = text("usceptible → ");
     			span15 = element("span");
     			b3 = element("b");
     			b3.textContent = "E";
-    			t284 = text("xposed → ");
+    			t278 = text("xposed → ");
     			span16 = element("span");
     			b4 = element("b");
     			b4.textContent = "I";
-    			t286 = text("nfected → ");
+    			t280 = text("nfected → ");
     			span17 = element("span");
     			b5 = element("b");
     			b5.textContent = "R";
-    			t288 = text("emoved, en inglés), y esta basada en el trabajo del \n");
+    			t282 = text("emoved, en inglés), y esta basada en el trabajo del \n");
     			a2 = element("a");
     			a2.textContent = "Dr. Gabriel Goh";
-    			t290 = text(" (");
+    			t284 = text(" (");
     			a3 = element("a");
     			a3.textContent = "código fuente original";
-    			t292 = text(").\nEl modelo SEIR es un modelo idealizado de propagación utilizado comunmente en algunas\ninvestigaciones actuales, e.g. [");
+    			t286 = text(").\nEl modelo SEIR es un modelo idealizado de propagación utilizado comunmente en algunas\ninvestigaciones actuales, e.g. [");
     			a4 = element("a");
     			a4.textContent = "Wu, et.\nal";
-    			t294 = text(", ");
+    			t288 = text(", ");
     			a5 = element("a");
     			a5.textContent = "Kucharski\net. al";
-    			t296 = text("]. La dinámica del modelo es caracterizada mediante un conjunto de cuatro ecuaciones\ndiferenciales ordinarias que corresponden a los diferentes estadios de la enfermedad durante su\npropagación en una dada población: ");
+    			t290 = text("]. La dinámica del modelo es caracterizada mediante un conjunto de cuatro ecuaciones\ndiferenciales ordinarias que corresponden a los diferentes estadios de la enfermedad durante su\npropagación en una dada población: ");
     			span18 = element("span");
-    			t297 = text(" Además de la\ndinámica de transmisión, este modelo permite cargar mediante parámetros de entrada información\nsuplementaria como la tasa de mortalidad y la carga de atención médica.");
-    			t298 = space();
+    			t291 = text(" Además de la\ndinámica de transmisión, este modelo permite cargar mediante parámetros de entrada información\nsuplementaria como la tasa de mortalidad y la carga de atención médica.");
+    			t292 = space();
     			p3 = element("p");
-    			t299 = text("Con respecto a la versión del Dr. Goh se añadieron nuevos varias mejoras, el\ncódigo fuente es libre y puede descargarse desde el siguiente ");
+    			t293 = text("Con respecto a la versión del Dr. Goh se añadieron nuevos varias mejoras, el\ncódigo fuente es libre y puede descargarse desde el siguiente ");
     			a6 = element("a");
     			a6.textContent = "repositorio GIT";
-    			t301 = text(". Algunas de las modificaciones son:");
-    			t302 = space();
+    			t295 = text(". Algunas de las modificaciones son:");
+    			t296 = space();
     			p4 = element("p");
     			p4.textContent = "- Definir la duración de la cuarentena";
-    			t304 = space();
+    			t298 = space();
     			p5 = element("p");
     			p5.textContent = "- Controlar el ritmo reproductivo durante y a la salida de la cuarentena.";
-    			t306 = space();
+    			t300 = space();
     			p6 = element("p");
-    			t307 = text("- Debido a que la detección de nuevos casos es un procedimiento que puede tardar varios\ndías, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena\nen el número de casos activos (ver figura 1 en ");
+    			t301 = text("- Debido a que la detección de nuevos casos es un procedimiento que puede tardar varios\ndías, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena\nen el número de casos activos (ver figura 1 en ");
     			a7 = element("a");
     			a7.textContent = "Wu y McGoogan";
-    			t309 = text("). Si dispusieramos en los datos oficiales del día cuando se desarrollaron los\nsíntomas de cada caso ésta traslación del eje temporal no sería necesaria. Debido a esto la\nserie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo (ya que los\nfallecidos se supone que no tienen demora en ser informados).");
-    			t310 = space();
+    			t303 = text("). Si dispusieramos en los datos oficiales del día cuando se desarrollaron los\nsíntomas de cada caso ésta traslación del eje temporal no sería necesaria. Debido a esto la\nserie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo (ya que los\nfallecidos se supone que no tienen demora en ser informados).");
+    			t304 = space();
     			p7 = element("p");
-    			t311 = text("- Se añadió en forma de puntos los casos activos y las muertes de COVID-19 en Argentina, para permitir\nvisualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.\nLos datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.\nEl código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en\npython se encuentra en este ");
+    			t305 = text("- Se añadió en forma de puntos los casos activos y las muertes de COVID-19 en Argentina, para permitir\nvisualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.\nLos datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.\nEl código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en\npython se encuentra en este ");
     			a8 = element("a");
     			a8.textContent = "repositorio";
-    			t313 = text("\nLos datos poseen el siguiente DOI:\n\nLuczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. \n");
+    			t307 = text("\nLos datos poseen el siguiente DOI:\n\nLuczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. \n");
     			a9 = element("a");
     			a9.textContent = "https://doi.org/10.13140/RG.2.2.22519.78246";
-    			t315 = space();
+    			t309 = space();
     			p8 = element("p");
     			p8.textContent = "- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos\nya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.\nEncontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir\nun número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,\nya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer\na más personas.";
-    			t317 = space();
+    			t311 = space();
     			p9 = element("p");
-    			t318 = text("Gracias a la generosidad de Mario Lamfri (CONAE) quien lleva un proyecto paralelo a este para el\nministerio de salud de la provincia de Córdoba, se añadió la facilidad de poder descargar los datos\ndel modelo a un archivo csv, que facilita su manipulacion en planillas de cálculo. Mario también nos\nayudó a mejorar la interface de entrada permitiendo el ingreso de texto. El desarrollo de esta\ncalculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga\ny todo el equipo de ");
+    			t312 = text("Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de\nCONAE, quien lleva un proyecto paralelo a este para el ministerio de salud de la provincia de Córdoba, \nse añadió la facilidad de poder descargar los datos del modelo a un archivo csv, que facilita \nsu manipulacion en planillas de cálculo. También nos\nayudó a mejorar la interface de entrada permitiendo el ingreso de texto. El desarrollo de esta\ncalculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga,\ny todo el equipo de ");
     			a10 = element("a");
     			a10.textContent = "Arcovid19";
-    			t320 = text(".");
-    			t321 = space();
+    			t314 = text(". En especial agradecemos el\napoyo y asesoría de Mario Lamfri.");
+    			t315 = space();
     			p10 = element("p");
-    			t322 = text("Esta calculadora puede utilizarse para medir el riesgo de exposición a la enfermedad para un día determinado de la epidemia:\nPor ejemplo la probabilidad de infectarse en el día ");
-    			t323 = text(t323_value);
-    			t324 = text(" dado ");
+    			t316 = text("Esta calculadora puede utilizarse para medir el riesgo de exposición a la enfermedad para un día determinado de la epidemia:\nPor ejemplo la probabilidad de infectarse en el día ");
+    			t317 = text(t317_value);
+    			t318 = text(" dado ");
     			a11 = element("a");
     			a11.textContent = "contactos cercanos";
-    			t326 = text(" con ");
+    			t320 = text(" con ");
     			input29 = element("input");
-    			t327 = text(" sujetos es de ");
-    			t328 = text(t328_value);
-    			t329 = text("% dada una ");
+    			t321 = text(" sujetos es de ");
+    			t322 = text(t322_value);
+    			t323 = text("% dada una ");
     			a12 = element("a");
     			a12.textContent = "tasa de de ataque";
-    			t331 = text(" del 0.45% [");
+    			t325 = text(" del 0.45% [");
     			a13 = element("a");
     			a13.textContent = "Burke et. al";
-    			t333 = text("].");
-    			t334 = space();
+    			t327 = text("].");
+    			t328 = space();
     			p11 = element("p");
     			p11.textContent = "A continuación se presenta una muestra de estimaciones de parámetros epidémicos:";
-    			t336 = space();
-    			div131 = element("div");
+    			t330 = space();
+    			div125 = element("div");
     			table = element("table");
     			tr0 = element("tr");
     			th0 = element("th");
-    			t337 = space();
+    			t331 = space();
     			th1 = element("th");
     			th1.textContent = "Lugar";
-    			t339 = space();
+    			t333 = space();
     			th2 = element("th");
-    			t340 = text("Ritmo reproductivo");
+    			t334 = text("Ritmo reproductivo");
     			br13 = element("br");
-    			t341 = space();
-    			t342 = space();
+    			t335 = space();
+    			t336 = space();
     			th3 = element("th");
-    			t343 = text("Periodo de incubacion");
+    			t337 = text("Periodo de incubacion");
     			br14 = element("br");
-    			t344 = space();
-    			t345 = text(" (días)");
-    			t346 = space();
+    			t338 = space();
+    			t339 = text(" (días)");
+    			t340 = space();
     			th4 = element("th");
-    			t347 = text("Periodo infeccioso");
+    			t341 = text("Periodo infeccioso");
     			br15 = element("br");
-    			t348 = space();
-    			t349 = text(" (días)");
-    			t350 = space();
+    			t342 = space();
+    			t343 = text(" (días)");
+    			t344 = space();
     			tr1 = element("tr");
     			td0 = element("td");
     			a14 = element("a");
     			a14.textContent = "Kucharski et. al";
-    			t352 = space();
+    			t346 = space();
     			td1 = element("td");
     			td1.textContent = "Wuhan";
-    			t354 = space();
+    			t348 = space();
     			td2 = element("td");
     			td2.textContent = "3.0 (1.5 — 4.5)";
-    			t356 = space();
+    			t350 = space();
     			td3 = element("td");
     			td3.textContent = "5.2";
-    			t358 = space();
+    			t352 = space();
     			td4 = element("td");
     			td4.textContent = "2.9";
-    			t360 = space();
+    			t354 = space();
     			tr2 = element("tr");
     			td5 = element("td");
     			a15 = element("a");
     			a15.textContent = "Li, Leung and Leung";
-    			t362 = space();
+    			t356 = space();
     			td6 = element("td");
     			td6.textContent = "Wuhan";
-    			t364 = space();
+    			t358 = space();
     			td7 = element("td");
     			td7.textContent = "2.2 (1.4 — 3.9)";
-    			t366 = space();
+    			t360 = space();
     			td8 = element("td");
     			td8.textContent = "5.2 (4.1 — 7.0)";
-    			t368 = space();
+    			t362 = space();
     			td9 = element("td");
     			td9.textContent = "2.3 (0.0 — 14.9)";
-    			t370 = space();
+    			t364 = space();
     			tr3 = element("tr");
     			td10 = element("td");
     			a16 = element("a");
     			a16.textContent = "Wu et. al";
-    			t372 = space();
+    			t366 = space();
     			td11 = element("td");
     			td11.textContent = "Greater Wuhan";
-    			t374 = space();
+    			t368 = space();
     			td12 = element("td");
     			td12.textContent = "2.68 (2.47 — 2.86)";
-    			t376 = space();
+    			t370 = space();
     			td13 = element("td");
     			td13.textContent = "6.1";
-    			t378 = space();
+    			t372 = space();
     			td14 = element("td");
     			td14.textContent = "2.3";
-    			t380 = space();
+    			t374 = space();
     			tr4 = element("tr");
     			td15 = element("td");
     			a17 = element("a");
     			a17.textContent = "WHO Initial Estimate";
-    			t382 = space();
+    			t376 = space();
     			td16 = element("td");
     			td16.textContent = "Hubei";
-    			t384 = space();
+    			t378 = space();
     			td17 = element("td");
     			td17.textContent = "1.95 (1.4 — 2.5)";
-    			t386 = space();
+    			t380 = space();
     			td18 = element("td");
-    			t387 = space();
+    			t381 = space();
     			td19 = element("td");
-    			t388 = space();
+    			t382 = space();
     			tr5 = element("tr");
     			td20 = element("td");
     			a18 = element("a");
     			a18.textContent = "WHO-China Joint Mission";
-    			t390 = space();
+    			t384 = space();
     			td21 = element("td");
     			td21.textContent = "Hubei";
-    			t392 = space();
+    			t386 = space();
     			td22 = element("td");
     			td22.textContent = "2.25 (2.0 — 2.5)";
-    			t394 = space();
+    			t388 = space();
     			td23 = element("td");
     			td23.textContent = "5.5 (5.0 - 6.0)";
-    			t396 = space();
+    			t390 = space();
     			td24 = element("td");
-    			t397 = space();
+    			t391 = space();
     			tr6 = element("tr");
     			td25 = element("td");
     			a19 = element("a");
     			a19.textContent = "Liu et. al";
-    			t399 = space();
+    			t393 = space();
     			td26 = element("td");
     			td26.textContent = "Guangdong";
-    			t401 = space();
+    			t395 = space();
     			td27 = element("td");
     			td27.textContent = "4.5 (4.4 — 4.6)";
-    			t403 = space();
+    			t397 = space();
     			td28 = element("td");
     			td28.textContent = "4.8 (2.2 — 7.4)";
-    			t405 = space();
+    			t399 = space();
     			td29 = element("td");
     			td29.textContent = "2.9 (0 — 5.9)";
-    			t407 = space();
+    			t401 = space();
     			tr7 = element("tr");
     			td30 = element("td");
     			a20 = element("a");
     			a20.textContent = "Rocklöv, Sjödin and Wilder-Smith";
-    			t409 = space();
+    			t403 = space();
     			td31 = element("td");
     			td31.textContent = "Princess Diamond";
-    			t411 = space();
+    			t405 = space();
     			td32 = element("td");
     			td32.textContent = "14.8";
-    			t413 = space();
+    			t407 = space();
     			td33 = element("td");
     			td33.textContent = "5.0";
-    			t415 = space();
+    			t409 = space();
     			td34 = element("td");
     			td34.textContent = "10.0";
-    			t417 = space();
+    			t411 = space();
     			tr8 = element("tr");
     			td35 = element("td");
     			a21 = element("a");
     			a21.textContent = "Backer, Klinkenberg, Wallinga";
-    			t419 = space();
+    			t413 = space();
     			td36 = element("td");
     			td36.textContent = "Wuhan";
-    			t421 = space();
+    			t415 = space();
     			td37 = element("td");
-    			t422 = space();
+    			t416 = space();
     			td38 = element("td");
     			td38.textContent = "6.5 (5.6 — 7.9)";
-    			t424 = space();
+    			t418 = space();
     			td39 = element("td");
-    			t425 = space();
+    			t419 = space();
     			tr9 = element("tr");
     			td40 = element("td");
     			a22 = element("a");
     			a22.textContent = "Read et. al";
-    			t427 = space();
+    			t421 = space();
     			td41 = element("td");
     			td41.textContent = "Wuhan";
-    			t429 = space();
+    			t423 = space();
     			td42 = element("td");
     			td42.textContent = "3.11 (2.39 — 4.13)";
-    			t431 = space();
+    			t425 = space();
     			td43 = element("td");
-    			t432 = space();
+    			t426 = space();
     			td44 = element("td");
-    			t433 = space();
+    			t427 = space();
     			tr10 = element("tr");
     			td45 = element("td");
     			a23 = element("a");
     			a23.textContent = "Bi et. al";
-    			t435 = space();
+    			t429 = space();
     			td46 = element("td");
     			td46.textContent = "Shenzhen";
-    			t437 = space();
+    			t431 = space();
     			td47 = element("td");
-    			t438 = space();
+    			t432 = space();
     			td48 = element("td");
     			td48.textContent = "4.8 (4.2 — 5.4)";
-    			t440 = space();
+    			t434 = space();
     			td49 = element("td");
     			td49.textContent = "1.5 (0 — 3.4)";
-    			t442 = space();
+    			t436 = space();
     			td50 = element("td");
-    			t443 = space();
+    			t437 = space();
     			tr11 = element("tr");
     			td51 = element("td");
     			a24 = element("a");
     			a24.textContent = "Tang et. al";
-    			t445 = space();
+    			t439 = space();
     			td52 = element("td");
     			td52.textContent = "China";
-    			t447 = space();
+    			t441 = space();
     			td53 = element("td");
     			td53.textContent = "6.47 (5.71 — 7.23)";
-    			t449 = space();
+    			t443 = space();
     			td54 = element("td");
-    			t450 = space();
+    			t444 = space();
     			td55 = element("td");
-    			t451 = space();
+    			t445 = space();
     			p12 = element("p");
-    			t452 = text("Ver  [");
+    			t446 = text("Ver  [");
     			a25 = element("a");
     			a25.textContent = "Liu et.\nal";
-    			t454 = text("] para un relevamiento detallado de las estimaciones actuales del ritmo reporductivo. \nLos parámetros para las características clínicas de las enfermedades se toman de un ");
+    			t448 = text("] para un relevamiento detallado de las estimaciones actuales del ritmo reporductivo. \nLos parámetros para las características clínicas de las enfermedades se toman de un ");
     			a26 = element("a");
     			a26.textContent = "Informe de la OMS";
-    			t456 = text(".");
-    			t457 = space();
+    			t450 = text(".");
+    			t451 = space();
     			p13 = element("p");
     			b6 = element("b");
     			b6.textContent = "Detalles del modelo";
     			br16 = element("br");
-    			t459 = text("\nLa dinámica clínica en este modelo es una implementacion basada en SEIR que simula la progresión de la enfermedad \nen una \"resolución más alta\", es decir se subdivide a ");
-    			t460 = text(" en  ");
+    			t453 = text("\nLa dinámica clínica en este modelo es una implementacion basada en SEIR que simula la progresión de la enfermedad \nen una \"resolución más alta\", es decir se subdivide a ");
+    			t454 = text(" en  ");
     			i14 = element("i");
     			i14.textContent = "leves";
-    			t462 = text(" \n(pacientes que se recuperan sin internación), ");
+    			t456 = text(" \n(pacientes que se recuperan sin internación), ");
     			i15 = element("i");
     			i15.textContent = "moderado";
-    			t464 = text(" (pacientes que requieren ser\nhospitalizados pero sobreviven) y ");
+    			t458 = text(" (pacientes que requieren ser\nhospitalizados pero sobreviven) y ");
     			i16 = element("i");
     			i16.textContent = "fatales";
-    			t466 = text(" (pacientes que son internados y no sobreviven).\nCada una de estas variables sigue su propia trayectoria hasta el resultado final, y la suma de estos compartimentos\nse suman a los valores predichos por SEIR. Tenga en cuenta que suponemos, por simplicidad, que todas las muertes \nprovienen de hospitales, y que todos los casos fatales son ingresados en hospitales inmediatamente después del período infeccioso.");
-    			t467 = space();
-    			div134 = element("div");
-    			div133 = element("div");
-    			div132 = element("div");
-    			div132.textContent = "Parámetros para exportar:";
-    			t469 = space();
+    			t460 = text(" (pacientes que son internados y no sobreviven).\nCada una de estas variables sigue su propia trayectoria hasta el resultado final, y la suma de estos compartimentos\nse suman a los valores predichos por SEIR. Tenga en cuenta que suponemos, por simplicidad, que todas las muertes \nprovienen de hospitales, y que todos los casos fatales son ingresados en hospitales inmediatamente después del período infeccioso.");
+    			t461 = space();
+    			div128 = element("div");
+    			div127 = element("div");
+    			div126 = element("div");
+    			div126.textContent = "Parámetros para exportar:";
+    			t463 = space();
     			form = element("form");
     			textarea = element("textarea");
     			attr_dev(link, "rel", "stylesheet");
@@ -24288,279 +24084,245 @@
     			set_style(div48, "width", "180px");
     			set_style(div48, "height", "100px");
     			add_location(div48, file$3, 771, 6, 25840);
-    			attr_dev(circle0, "cx", "7px");
-    			attr_dev(circle0, "cy", "10px");
-    			attr_dev(circle0, "r", "4");
-    			attr_dev(circle0, "fill", ctx.colors[2]);
-    			add_location(circle0, file$3, 791, 1, 27016);
-    			add_location(svg0, file$3, 790, 6, 27009);
-    			attr_dev(div49, "class", "legendtitle svelte-1vzb36m");
-    			add_location(div49, file$3, 793, 10, 27138);
-    			attr_dev(div50, "class", "legend svelte-1vzb36m");
-    			set_style(div50, "position", "absolute");
-    			add_location(div50, file$3, 792, 8, 27080);
-    			set_style(div51, "position", "absolute");
-    			set_style(div51, "left", "0px");
-    			set_style(div51, "top", "" + (legendheight*4+180) + "px");
-    			set_style(div51, "width", "180px");
-    			set_style(div51, "height", "100px");
-    			add_location(div51, file$3, 789, 6, 26904);
-    			attr_dev(circle1, "cx", "7px");
-    			attr_dev(circle1, "cy", "10px");
-    			attr_dev(circle1, "r", "4");
-    			attr_dev(circle1, "fill", ctx.colors[1]);
-    			add_location(circle1, file$3, 798, 1, 27332);
-    			add_location(svg1, file$3, 797, 6, 27325);
-    			attr_dev(div52, "class", "legendtitle svelte-1vzb36m");
-    			add_location(div52, file$3, 800, 10, 27454);
-    			attr_dev(div53, "class", "legend svelte-1vzb36m");
+    			set_style(div49, "position", "relative");
+    			set_style(div49, "top", "48px");
+    			set_style(div49, "right", "-115px");
+    			add_location(div49, file$3, 651, 4, 19066);
+    			set_style(div50, "flex", "0 0 270px");
+    			set_style(div50, "width", "270px");
+    			add_location(div50, file$3, 650, 2, 19018);
+    			set_style(div51, "position", "relative");
+    			set_style(div51, "top", "60px");
+    			set_style(div51, "left", "10px");
+    			add_location(div51, file$3, 812, 4, 27645);
+    			attr_dev(div52, "id", "xAxisDrag");
+    			set_style(div52, "pointer-events", "all");
+    			set_style(div52, "position", "absolute");
+    			set_style(div52, "top", "" + (height$1+80) + "px");
+    			set_style(div52, "left", "" + 0 + "px");
+    			set_style(div52, "width", "" + 780 + "px");
+    			set_style(div52, "background-color", "#222");
+    			set_style(div52, "opacity", "0");
+    			set_style(div52, "height", "25px");
+    			set_style(div52, "cursor", "col-resize");
+    			add_location(div52, file$3, 830, 6, 28193);
+    			attr_dev(div53, "id", "yAxisDrag");
+    			set_style(div53, "pointer-events", "all");
     			set_style(div53, "position", "absolute");
-    			add_location(div53, file$3, 799, 8, 27396);
-    			set_style(div54, "position", "absolute");
-    			set_style(div54, "left", "0px");
-    			set_style(div54, "top", "" + (legendheight*4+200) + "px");
-    			set_style(div54, "width", "180px");
-    			set_style(div54, "height", "100px");
-    			add_location(div54, file$3, 796, 6, 27220);
-    			set_style(div55, "position", "relative");
-    			set_style(div55, "top", "48px");
-    			set_style(div55, "right", "-115px");
-    			add_location(div55, file$3, 651, 4, 19066);
-    			set_style(div56, "flex", "0 0 270px");
-    			set_style(div56, "width", "270px");
-    			add_location(div56, file$3, 650, 2, 19018);
-    			set_style(div57, "position", "relative");
-    			set_style(div57, "top", "60px");
-    			set_style(div57, "left", "10px");
-    			add_location(div57, file$3, 812, 4, 27645);
-    			attr_dev(div58, "id", "xAxisDrag");
-    			set_style(div58, "pointer-events", "all");
-    			set_style(div58, "position", "absolute");
-    			set_style(div58, "top", "" + (height$1+80) + "px");
-    			set_style(div58, "left", "" + 0 + "px");
-    			set_style(div58, "width", "" + 780 + "px");
-    			set_style(div58, "background-color", "#222");
-    			set_style(div58, "opacity", "0");
-    			set_style(div58, "height", "25px");
-    			set_style(div58, "cursor", "col-resize");
-    			add_location(div58, file$3, 830, 6, 28193);
-    			attr_dev(div59, "id", "yAxisDrag");
-    			set_style(div59, "pointer-events", "all");
-    			set_style(div59, "position", "absolute");
-    			set_style(div59, "top", "" + 55 + "px");
-    			set_style(div59, "left", "" + 0 + "px");
-    			set_style(div59, "width", "" + 20 + "px");
-    			set_style(div59, "background-color", "#222");
-    			set_style(div59, "opacity", "0");
-    			set_style(div59, "height", "425px");
-    			set_style(div59, "cursor", "row-resize");
-    			add_location(div59, file$3, 842, 6, 28550);
-    			attr_dev(div60, "class", "paneltitle svelte-1vzb36m");
-    			set_style(div60, "top", "9px");
-    			set_style(div60, "position", "relative");
-    			set_style(div60, "text-align", "right");
-    			add_location(div60, file$3, 875, 10, 30131);
+    			set_style(div53, "top", "" + 55 + "px");
+    			set_style(div53, "left", "" + 0 + "px");
+    			set_style(div53, "width", "" + 20 + "px");
+    			set_style(div53, "background-color", "#222");
+    			set_style(div53, "opacity", "0");
+    			set_style(div53, "height", "425px");
+    			set_style(div53, "cursor", "row-resize");
+    			add_location(div53, file$3, 842, 6, 28550);
+    			attr_dev(div54, "class", "paneltitle svelte-1vzb36m");
+    			set_style(div54, "top", "9px");
+    			set_style(div54, "position", "relative");
+    			set_style(div54, "text-align", "right");
+    			add_location(div54, file$3, 875, 10, 30131);
     			add_location(span14, file$3, 877, 10, 30281);
-    			set_style(div61, "top", "9px");
-    			set_style(div61, "position", "relative");
-    			set_style(div61, "text-align", "right");
-    			add_location(div61, file$3, 877, 23, 30294);
+    			set_style(div55, "top", "9px");
+    			set_style(div55, "position", "relative");
+    			set_style(div55, "text-align", "right");
+    			add_location(div55, file$3, 877, 23, 30294);
     			attr_dev(path, "d", "M2 11h16v2H2zm0-4h16v2H2zm8 11l3-3H7l3 3zm0-16L7 5h6l-3-3z");
     			add_location(path, file$3, 883, 18, 30654);
     			attr_dev(g0, "transform", "translate(0,-20)");
     			add_location(g0, file$3, 882, 16, 30603);
     			attr_dev(g1, "transform", "rotate(90)");
     			add_location(g1, file$3, 881, 14, 30560);
-    			attr_dev(svg2, "width", "20");
-    			attr_dev(svg2, "height", "20");
-    			add_location(svg2, file$3, 880, 12, 30517);
-    			set_style(div62, "top", "43px");
-    			set_style(div62, "left", "40px");
+    			attr_dev(svg, "width", "20");
+    			attr_dev(svg, "height", "20");
+    			add_location(svg, file$3, 880, 12, 30517);
+    			set_style(div56, "top", "43px");
+    			set_style(div56, "left", "40px");
+    			set_style(div56, "position", "absolute");
+    			set_style(div56, "text-align", "right");
+    			set_style(div56, "width", "20px");
+    			set_style(div56, "height", "20px");
+    			set_style(div56, "opacity", "0.3");
+    			add_location(div56, file$3, 879, 10, 30392);
+    			attr_dev(div57, "id", "interventionDrag");
+    			attr_dev(div57, "class", "legendtext svelte-1vzb36m");
+    			set_style(div57, "flex", "0 0 160px");
+    			set_style(div57, "width", "120px");
+    			set_style(div57, "position", "relative");
+    			set_style(div57, "top", "-70px");
+    			set_style(div57, "height", "60px");
+    			set_style(div57, "padding-right", "15px");
+    			set_style(div57, "left", "-125px");
+    			set_style(div57, "pointer-events", "all");
+    			set_style(div57, "cursor", "col-resize");
+    			add_location(div57, file$3, 874, 8, 29916);
+    			set_style(div58, "width", "150px");
+    			set_style(div58, "position", "relative");
+    			set_style(div58, "top", "-85px");
+    			set_style(div58, "height", "80px");
+    			set_style(div58, "padding-right", "15px");
+    			set_style(div58, "left", "0px");
+    			set_style(div58, "cursor", "col-resize");
+    			set_style(div58, "background-color", "white");
+    			set_style(div58, "position", "absolute");
+    			add_location(div58, file$3, 891, 8, 30829);
+    			attr_dev(div59, "id", "dottedline");
+    			set_style(div59, "pointer-events", "all");
+    			set_style(div59, "position", "absolute");
+    			set_style(div59, "top", "-38px");
+    			set_style(div59, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
+    			set_style(div59, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    			set_style(div59, "width", "2px");
+    			set_style(div59, "background-color", "#FFF");
+    			set_style(div59, "border-right", "1px dashed black");
+    			set_style(div59, "pointer-events", "all");
+    			set_style(div59, "cursor", "col-resize");
+    			set_style(div59, "height", "" + (height$1+19) + "px");
+    			add_location(div59, file$3, 856, 8, 29078);
+    			set_style(div60, "position", "absolute");
+    			set_style(div60, "width", "" + (width$1+15) + "px");
+    			set_style(div60, "height", "" + height$1 + "px");
+    			set_style(div60, "position", "absolute");
+    			set_style(div60, "top", "100px");
+    			set_style(div60, "left", "10px");
+    			set_style(div60, "pointer-events", "none");
+    			add_location(div60, file$3, 855, 6, 28933);
+    			set_style(div61, "font-size", "13px");
+    			set_style(div61, "color", "#FF0000");
+    			set_style(div61, "position", "absolute");
+    			set_style(div61, "top", "105px");
+    			set_style(div61, "right", "-65px");
+    			set_style(div61, "text-align", "right");
+    			set_style(div61, "width", "120px");
+    			add_location(div61, file$3, 919, 3, 32100);
+    			attr_dev(div62, "id", "dottedline");
+    			set_style(div62, "pointer-events", "all");
     			set_style(div62, "position", "absolute");
-    			set_style(div62, "text-align", "right");
-    			set_style(div62, "width", "20px");
-    			set_style(div62, "height", "20px");
-    			set_style(div62, "opacity", "0.3");
-    			add_location(div62, file$3, 879, 10, 30392);
-    			attr_dev(div63, "id", "interventionDrag");
-    			attr_dev(div63, "class", "legendtext svelte-1vzb36m");
-    			set_style(div63, "flex", "0 0 160px");
-    			set_style(div63, "width", "120px");
-    			set_style(div63, "position", "relative");
-    			set_style(div63, "top", "-70px");
-    			set_style(div63, "height", "60px");
-    			set_style(div63, "padding-right", "15px");
-    			set_style(div63, "left", "-125px");
-    			set_style(div63, "pointer-events", "all");
-    			set_style(div63, "cursor", "col-resize");
-    			add_location(div63, file$3, 874, 8, 29916);
-    			set_style(div64, "width", "150px");
-    			set_style(div64, "position", "relative");
-    			set_style(div64, "top", "-85px");
-    			set_style(div64, "height", "80px");
-    			set_style(div64, "padding-right", "15px");
-    			set_style(div64, "left", "0px");
-    			set_style(div64, "cursor", "col-resize");
-    			set_style(div64, "background-color", "white");
-    			set_style(div64, "position", "absolute");
-    			add_location(div64, file$3, 891, 8, 30829);
-    			attr_dev(div65, "id", "dottedline");
-    			set_style(div65, "pointer-events", "all");
-    			set_style(div65, "position", "absolute");
-    			set_style(div65, "top", "-38px");
-    			set_style(div65, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
-    			set_style(div65, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
-    			set_style(div65, "width", "2px");
-    			set_style(div65, "background-color", "#FFF");
-    			set_style(div65, "border-right", "1px dashed black");
-    			set_style(div65, "pointer-events", "all");
-    			set_style(div65, "cursor", "col-resize");
-    			set_style(div65, "height", "" + (height$1+19) + "px");
-    			add_location(div65, file$3, 856, 8, 29078);
-    			set_style(div66, "position", "absolute");
-    			set_style(div66, "width", "" + (width$1+15) + "px");
-    			set_style(div66, "height", "" + height$1 + "px");
-    			set_style(div66, "position", "absolute");
-    			set_style(div66, "top", "100px");
-    			set_style(div66, "left", "10px");
-    			set_style(div66, "pointer-events", "none");
-    			add_location(div66, file$3, 855, 6, 28933);
-    			set_style(div67, "font-size", "13px");
-    			set_style(div67, "color", "#FF0000");
-    			set_style(div67, "position", "absolute");
-    			set_style(div67, "top", "105px");
-    			set_style(div67, "right", "-65px");
-    			set_style(div67, "text-align", "right");
-    			set_style(div67, "width", "120px");
-    			add_location(div67, file$3, 919, 3, 32100);
-    			attr_dev(div68, "id", "dottedline");
-    			set_style(div68, "pointer-events", "all");
-    			set_style(div68, "position", "absolute");
-    			set_style(div68, "top", "-38px");
-    			set_style(div68, "left", "" + ctx.xScaleTime(ctx.InterventionTime+ctx.duration) + "px");
-    			set_style(div68, "visibility", ((ctx.xScaleTime(ctx.InterventionTime+ctx.duration) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
-    			set_style(div68, "width", "2px");
-    			set_style(div68, "background-color", "#FFF");
-    			set_style(div68, "border-right", "1px dashed red");
-    			set_style(div68, "pointer-events", "all");
-    			set_style(div68, "cursor", "col-resize");
-    			set_style(div68, "height", "" + (height$1+69) + "px");
-    			add_location(div68, file$3, 901, 8, 31230);
-    			set_style(div69, "position", "absolute");
-    			set_style(div69, "width", "" + (width$1+15) + "px");
-    			set_style(div69, "height", "" + height$1 + "px");
-    			set_style(div69, "position", "absolute");
-    			set_style(div69, "top", "50px");
-    			set_style(div69, "left", "10px");
-    			set_style(div69, "pointer-events", "none");
-    			add_location(div69, file$3, 900, 6, 31086);
-    			html_tag = new HtmlTag(raw0_value, t153);
+    			set_style(div62, "top", "-38px");
+    			set_style(div62, "left", "" + ctx.xScaleTime(ctx.InterventionTime+ctx.duration) + "px");
+    			set_style(div62, "visibility", ((ctx.xScaleTime(ctx.InterventionTime+ctx.duration) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    			set_style(div62, "width", "2px");
+    			set_style(div62, "background-color", "#FFF");
+    			set_style(div62, "border-right", "1px dashed red");
+    			set_style(div62, "pointer-events", "all");
+    			set_style(div62, "cursor", "col-resize");
+    			set_style(div62, "height", "" + (height$1+69) + "px");
+    			add_location(div62, file$3, 901, 8, 31230);
+    			set_style(div63, "position", "absolute");
+    			set_style(div63, "width", "" + (width$1+15) + "px");
+    			set_style(div63, "height", "" + height$1 + "px");
+    			set_style(div63, "position", "absolute");
+    			set_style(div63, "top", "50px");
+    			set_style(div63, "left", "10px");
+    			set_style(div63, "pointer-events", "none");
+    			add_location(div63, file$3, 900, 6, 31086);
+    			html_tag = new HtmlTag(raw0_value, t147);
     			attr_dev(input0, "class", "range svelte-1vzb36m");
     			attr_dev(input0, "type", "range");
     			attr_dev(input0, "min", "0");
     			attr_dev(input0, "max", "1");
     			attr_dev(input0, "step", "0.01");
     			add_location(input0, file$3, 947, 16, 33697);
-    			attr_dev(div70, "class", "slidertext svelte-1vzb36m");
-    			add_location(div70, file$3, 946, 16, 33558);
+    			attr_dev(div64, "class", "slidertext svelte-1vzb36m");
+    			add_location(div64, file$3, 946, 16, 33558);
     			attr_dev(input1, "class", "range svelte-1vzb36m");
     			attr_dev(input1, "type", "range");
     			attr_dev(input1, "min", "0");
     			attr_dev(input1, "max", "60");
     			attr_dev(input1, "step", "1");
     			add_location(input1, file$3, 950, 16, 33943);
-    			attr_dev(div71, "class", "slidertext svelte-1vzb36m");
-    			add_location(div71, file$3, 949, 16, 33839);
+    			attr_dev(div65, "class", "slidertext svelte-1vzb36m");
+    			add_location(div65, file$3, 949, 16, 33839);
     			attr_dev(input2, "class", "range svelte-1vzb36m");
     			attr_dev(input2, "type", "range");
     			attr_dev(input2, "min", "0");
     			attr_dev(input2, "max", "10");
     			attr_dev(input2, "step", "1");
     			add_location(input2, file$3, 953, 16, 34185);
-    			attr_dev(div72, "class", "slidertext svelte-1vzb36m");
-    			add_location(div72, file$3, 952, 16, 34083);
-    			set_style(div73, "pointer-events", "all");
-    			add_location(div73, file$3, 944, 14, 33386);
-    			attr_dev(div74, "class", "caption svelte-1vzb36m");
-    			set_style(div74, "pointer-events", "none");
+    			attr_dev(div66, "class", "slidertext svelte-1vzb36m");
+    			add_location(div66, file$3, 952, 16, 34083);
+    			set_style(div67, "pointer-events", "all");
+    			add_location(div67, file$3, 944, 14, 33386);
+    			attr_dev(div68, "class", "caption svelte-1vzb36m");
+    			set_style(div68, "pointer-events", "none");
+    			set_style(div68, "position", "absolute");
+    			set_style(div68, "left", "0");
+    			set_style(div68, "top", "40px");
+    			set_style(div68, "width", "100px");
+    			set_style(div68, "border-left", "2px solid #777");
+    			set_style(div68, "padding", "5px 7px 7px 7px");
+    			add_location(div68, file$3, 943, 14, 33207);
+    			set_style(div69, "flex", "0 0 160px");
+    			set_style(div69, "flex-direction", "row width:120px");
+    			set_style(div69, "position", "relative");
+    			set_style(div69, "top", "-125px");
+    			set_style(div69, "left", "1px");
+    			add_location(div69, file$3, 942, 12, 33088);
+    			set_style(div70, "position", "absolute");
+    			set_style(div70, "top", "-38px");
+    			set_style(div70, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
+    			set_style(div70, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    			set_style(div70, "width", "2px");
+    			set_style(div70, "background-color", "#FFF");
+    			set_style(div70, "border-right", "1px dashed black");
+    			set_style(div70, "cursor", "col-resize");
+    			set_style(div70, "height", "" + height$1 + "px");
+    			add_location(div70, file$3, 932, 8, 32687);
+    			set_style(div71, "position", "absolute");
+    			set_style(div71, "width", "" + (width$1+15) + "px");
+    			set_style(div71, "height", "" + height$1 + "px");
+    			set_style(div71, "position", "absolute");
+    			set_style(div71, "top", "120px");
+    			set_style(div71, "left", "10px");
+    			set_style(div71, "pointer-events", "none");
+    			add_location(div71, file$3, 931, 6, 32542);
+    			set_style(div72, "pointer-events", "none");
+    			set_style(div72, "position", "absolute");
+    			set_style(div72, "top", "" + (height$1+84) + "px");
+    			set_style(div72, "left", "" + 0 + "px");
+    			set_style(div72, "width", "" + 780 + "px");
+    			set_style(div72, "opacity", "1.0");
+    			set_style(div72, "height", "25px");
+    			set_style(div72, "cursor", "col-resize");
+    			add_location(div72, file$3, 1009, 6, 36845);
+    			set_style(div73, "position", "relative");
+    			set_style(div73, "top", "4px");
+    			set_style(div73, "left", "20px");
+    			add_location(div73, file$3, 1027, 51, 37870);
+    			attr_dev(div74, "class", "tick svelte-1vzb36m");
+    			set_style(div74, "color", "#AAA");
     			set_style(div74, "position", "absolute");
-    			set_style(div74, "left", "0");
-    			set_style(div74, "top", "40px");
-    			set_style(div74, "width", "100px");
-    			set_style(div74, "border-left", "2px solid #777");
-    			set_style(div74, "padding", "5px 7px 7px 7px");
-    			add_location(div74, file$3, 943, 14, 33207);
-    			set_style(div75, "flex", "0 0 160px");
-    			set_style(div75, "flex-direction", "row width:120px");
-    			set_style(div75, "position", "relative");
-    			set_style(div75, "top", "-125px");
-    			set_style(div75, "left", "1px");
-    			add_location(div75, file$3, 942, 12, 33088);
-    			set_style(div76, "position", "absolute");
-    			set_style(div76, "top", "-38px");
-    			set_style(div76, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
-    			set_style(div76, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
-    			set_style(div76, "width", "2px");
-    			set_style(div76, "background-color", "#FFF");
-    			set_style(div76, "border-right", "1px dashed black");
-    			set_style(div76, "cursor", "col-resize");
-    			set_style(div76, "height", "" + height$1 + "px");
-    			add_location(div76, file$3, 932, 8, 32687);
-    			set_style(div77, "position", "absolute");
-    			set_style(div77, "width", "" + (width$1+15) + "px");
-    			set_style(div77, "height", "" + height$1 + "px");
-    			set_style(div77, "position", "absolute");
-    			set_style(div77, "top", "120px");
-    			set_style(div77, "left", "10px");
-    			set_style(div77, "pointer-events", "none");
-    			add_location(div77, file$3, 931, 6, 32542);
-    			set_style(div78, "pointer-events", "none");
-    			set_style(div78, "position", "absolute");
-    			set_style(div78, "top", "" + (height$1+84) + "px");
-    			set_style(div78, "left", "" + 0 + "px");
-    			set_style(div78, "width", "" + 780 + "px");
-    			set_style(div78, "opacity", "1.0");
-    			set_style(div78, "height", "25px");
-    			set_style(div78, "cursor", "col-resize");
-    			add_location(div78, file$3, 1009, 6, 36845);
-    			set_style(div79, "position", "relative");
-    			set_style(div79, "top", "4px");
-    			set_style(div79, "left", "20px");
-    			add_location(div79, file$3, 1027, 51, 37870);
-    			attr_dev(div80, "class", "tick svelte-1vzb36m");
-    			set_style(div80, "color", "#AAA");
-    			set_style(div80, "position", "absolute");
-    			set_style(div80, "pointer-events", "all");
-    			set_style(div80, "left", "10px");
-    			set_style(div80, "top", "10px");
-    			add_location(div80, file$3, 1026, 6, 37719);
-    			set_style(div81, "opacity", (ctx.xScaleTime(ctx.InterventionTime) >= 192? 1.0 : 0.2));
-    			add_location(div81, file$3, 1025, 5, 37637);
-    			set_style(div82, "flex", "0 0 890px");
-    			set_style(div82, "width", "890px");
-    			set_style(div82, "height", "" + (height$1+128) + "px");
-    			set_style(div82, "position", "relative");
-    			add_location(div82, file$3, 810, 2, 27553);
-    			attr_dev(div83, "class", "chart svelte-1vzb36m");
-    			set_style(div83, "display", "flex");
-    			set_style(div83, "max-width", "1120px");
-    			add_location(div83, file$3, 648, 0, 18954);
+    			set_style(div74, "pointer-events", "all");
+    			set_style(div74, "left", "10px");
+    			set_style(div74, "top", "10px");
+    			add_location(div74, file$3, 1026, 6, 37719);
+    			set_style(div75, "opacity", (ctx.xScaleTime(ctx.InterventionTime) >= 192? 1.0 : 0.2));
+    			add_location(div75, file$3, 1025, 5, 37637);
+    			set_style(div76, "flex", "0 0 890px");
+    			set_style(div76, "width", "890px");
+    			set_style(div76, "height", "" + (height$1+128) + "px");
+    			set_style(div76, "position", "relative");
+    			add_location(div76, file$3, 810, 2, 27553);
+    			attr_dev(div77, "class", "chart svelte-1vzb36m");
+    			set_style(div77, "display", "flex");
+    			set_style(div77, "max-width", "1120px");
+    			add_location(div77, file$3, 648, 0, 18954);
     			attr_dev(p0, "class", "center svelte-1vzb36m");
     			add_location(p0, file$3, 1042, 2, 38295);
-    			set_style(div84, "margin", "0px 0px 5px 4px");
-    			attr_dev(div84, "class", "minorTitleColumn svelte-1vzb36m");
-    			add_location(div84, file$3, 1043, 4, 38320);
-    			set_style(div85, "flex", "0 0 20");
-    			set_style(div85, "width", "20px");
-    			add_location(div85, file$3, 1045, 4, 38436);
-    			attr_dev(div86, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div86, file$3, 1048, 6, 38513);
+    			set_style(div78, "margin", "0px 0px 5px 4px");
+    			attr_dev(div78, "class", "minorTitleColumn svelte-1vzb36m");
+    			add_location(div78, file$3, 1043, 4, 38320);
+    			set_style(div79, "flex", "0 0 20");
+    			set_style(div79, "width", "20px");
+    			add_location(div79, file$3, 1045, 4, 38436);
+    			attr_dev(div80, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div80, file$3, 1048, 6, 38513);
     			add_location(br1, file$3, 1049, 68, 38635);
-    			attr_dev(div87, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div87, "height", "30px");
-    			add_location(div87, file$3, 1049, 6, 38573);
-    			attr_dev(div88, "class", "slidertext svelte-1vzb36m");
-    			add_location(div88, file$3, 1050, 6, 38652);
+    			attr_dev(div81, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div81, "height", "30px");
+    			add_location(div81, file$3, 1049, 6, 38573);
+    			attr_dev(div82, "class", "slidertext svelte-1vzb36m");
+    			add_location(div82, file$3, 1050, 6, 38652);
     			attr_dev(input3, "class", "range svelte-1vzb36m");
     			set_style(input3, "margin-bottom", "8px");
     			attr_dev(input3, "type", "range");
@@ -24575,13 +24337,13 @@
     			attr_dev(input4, "step", "1.0");
     			add_location(input4, file$3, 1052, 6, 38825);
     			add_location(br2, file$3, 1053, 128, 39061);
-    			attr_dev(div89, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div89, "height", "29px");
-    			set_style(div89, "border-top", "1px solid #EEE");
-    			set_style(div89, "padding-top", "10px");
-    			add_location(div89, file$3, 1053, 6, 38939);
-    			attr_dev(div90, "class", "slidertext svelte-1vzb36m");
-    			add_location(div90, file$3, 1054, 6, 39078);
+    			attr_dev(div83, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div83, "height", "29px");
+    			set_style(div83, "border-top", "1px solid #EEE");
+    			set_style(div83, "padding-top", "10px");
+    			add_location(div83, file$3, 1053, 6, 38939);
+    			attr_dev(div84, "class", "slidertext svelte-1vzb36m");
+    			add_location(div84, file$3, 1054, 6, 39078);
     			attr_dev(input5, "class", "range svelte-1vzb36m");
     			attr_dev(input5, "type", "range");
     			attr_dev(input5, "min", 1);
@@ -24594,13 +24356,13 @@
     			attr_dev(input6, "step", "1");
     			add_location(input6, file$3, 1056, 6, 39197);
     			add_location(br3, file$3, 1057, 126, 39382);
-    			attr_dev(div91, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div91, "height", "29px");
-    			set_style(div91, "border-top", "1px solid #EEE");
-    			set_style(div91, "padding-top", "10px");
-    			add_location(div91, file$3, 1057, 6, 39262);
-    			attr_dev(div92, "class", "slidertext svelte-1vzb36m");
-    			add_location(div92, file$3, 1058, 6, 39399);
+    			attr_dev(div85, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div85, "height", "29px");
+    			set_style(div85, "border-top", "1px solid #EEE");
+    			set_style(div85, "padding-top", "10px");
+    			add_location(div85, file$3, 1057, 6, 39262);
+    			attr_dev(div86, "class", "slidertext svelte-1vzb36m");
+    			add_location(div86, file$3, 1058, 6, 39399);
     			attr_dev(input7, "class", "range svelte-1vzb36m");
     			attr_dev(input7, "type", "range");
     			attr_dev(input7, "min", 1);
@@ -24612,16 +24374,16 @@
     			attr_dev(input8, "max", "100");
     			attr_dev(input8, "step", "1");
     			add_location(input8, file$3, 1060, 6, 39518);
-    			attr_dev(div93, "class", "column svelte-1vzb36m");
-    			add_location(div93, file$3, 1047, 4, 38486);
+    			attr_dev(div87, "class", "column svelte-1vzb36m");
+    			add_location(div87, file$3, 1047, 4, 38486);
     			html_tag_1 = new HtmlTag(raw1_value, null);
-    			attr_dev(div94, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div94, file$3, 1064, 6, 39620);
+    			attr_dev(div88, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div88, file$3, 1064, 6, 39620);
     			add_location(br4, file$3, 1065, 122, 39837);
-    			attr_dev(div95, "class", "paneldesc svelte-1vzb36m");
-    			add_location(div95, file$3, 1065, 6, 39721);
-    			attr_dev(div96, "class", "slidertext svelte-1vzb36m");
-    			add_location(div96, file$3, 1066, 6, 39854);
+    			attr_dev(div89, "class", "paneldesc svelte-1vzb36m");
+    			add_location(div89, file$3, 1065, 6, 39721);
+    			attr_dev(div90, "class", "slidertext svelte-1vzb36m");
+    			add_location(div90, file$3, 1066, 6, 39854);
     			attr_dev(input9, "class", "range svelte-1vzb36m");
     			attr_dev(input9, "type", "range");
     			attr_dev(input9, "min", "0.01");
@@ -24633,17 +24395,17 @@
     			attr_dev(input10, "max", "10");
     			attr_dev(input10, "step", "0.01");
     			add_location(input10, file$3, 1068, 6, 39977);
-    			attr_dev(div97, "class", "column svelte-1vzb36m");
-    			add_location(div97, file$3, 1063, 4, 39593);
-    			attr_dev(div98, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div98, file$3, 1073, 6, 40083);
-    			html_tag_2 = new HtmlTag(raw2_value, t201);
+    			attr_dev(div91, "class", "column svelte-1vzb36m");
+    			add_location(div91, file$3, 1063, 4, 39593);
+    			attr_dev(div92, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div92, file$3, 1073, 6, 40083);
+    			html_tag_2 = new HtmlTag(raw2_value, t195);
     			add_location(br5, file$3, 1074, 124, 40260);
-    			attr_dev(div99, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div99, "height", "50px");
-    			add_location(div99, file$3, 1074, 6, 40142);
-    			attr_dev(div100, "class", "slidertext svelte-1vzb36m");
-    			add_location(div100, file$3, 1075, 6, 40277);
+    			attr_dev(div93, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div93, "height", "50px");
+    			add_location(div93, file$3, 1074, 6, 40142);
+    			attr_dev(div94, "class", "slidertext svelte-1vzb36m");
+    			add_location(div94, file$3, 1075, 6, 40277);
     			attr_dev(input11, "class", "range svelte-1vzb36m");
     			set_style(input11, "margin-bottom", "8px");
     			attr_dev(input11, "type", "range");
@@ -24657,15 +24419,15 @@
     			attr_dev(input12, "max", "24");
     			attr_dev(input12, "step", "0.0001");
     			add_location(input12, file$3, 1077, 6, 40465);
-    			html_tag_3 = new HtmlTag(raw3_value, t209);
+    			html_tag_3 = new HtmlTag(raw3_value, t203);
     			add_location(br6, file$3, 1078, 178, 40744);
-    			attr_dev(div101, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div101, "height", "50px");
-    			set_style(div101, "border-top", "1px solid #EEE");
-    			set_style(div101, "padding-top", "10px");
-    			add_location(div101, file$3, 1078, 6, 40572);
-    			attr_dev(div102, "class", "slidertext svelte-1vzb36m");
-    			add_location(div102, file$3, 1079, 6, 40761);
+    			attr_dev(div95, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div95, "height", "50px");
+    			set_style(div95, "border-top", "1px solid #EEE");
+    			set_style(div95, "padding-top", "10px");
+    			add_location(div95, file$3, 1078, 6, 40572);
+    			attr_dev(div96, "class", "slidertext svelte-1vzb36m");
+    			add_location(div96, file$3, 1079, 6, 40761);
     			attr_dev(input13, "class", "range svelte-1vzb36m");
     			attr_dev(input13, "type", "range");
     			attr_dev(input13, "min", 0);
@@ -24677,16 +24439,16 @@
     			attr_dev(input14, "max", "24");
     			attr_dev(input14, "step", "0.01");
     			add_location(input14, file$3, 1081, 6, 40907);
-    			attr_dev(div103, "class", "column svelte-1vzb36m");
-    			add_location(div103, file$3, 1072, 4, 40056);
-    			html_tag_4 = new HtmlTag(raw4_value, t216);
-    			attr_dev(div104, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div104, file$3, 1085, 6, 41020);
-    			attr_dev(div105, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div105, "height", "30px");
-    			add_location(div105, file$3, 1086, 6, 41113);
-    			attr_dev(div106, "class", "slidertext svelte-1vzb36m");
-    			add_location(div106, file$3, 1087, 6, 41197);
+    			attr_dev(div97, "class", "column svelte-1vzb36m");
+    			add_location(div97, file$3, 1072, 4, 40056);
+    			html_tag_4 = new HtmlTag(raw4_value, t210);
+    			attr_dev(div98, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div98, file$3, 1085, 6, 41020);
+    			attr_dev(div99, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div99, "height", "30px");
+    			add_location(div99, file$3, 1086, 6, 41113);
+    			attr_dev(div100, "class", "slidertext svelte-1vzb36m");
+    			add_location(div100, file$3, 1087, 6, 41197);
     			attr_dev(input15, "class", "range svelte-1vzb36m");
     			attr_dev(input15, "type", "range");
     			attr_dev(input15, "min", "0.01");
@@ -24698,26 +24460,26 @@
     			attr_dev(input16, "max", "10");
     			attr_dev(input16, "step", "0.01");
     			add_location(input16, file$3, 1089, 6, 41322);
-    			attr_dev(div107, "class", "column svelte-1vzb36m");
-    			add_location(div107, file$3, 1084, 3, 40993);
-    			attr_dev(div108, "class", "row svelte-1vzb36m");
-    			add_location(div108, file$3, 1044, 2, 38414);
+    			attr_dev(div101, "class", "column svelte-1vzb36m");
+    			add_location(div101, file$3, 1084, 3, 40993);
+    			attr_dev(div102, "class", "row svelte-1vzb36m");
+    			add_location(div102, file$3, 1044, 2, 38414);
     			attr_dev(p1, "class", "center svelte-1vzb36m");
     			add_location(p1, file$3, 1093, 2, 41408);
-    			set_style(div109, "margin", "0px 4px 5px 0px");
-    			attr_dev(div109, "class", "minorTitleColumn svelte-1vzb36m");
-    			add_location(div109, file$3, 1094, 4, 41433);
-    			set_style(div110, "flex", "0 0 20");
-    			set_style(div110, "width", "20px");
-    			add_location(div110, file$3, 1096, 3, 41541);
-    			attr_dev(div111, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div111, file$3, 1099, 6, 41619);
+    			set_style(div103, "margin", "0px 4px 5px 0px");
+    			attr_dev(div103, "class", "minorTitleColumn svelte-1vzb36m");
+    			add_location(div103, file$3, 1094, 4, 41433);
+    			set_style(div104, "flex", "0 0 20");
+    			set_style(div104, "width", "20px");
+    			add_location(div104, file$3, 1096, 3, 41541);
+    			attr_dev(div105, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div105, file$3, 1099, 6, 41619);
     			add_location(br7, file$3, 1100, 67, 41742);
-    			attr_dev(div112, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div112, "height", "30px");
-    			add_location(div112, file$3, 1100, 6, 41681);
-    			attr_dev(div113, "class", "slidertext svelte-1vzb36m");
-    			add_location(div113, file$3, 1101, 6, 41759);
+    			attr_dev(div106, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div106, "height", "30px");
+    			add_location(div106, file$3, 1100, 6, 41681);
+    			attr_dev(div107, "class", "slidertext svelte-1vzb36m");
+    			add_location(div107, file$3, 1101, 6, 41759);
     			attr_dev(input17, "class", "range svelte-1vzb36m");
     			set_style(input17, "margin-bottom", "8px");
     			attr_dev(input17, "type", "range");
@@ -24732,13 +24494,13 @@
     			attr_dev(input18, "step", "0.0001");
     			add_location(input18, file$3, 1103, 6, 41929);
     			add_location(br8, file$3, 1104, 147, 42166);
-    			attr_dev(div114, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div114, "height", "29px");
-    			set_style(div114, "border-top", "1px solid #EEE");
-    			set_style(div114, "padding-top", "10px");
-    			add_location(div114, file$3, 1104, 6, 42025);
-    			attr_dev(div115, "class", "slidertext svelte-1vzb36m");
-    			add_location(div115, file$3, 1105, 6, 42183);
+    			attr_dev(div108, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div108, "height", "29px");
+    			set_style(div108, "border-top", "1px solid #EEE");
+    			set_style(div108, "padding-top", "10px");
+    			add_location(div108, file$3, 1104, 6, 42025);
+    			attr_dev(div109, "class", "slidertext svelte-1vzb36m");
+    			add_location(div109, file$3, 1105, 6, 42183);
     			attr_dev(input19, "class", "range svelte-1vzb36m");
     			attr_dev(input19, "type", "range");
     			attr_dev(input19, "min", input19_min_value = (ctx.D_infectious)+0.1);
@@ -24750,16 +24512,16 @@
     			attr_dev(input20, "max", "100");
     			attr_dev(input20, "step", "0.01");
     			add_location(input20, file$3, 1107, 6, 42349);
-    			attr_dev(div116, "class", "column svelte-1vzb36m");
-    			add_location(div116, file$3, 1098, 4, 41592);
-    			attr_dev(div117, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div117, file$3, 1111, 6, 42482);
+    			attr_dev(div110, "class", "column svelte-1vzb36m");
+    			add_location(div110, file$3, 1098, 4, 41592);
+    			attr_dev(div111, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div111, file$3, 1111, 6, 42482);
     			add_location(br9, file$3, 1112, 86, 42622);
-    			attr_dev(div118, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div118, "height", "30px");
-    			add_location(div118, file$3, 1112, 6, 42542);
-    			attr_dev(div119, "class", "slidertext svelte-1vzb36m");
-    			add_location(div119, file$3, 1113, 6, 42639);
+    			attr_dev(div112, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div112, "height", "30px");
+    			add_location(div112, file$3, 1112, 6, 42542);
+    			attr_dev(div113, "class", "slidertext svelte-1vzb36m");
+    			add_location(div113, file$3, 1113, 6, 42639);
     			attr_dev(input21, "class", "range svelte-1vzb36m");
     			set_style(input21, "margin-bottom", "8px");
     			attr_dev(input21, "type", "range");
@@ -24774,13 +24536,13 @@
     			attr_dev(input22, "step", "0.01");
     			add_location(input22, file$3, 1115, 6, 42825);
     			add_location(br10, file$3, 1116, 133, 43064);
-    			attr_dev(div120, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div120, "height", "29px");
-    			set_style(div120, "border-top", "1px solid #EEE");
-    			set_style(div120, "padding-top", "10px");
-    			add_location(div120, file$3, 1116, 6, 42937);
-    			attr_dev(div121, "class", "slidertext svelte-1vzb36m");
-    			add_location(div121, file$3, 1117, 6, 43081);
+    			attr_dev(div114, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div114, "height", "29px");
+    			set_style(div114, "border-top", "1px solid #EEE");
+    			set_style(div114, "padding-top", "10px");
+    			add_location(div114, file$3, 1116, 6, 42937);
+    			attr_dev(div115, "class", "slidertext svelte-1vzb36m");
+    			add_location(div115, file$3, 1117, 6, 43081);
     			attr_dev(input23, "class", "range svelte-1vzb36m");
     			attr_dev(input23, "type", "range");
     			attr_dev(input23, "min", 0.5);
@@ -24792,16 +24554,16 @@
     			attr_dev(input24, "max", "100");
     			attr_dev(input24, "step", "0.01");
     			add_location(input24, file$3, 1119, 6, 43236);
-    			attr_dev(div122, "class", "column svelte-1vzb36m");
-    			add_location(div122, file$3, 1110, 4, 42455);
-    			attr_dev(div123, "class", "paneltitle svelte-1vzb36m");
-    			add_location(div123, file$3, 1123, 6, 43356);
+    			attr_dev(div116, "class", "column svelte-1vzb36m");
+    			add_location(div116, file$3, 1110, 4, 42455);
+    			attr_dev(div117, "class", "paneltitle svelte-1vzb36m");
+    			add_location(div117, file$3, 1123, 6, 43356);
     			add_location(br11, file$3, 1124, 73, 43484);
-    			attr_dev(div124, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div124, "height", "30px");
-    			add_location(div124, file$3, 1124, 6, 43417);
-    			attr_dev(div125, "class", "slidertext svelte-1vzb36m");
-    			add_location(div125, file$3, 1125, 6, 43501);
+    			attr_dev(div118, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div118, "height", "30px");
+    			add_location(div118, file$3, 1124, 6, 43417);
+    			attr_dev(div119, "class", "slidertext svelte-1vzb36m");
+    			add_location(div119, file$3, 1125, 6, 43501);
     			attr_dev(input25, "class", "range svelte-1vzb36m");
     			set_style(input25, "margin-bottom", "8px");
     			attr_dev(input25, "type", "range");
@@ -24816,13 +24578,13 @@
     			attr_dev(input26, "step", "0.0001");
     			add_location(input26, file$3, 1127, 6, 43686);
     			add_location(br12, file$3, 1128, 122, 43902);
-    			attr_dev(div126, "class", "paneldesc svelte-1vzb36m");
-    			set_style(div126, "height", "29px");
-    			set_style(div126, "border-top", "1px solid #EEE");
-    			set_style(div126, "padding-top", "10px");
-    			add_location(div126, file$3, 1128, 6, 43786);
-    			attr_dev(div127, "class", "slidertext svelte-1vzb36m");
-    			add_location(div127, file$3, 1129, 6, 43919);
+    			attr_dev(div120, "class", "paneldesc svelte-1vzb36m");
+    			set_style(div120, "height", "29px");
+    			set_style(div120, "border-top", "1px solid #EEE");
+    			set_style(div120, "padding-top", "10px");
+    			add_location(div120, file$3, 1128, 6, 43786);
+    			attr_dev(div121, "class", "slidertext svelte-1vzb36m");
+    			add_location(div121, file$3, 1129, 6, 43919);
     			attr_dev(input27, "class", "range svelte-1vzb36m");
     			attr_dev(input27, "type", "range");
     			attr_dev(input27, "min", 0.5);
@@ -24834,13 +24596,13 @@
     			attr_dev(input28, "max", "100");
     			attr_dev(input28, "step", "0.01");
     			add_location(input28, file$3, 1131, 6, 44072);
-    			attr_dev(div128, "class", "column svelte-1vzb36m");
-    			add_location(div128, file$3, 1122, 4, 43329);
-    			attr_dev(div129, "class", "row svelte-1vzb36m");
-    			add_location(div129, file$3, 1095, 2, 41520);
-    			set_style(div130, "position", "relative");
-    			set_style(div130, "height", "12px");
-    			add_location(div130, file$3, 1135, 0, 44168);
+    			attr_dev(div122, "class", "column svelte-1vzb36m");
+    			add_location(div122, file$3, 1122, 4, 43329);
+    			attr_dev(div123, "class", "row svelte-1vzb36m");
+    			add_location(div123, file$3, 1095, 2, 41520);
+    			set_style(div124, "position", "relative");
+    			set_style(div124, "height", "12px");
+    			add_location(div124, file$3, 1135, 0, 44168);
     			attr_dev(a0, "href", "https://ivco19.github.io/");
     			attr_dev(a0, "class", "svelte-1vzb36m");
     			add_location(a0, file$3, 1139, 0, 44331);
@@ -24899,238 +24661,238 @@
     			add_location(p8, file$3, 1181, 0, 47703);
     			attr_dev(a10, "href", "https://github.com/ivco19");
     			attr_dev(a10, "class", "svelte-1vzb36m");
-    			add_location(a10, file$3, 1195, 20, 48747);
+    			add_location(a10, file$3, 1196, 20, 48798);
     			attr_dev(p9, "class", "center svelte-1vzb36m");
     			add_location(p9, file$3, 1189, 0, 48215);
     			attr_dev(a11, "href", "https://www.cdc.gov/coronavirus/2019-ncov/hcp/guidance-risk-assesment-hcp.html");
     			attr_dev(a11, "class", "svelte-1vzb36m");
-    			add_location(a11, file$3, 1202, 92, 49045);
+    			add_location(a11, file$3, 1204, 92, 49156);
     			attr_dev(input29, "type", "text");
     			set_style(input29, "width", "" + (ctx.Math.ceil(ctx.Math.log10(ctx.p_num_ind))*9.5 + 5) + "px");
     			set_style(input29, "font-size", "15.5px");
     			set_style(input29, "color", "#777");
-    			add_location(input29, file$3, 1203, 113, 49161);
+    			add_location(input29, file$3, 1205, 113, 49272);
     			attr_dev(a12, "href", "https://glosarios.servidor-alicante.com/epidemiologia/tasa-de-ataque");
     			attr_dev(a12, "class", "svelte-1vzb36m");
-    			add_location(a12, file$3, 1203, 351, 49399);
+    			add_location(a12, file$3, 1205, 351, 49510);
     			attr_dev(a13, "href", "https://www.cdc.gov/mmwr/volumes/69/wr/mm6909e1.htm?s_cid=mm6909e1_w");
     			attr_dev(a13, "class", "svelte-1vzb36m");
-    			add_location(a13, file$3, 1203, 463, 49511);
+    			add_location(a13, file$3, 1205, 463, 49622);
     			attr_dev(p10, "class", "center svelte-1vzb36m");
-    			add_location(p10, file$3, 1200, 0, 48807);
+    			add_location(p10, file$3, 1202, 0, 48918);
     			attr_dev(p11, "class", "center svelte-1vzb36m");
-    			add_location(p11, file$3, 1207, 0, 49616);
+    			add_location(p11, file$3, 1209, 0, 49727);
     			attr_dev(th0, "class", "svelte-1vzb36m");
-    			add_location(th0, file$3, 1214, 4, 49839);
+    			add_location(th0, file$3, 1216, 4, 49950);
     			attr_dev(th1, "class", "svelte-1vzb36m");
-    			add_location(th1, file$3, 1215, 4, 49853);
-    			add_location(br13, file$3, 1216, 26, 49894);
+    			add_location(th1, file$3, 1217, 4, 49964);
+    			add_location(br13, file$3, 1218, 26, 50005);
     			html_tag_5 = new HtmlTag(raw6_value, null);
     			attr_dev(th2, "class", "svelte-1vzb36m");
-    			add_location(th2, file$3, 1216, 4, 49872);
-    			add_location(br14, file$3, 1217, 29, 49971);
-    			html_tag_6 = new HtmlTag(raw7_value, t345);
+    			add_location(th2, file$3, 1218, 4, 49983);
+    			add_location(br14, file$3, 1219, 29, 50082);
+    			html_tag_6 = new HtmlTag(raw7_value, t339);
     			attr_dev(th3, "class", "svelte-1vzb36m");
-    			add_location(th3, file$3, 1217, 4, 49946);
-    			add_location(br15, file$3, 1218, 26, 50053);
-    			html_tag_7 = new HtmlTag(raw8_value, t349);
+    			add_location(th3, file$3, 1219, 4, 50057);
+    			add_location(br15, file$3, 1220, 26, 50164);
+    			html_tag_7 = new HtmlTag(raw8_value, t343);
     			attr_dev(th4, "class", "svelte-1vzb36m");
-    			add_location(th4, file$3, 1218, 4, 50031);
+    			add_location(th4, file$3, 1220, 4, 50142);
     			attr_dev(tr0, "class", "svelte-1vzb36m");
-    			add_location(tr0, file$3, 1213, 2, 49830);
+    			add_location(tr0, file$3, 1215, 2, 49941);
     			attr_dev(a14, "href", "https://cmmid.github.io/topics/covid19/current-patterns-transmission/wuhan-early-dynamics.html");
     			attr_dev(a14, "class", "svelte-1vzb36m");
-    			add_location(a14, file$3, 1221, 20, 50144);
+    			add_location(a14, file$3, 1223, 20, 50255);
     			attr_dev(td0, "width", "27%");
     			attr_dev(td0, "class", "svelte-1vzb36m");
-    			add_location(td0, file$3, 1221, 4, 50128);
+    			add_location(td0, file$3, 1223, 4, 50239);
     			attr_dev(td1, "class", "svelte-1vzb36m");
-    			add_location(td1, file$3, 1222, 4, 50281);
+    			add_location(td1, file$3, 1224, 4, 50392);
     			attr_dev(td2, "class", "svelte-1vzb36m");
-    			add_location(td2, file$3, 1223, 4, 50305);
+    			add_location(td2, file$3, 1225, 4, 50416);
     			attr_dev(td3, "class", "svelte-1vzb36m");
-    			add_location(td3, file$3, 1224, 4, 50334);
+    			add_location(td3, file$3, 1226, 4, 50445);
     			attr_dev(td4, "class", "svelte-1vzb36m");
-    			add_location(td4, file$3, 1225, 4, 50351);
+    			add_location(td4, file$3, 1227, 4, 50462);
     			attr_dev(tr1, "class", "svelte-1vzb36m");
-    			add_location(tr1, file$3, 1220, 2, 50119);
+    			add_location(tr1, file$3, 1222, 2, 50230);
     			attr_dev(a15, "href", "https://www.nejm.org/doi/full/10.1056/NEJMoa2001316");
     			attr_dev(a15, "class", "svelte-1vzb36m");
-    			add_location(a15, file$3, 1228, 8, 50387);
+    			add_location(a15, file$3, 1230, 8, 50498);
     			attr_dev(td5, "class", "svelte-1vzb36m");
-    			add_location(td5, file$3, 1228, 4, 50383);
+    			add_location(td5, file$3, 1230, 4, 50494);
     			attr_dev(td6, "class", "svelte-1vzb36m");
-    			add_location(td6, file$3, 1229, 4, 50484);
+    			add_location(td6, file$3, 1231, 4, 50595);
     			attr_dev(td7, "class", "svelte-1vzb36m");
-    			add_location(td7, file$3, 1230, 4, 50508);
+    			add_location(td7, file$3, 1232, 4, 50619);
     			attr_dev(td8, "class", "svelte-1vzb36m");
-    			add_location(td8, file$3, 1231, 4, 50537);
+    			add_location(td8, file$3, 1233, 4, 50648);
     			attr_dev(td9, "class", "svelte-1vzb36m");
-    			add_location(td9, file$3, 1232, 4, 50566);
+    			add_location(td9, file$3, 1234, 4, 50677);
     			attr_dev(tr2, "class", "svelte-1vzb36m");
-    			add_location(tr2, file$3, 1227, 2, 50374);
+    			add_location(tr2, file$3, 1229, 2, 50485);
     			attr_dev(a16, "href", "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext");
     			attr_dev(a16, "class", "svelte-1vzb36m");
-    			add_location(a16, file$3, 1235, 8, 50615);
+    			add_location(a16, file$3, 1237, 8, 50726);
     			attr_dev(td10, "class", "svelte-1vzb36m");
-    			add_location(td10, file$3, 1235, 4, 50611);
+    			add_location(td10, file$3, 1237, 4, 50722);
     			attr_dev(td11, "class", "svelte-1vzb36m");
-    			add_location(td11, file$3, 1236, 4, 50734);
+    			add_location(td11, file$3, 1238, 4, 50845);
     			attr_dev(td12, "class", "svelte-1vzb36m");
-    			add_location(td12, file$3, 1237, 4, 50766);
+    			add_location(td12, file$3, 1239, 4, 50877);
     			attr_dev(td13, "class", "svelte-1vzb36m");
-    			add_location(td13, file$3, 1238, 4, 50798);
+    			add_location(td13, file$3, 1240, 4, 50909);
     			attr_dev(td14, "class", "svelte-1vzb36m");
-    			add_location(td14, file$3, 1239, 4, 50815);
+    			add_location(td14, file$3, 1241, 4, 50926);
     			attr_dev(tr3, "class", "svelte-1vzb36m");
-    			add_location(tr3, file$3, 1234, 2, 50602);
+    			add_location(tr3, file$3, 1236, 2, 50713);
     			attr_dev(a17, "href", "https://www.who.int/news-room/detail/23-01-2020-statement-on-the-meeting-of-the-international-health-regulations-(2005)-emergency-committee-regarding-the-outbreak-of-novel-coronavirus-(2019-ncov)");
     			attr_dev(a17, "class", "svelte-1vzb36m");
-    			add_location(a17, file$3, 1242, 8, 50851);
+    			add_location(a17, file$3, 1244, 8, 50962);
     			attr_dev(td15, "class", "svelte-1vzb36m");
-    			add_location(td15, file$3, 1242, 4, 50847);
+    			add_location(td15, file$3, 1244, 4, 50958);
     			attr_dev(td16, "class", "svelte-1vzb36m");
-    			add_location(td16, file$3, 1243, 4, 51093);
+    			add_location(td16, file$3, 1245, 4, 51204);
     			attr_dev(td17, "class", "svelte-1vzb36m");
-    			add_location(td17, file$3, 1244, 4, 51117);
+    			add_location(td17, file$3, 1246, 4, 51228);
     			attr_dev(td18, "class", "svelte-1vzb36m");
-    			add_location(td18, file$3, 1245, 4, 51147);
+    			add_location(td18, file$3, 1247, 4, 51258);
     			attr_dev(td19, "class", "svelte-1vzb36m");
-    			add_location(td19, file$3, 1246, 4, 51161);
+    			add_location(td19, file$3, 1248, 4, 51272);
     			attr_dev(tr4, "class", "svelte-1vzb36m");
-    			add_location(tr4, file$3, 1241, 2, 50838);
+    			add_location(tr4, file$3, 1243, 2, 50949);
     			attr_dev(a18, "href", "https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf");
     			attr_dev(a18, "class", "svelte-1vzb36m");
-    			add_location(a18, file$3, 1249, 8, 51194);
+    			add_location(a18, file$3, 1251, 8, 51305);
     			attr_dev(td20, "class", "svelte-1vzb36m");
-    			add_location(td20, file$3, 1249, 4, 51190);
+    			add_location(td20, file$3, 1251, 4, 51301);
     			attr_dev(td21, "class", "svelte-1vzb36m");
-    			add_location(td21, file$3, 1250, 4, 51350);
+    			add_location(td21, file$3, 1252, 4, 51461);
     			attr_dev(td22, "class", "svelte-1vzb36m");
-    			add_location(td22, file$3, 1251, 4, 51374);
+    			add_location(td22, file$3, 1253, 4, 51485);
     			attr_dev(td23, "class", "svelte-1vzb36m");
-    			add_location(td23, file$3, 1252, 4, 51404);
+    			add_location(td23, file$3, 1254, 4, 51515);
     			attr_dev(td24, "class", "svelte-1vzb36m");
-    			add_location(td24, file$3, 1253, 4, 51433);
+    			add_location(td24, file$3, 1255, 4, 51544);
     			attr_dev(tr5, "class", "svelte-1vzb36m");
-    			add_location(tr5, file$3, 1248, 2, 51181);
+    			add_location(tr5, file$3, 1250, 2, 51292);
     			attr_dev(a19, "href", "https://www.biorxiv.org/content/10.1101/2020.01.25.919787v2");
     			attr_dev(a19, "class", "svelte-1vzb36m");
-    			add_location(a19, file$3, 1256, 8, 51466);
+    			add_location(a19, file$3, 1258, 8, 51577);
     			attr_dev(td25, "class", "svelte-1vzb36m");
-    			add_location(td25, file$3, 1256, 4, 51462);
+    			add_location(td25, file$3, 1258, 4, 51573);
     			attr_dev(td26, "class", "svelte-1vzb36m");
-    			add_location(td26, file$3, 1257, 4, 51563);
+    			add_location(td26, file$3, 1259, 4, 51674);
     			attr_dev(td27, "class", "svelte-1vzb36m");
-    			add_location(td27, file$3, 1258, 4, 51586);
+    			add_location(td27, file$3, 1260, 4, 51697);
     			attr_dev(td28, "class", "svelte-1vzb36m");
-    			add_location(td28, file$3, 1259, 4, 51615);
+    			add_location(td28, file$3, 1261, 4, 51726);
     			attr_dev(td29, "class", "svelte-1vzb36m");
-    			add_location(td29, file$3, 1260, 4, 51645);
+    			add_location(td29, file$3, 1262, 4, 51756);
     			attr_dev(tr6, "class", "svelte-1vzb36m");
-    			add_location(tr6, file$3, 1255, 2, 51453);
+    			add_location(tr6, file$3, 1257, 2, 51564);
     			attr_dev(a20, "href", "https://academic.oup.com/jtm/advance-article/doi/10.1093/jtm/taaa030/5766334");
     			attr_dev(a20, "class", "svelte-1vzb36m");
-    			add_location(a20, file$3, 1263, 8, 51691);
+    			add_location(a20, file$3, 1265, 8, 51802);
     			attr_dev(td30, "class", "svelte-1vzb36m");
-    			add_location(td30, file$3, 1263, 4, 51687);
+    			add_location(td30, file$3, 1265, 4, 51798);
     			attr_dev(td31, "class", "svelte-1vzb36m");
-    			add_location(td31, file$3, 1264, 4, 51826);
+    			add_location(td31, file$3, 1266, 4, 51937);
     			attr_dev(td32, "class", "svelte-1vzb36m");
-    			add_location(td32, file$3, 1265, 4, 51856);
+    			add_location(td32, file$3, 1267, 4, 51967);
     			attr_dev(td33, "class", "svelte-1vzb36m");
-    			add_location(td33, file$3, 1266, 4, 51874);
+    			add_location(td33, file$3, 1268, 4, 51985);
     			attr_dev(td34, "class", "svelte-1vzb36m");
-    			add_location(td34, file$3, 1267, 4, 51891);
+    			add_location(td34, file$3, 1269, 4, 52002);
     			attr_dev(tr7, "class", "svelte-1vzb36m");
-    			add_location(tr7, file$3, 1262, 2, 51678);
+    			add_location(tr7, file$3, 1264, 2, 51789);
     			attr_dev(a21, "href", "https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.5.2000062");
     			attr_dev(a21, "class", "svelte-1vzb36m");
-    			add_location(a21, file$3, 1270, 8, 51928);
+    			add_location(a21, file$3, 1272, 8, 52039);
     			attr_dev(td35, "class", "svelte-1vzb36m");
-    			add_location(td35, file$3, 1270, 4, 51924);
+    			add_location(td35, file$3, 1272, 4, 52035);
     			attr_dev(td36, "class", "svelte-1vzb36m");
-    			add_location(td36, file$3, 1271, 4, 52063);
+    			add_location(td36, file$3, 1273, 4, 52174);
     			attr_dev(td37, "class", "svelte-1vzb36m");
-    			add_location(td37, file$3, 1272, 4, 52082);
+    			add_location(td37, file$3, 1274, 4, 52193);
     			attr_dev(td38, "class", "svelte-1vzb36m");
-    			add_location(td38, file$3, 1273, 4, 52096);
+    			add_location(td38, file$3, 1275, 4, 52207);
     			attr_dev(td39, "class", "svelte-1vzb36m");
-    			add_location(td39, file$3, 1274, 4, 52125);
+    			add_location(td39, file$3, 1276, 4, 52236);
     			attr_dev(tr8, "class", "svelte-1vzb36m");
-    			add_location(tr8, file$3, 1269, 2, 51915);
+    			add_location(tr8, file$3, 1271, 2, 52026);
     			attr_dev(a22, "href", "https://www.medrxiv.org/content/10.1101/2020.01.23.20018549v2.article-info");
     			attr_dev(a22, "class", "svelte-1vzb36m");
-    			add_location(a22, file$3, 1277, 8, 52158);
+    			add_location(a22, file$3, 1279, 8, 52269);
     			attr_dev(td40, "class", "svelte-1vzb36m");
-    			add_location(td40, file$3, 1277, 4, 52154);
+    			add_location(td40, file$3, 1279, 4, 52265);
     			attr_dev(td41, "class", "svelte-1vzb36m");
-    			add_location(td41, file$3, 1278, 4, 52270);
+    			add_location(td41, file$3, 1280, 4, 52381);
     			attr_dev(td42, "class", "svelte-1vzb36m");
-    			add_location(td42, file$3, 1279, 4, 52289);
+    			add_location(td42, file$3, 1281, 4, 52400);
     			attr_dev(td43, "class", "svelte-1vzb36m");
-    			add_location(td43, file$3, 1280, 4, 52321);
+    			add_location(td43, file$3, 1282, 4, 52432);
     			attr_dev(td44, "class", "svelte-1vzb36m");
-    			add_location(td44, file$3, 1281, 4, 52335);
+    			add_location(td44, file$3, 1283, 4, 52446);
     			attr_dev(tr9, "class", "svelte-1vzb36m");
-    			add_location(tr9, file$3, 1276, 2, 52145);
+    			add_location(tr9, file$3, 1278, 2, 52256);
     			attr_dev(a23, "href", "https://www.medrxiv.org/content/10.1101/2020.03.03.20028423v1");
     			attr_dev(a23, "class", "svelte-1vzb36m");
-    			add_location(a23, file$3, 1284, 8, 52368);
+    			add_location(a23, file$3, 1286, 8, 52479);
     			attr_dev(td45, "class", "svelte-1vzb36m");
-    			add_location(td45, file$3, 1284, 4, 52364);
+    			add_location(td45, file$3, 1286, 4, 52475);
     			attr_dev(td46, "class", "svelte-1vzb36m");
-    			add_location(td46, file$3, 1285, 4, 52465);
+    			add_location(td46, file$3, 1287, 4, 52576);
     			attr_dev(td47, "class", "svelte-1vzb36m");
-    			add_location(td47, file$3, 1286, 4, 52487);
+    			add_location(td47, file$3, 1288, 4, 52598);
     			attr_dev(td48, "class", "svelte-1vzb36m");
-    			add_location(td48, file$3, 1287, 4, 52501);
+    			add_location(td48, file$3, 1289, 4, 52612);
     			attr_dev(td49, "class", "svelte-1vzb36m");
-    			add_location(td49, file$3, 1288, 4, 52530);
+    			add_location(td49, file$3, 1290, 4, 52641);
     			attr_dev(td50, "class", "svelte-1vzb36m");
-    			add_location(td50, file$3, 1289, 4, 52557);
+    			add_location(td50, file$3, 1291, 4, 52668);
     			attr_dev(tr10, "class", "svelte-1vzb36m");
-    			add_location(tr10, file$3, 1283, 2, 52355);
+    			add_location(tr10, file$3, 1285, 2, 52466);
     			attr_dev(a24, "href", "https://www.mdpi.com/2077-0383/9/2/462");
     			attr_dev(a24, "class", "svelte-1vzb36m");
-    			add_location(a24, file$3, 1293, 8, 52591);
+    			add_location(a24, file$3, 1295, 8, 52702);
     			attr_dev(td51, "class", "svelte-1vzb36m");
-    			add_location(td51, file$3, 1293, 4, 52587);
+    			add_location(td51, file$3, 1295, 4, 52698);
     			attr_dev(td52, "class", "svelte-1vzb36m");
-    			add_location(td52, file$3, 1294, 4, 52667);
+    			add_location(td52, file$3, 1296, 4, 52778);
     			attr_dev(td53, "class", "svelte-1vzb36m");
-    			add_location(td53, file$3, 1295, 4, 52686);
+    			add_location(td53, file$3, 1297, 4, 52797);
     			attr_dev(td54, "class", "svelte-1vzb36m");
-    			add_location(td54, file$3, 1296, 4, 52718);
+    			add_location(td54, file$3, 1298, 4, 52829);
     			attr_dev(td55, "class", "svelte-1vzb36m");
-    			add_location(td55, file$3, 1297, 4, 52732);
+    			add_location(td55, file$3, 1299, 4, 52843);
     			attr_dev(tr11, "class", "svelte-1vzb36m");
-    			add_location(tr11, file$3, 1292, 2, 52578);
+    			add_location(tr11, file$3, 1294, 2, 52689);
     			set_style(table, "width", "100%");
     			set_style(table, "margin", "auto");
     			set_style(table, "font-weight", "300");
     			set_style(table, "border-spacing", "inherit");
-    			add_location(table, file$3, 1212, 0, 49745);
-    			attr_dev(div131, "class", "center svelte-1vzb36m");
-    			add_location(div131, file$3, 1211, 0, 49724);
+    			add_location(table, file$3, 1214, 0, 49856);
+    			attr_dev(div125, "class", "center svelte-1vzb36m");
+    			add_location(div125, file$3, 1213, 0, 49835);
     			attr_dev(a25, "href", "https://academic.oup.com/jtm/advance-article/doi/10.1093/jtm/taaa021/5735319");
     			attr_dev(a25, "class", "svelte-1vzb36m");
-    			add_location(a25, file$3, 1305, 6, 52794);
+    			add_location(a25, file$3, 1307, 6, 52905);
     			attr_dev(a26, "href", "https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf");
     			attr_dev(a26, "class", "svelte-1vzb36m");
-    			add_location(a26, file$3, 1307, 84, 53066);
+    			add_location(a26, file$3, 1309, 84, 53177);
     			attr_dev(p12, "class", "center svelte-1vzb36m");
-    			add_location(p12, file$3, 1304, 0, 52769);
-    			add_location(b6, file$3, 1312, 0, 53234);
-    			add_location(br16, file$3, 1312, 26, 53260);
-    			html_tag_8 = new HtmlTag(raw9_value, t460);
-    			add_location(i14, file$3, 1314, 95, 53475);
-    			add_location(i15, file$3, 1315, 46, 53535);
-    			add_location(i16, file$3, 1316, 34, 53614);
+    			add_location(p12, file$3, 1306, 0, 52880);
+    			add_location(b6, file$3, 1314, 0, 53345);
+    			add_location(br16, file$3, 1314, 26, 53371);
+    			html_tag_8 = new HtmlTag(raw9_value, t454);
+    			add_location(i14, file$3, 1316, 95, 53586);
+    			add_location(i15, file$3, 1317, 46, 53646);
+    			add_location(i16, file$3, 1318, 34, 53725);
     			attr_dev(p13, "class", "center svelte-1vzb36m");
-    			add_location(p13, file$3, 1311, 0, 53213);
-    			attr_dev(div132, "class", "legendtext svelte-1vzb36m");
-    			add_location(div132, file$3, 1326, 4, 54179);
+    			add_location(p13, file$3, 1313, 0, 53324);
+    			attr_dev(div126, "class", "legendtext svelte-1vzb36m");
+    			add_location(div126, file$3, 1328, 4, 54290);
     			attr_dev(textarea, "type", "textarea");
     			attr_dev(textarea, "rows", "1");
     			attr_dev(textarea, "cols", "5000");
@@ -25141,30 +24903,30 @@
     			attr_dev(textarea, "id", "fname");
     			attr_dev(textarea, "name", "fname");
     			textarea.value = ctx.state;
-    			add_location(textarea, file$3, 1328, 6, 54252);
-    			add_location(form, file$3, 1327, 4, 54239);
-    			attr_dev(div133, "class", "center svelte-1vzb36m");
-    			set_style(div133, "padding", "10px");
-    			set_style(div133, "margin-top", "3px");
-    			set_style(div133, "width", "925px");
-    			add_location(div133, file$3, 1325, 2, 54101);
-    			set_style(div134, "margin-bottom", "30px");
-    			add_location(div134, file$3, 1323, 0, 54064);
+    			add_location(textarea, file$3, 1330, 6, 54363);
+    			add_location(form, file$3, 1329, 4, 54350);
+    			attr_dev(div127, "class", "center svelte-1vzb36m");
+    			set_style(div127, "padding", "10px");
+    			set_style(div127, "margin-top", "3px");
+    			set_style(div127, "width", "925px");
+    			add_location(div127, file$3, 1327, 2, 54212);
+    			set_style(div128, "margin-bottom", "30px");
+    			add_location(div128, file$3, 1325, 0, 54175);
 
     			dispose = [
     				listen_dev(button, "click", ctx.download_all_csv),
     				listen_dev(input0, "change", ctx.input0_change_input_handler),
     				listen_dev(input0, "input", ctx.input0_change_input_handler),
     				listen_dev(input0, "mousedown", ctx.lock_yaxis),
-    				listen_dev(div70, "mousedown", ctx.lock_yaxis),
+    				listen_dev(div64, "mousedown", ctx.lock_yaxis),
     				listen_dev(input1, "change", ctx.input1_change_input_handler),
     				listen_dev(input1, "input", ctx.input1_change_input_handler),
     				listen_dev(input1, "mousedown", ctx.lock_yaxis),
-    				listen_dev(div71, "mousedown", ctx.lock_yaxis),
+    				listen_dev(div65, "mousedown", ctx.lock_yaxis),
     				listen_dev(input2, "change", ctx.input2_change_input_handler),
     				listen_dev(input2, "input", ctx.input2_change_input_handler),
     				listen_dev(input2, "mousedown", ctx.lock_yaxis),
-    				listen_dev(div72, "mousedown", ctx.lock_yaxis),
+    				listen_dev(div66, "mousedown", ctx.lock_yaxis),
     				listen_dev(input3, "change", ctx.input3_change_input_handler),
     				listen_dev(input3, "input", ctx.input3_change_input_handler),
     				listen_dev(input4, "input", ctx.input4_input_handler),
@@ -25219,16 +24981,16 @@
     			insert_dev(target, t2, anchor);
     			insert_dev(target, button, anchor);
     			insert_dev(target, t4, anchor);
-    			insert_dev(target, div83, anchor);
-    			append_dev(div83, div56);
-    			append_dev(div56, div55);
-    			append_dev(div55, div0);
+    			insert_dev(target, div77, anchor);
+    			append_dev(div77, div50);
+    			append_dev(div50, div49);
+    			append_dev(div49, div0);
     			append_dev(div0, b0);
     			append_dev(div0, br0);
     			append_dev(div0, t6);
     			append_dev(div0, t7);
-    			append_dev(div55, t8);
-    			append_dev(div55, div7);
+    			append_dev(div49, t8);
+    			append_dev(div49, div7);
     			append_dev(div7, span0);
     			mount_component(checkbox0, span0, null);
     			append_dev(div7, t9);
@@ -25255,8 +25017,8 @@
     			append_dev(i1, t23);
     			append_dev(div7, t24);
     			append_dev(div7, div6);
-    			append_dev(div55, t26);
-    			append_dev(div55, div14);
+    			append_dev(div49, t26);
+    			append_dev(div49, div14);
     			mount_component(checkbox1, div14, null);
     			append_dev(div14, t27);
     			mount_component(arrow1, div14, null);
@@ -25282,8 +25044,8 @@
     			append_dev(i3, t41);
     			append_dev(div14, t42);
     			append_dev(div14, div13);
-    			append_dev(div55, t44);
-    			append_dev(div55, div21);
+    			append_dev(div49, t44);
+    			append_dev(div49, div21);
     			mount_component(checkbox2, div21, null);
     			append_dev(div21, t45);
     			mount_component(arrow2, div21, null);
@@ -25312,8 +25074,8 @@
     			append_dev(div20, t61);
     			append_dev(div20, i6);
     			append_dev(div20, t63);
-    			append_dev(div55, t64);
-    			append_dev(div55, div28);
+    			append_dev(div49, t64);
+    			append_dev(div49, div28);
     			mount_component(checkbox3, div28, null);
     			append_dev(div28, t65);
     			mount_component(arrow3, div28, null);
@@ -25339,8 +25101,8 @@
     			append_dev(i8, t79);
     			append_dev(div28, t80);
     			append_dev(div28, div27);
-    			append_dev(div55, t82);
-    			append_dev(div55, div34);
+    			append_dev(div49, t82);
+    			append_dev(div49, div34);
     			mount_component(checkbox4, div34, null);
     			append_dev(div34, t83);
     			mount_component(arrow4, div34, null);
@@ -25359,8 +25121,8 @@
     			append_dev(i9, t92);
     			append_dev(div34, t93);
     			append_dev(div34, div33);
-    			append_dev(div55, t95);
-    			append_dev(div55, div41);
+    			append_dev(div49, t95);
+    			append_dev(div49, div41);
     			mount_component(arrow5, div41, null);
     			append_dev(div41, t96);
     			mount_component(checkbox5, div41, null);
@@ -25386,8 +25148,8 @@
     			append_dev(i11, t110);
     			append_dev(div41, t111);
     			append_dev(div41, div40);
-    			append_dev(div55, t113);
-    			append_dev(div55, div48);
+    			append_dev(div49, t113);
+    			append_dev(div49, div48);
     			mount_component(arrow6, div48, null);
     			append_dev(div48, t114);
     			mount_component(checkbox6, div48, null);
@@ -25413,634 +25175,620 @@
     			append_dev(i13, t128);
     			append_dev(div48, t129);
     			append_dev(div48, div47);
-    			append_dev(div55, t131);
-    			append_dev(div55, div51);
-    			append_dev(div51, svg0);
-    			append_dev(svg0, circle0);
-    			append_dev(div51, t132);
-    			append_dev(div51, div50);
-    			append_dev(div50, div49);
-    			append_dev(div55, t134);
-    			append_dev(div55, div54);
-    			append_dev(div54, svg1);
-    			append_dev(svg1, circle1);
-    			append_dev(div54, t135);
-    			append_dev(div54, div53);
-    			append_dev(div53, div52);
-    			append_dev(div83, t137);
-    			append_dev(div83, div82);
-    			append_dev(div82, div57);
-    			mount_component(chart, div57, null);
-    			append_dev(div82, t138);
-    			append_dev(div82, div58);
-    			append_dev(div82, t139);
-    			append_dev(div82, div59);
-    			append_dev(div82, t140);
-    			append_dev(div82, div66);
-    			append_dev(div66, div65);
-    			if (if_block0) if_block0.m(div65, null);
-    			append_dev(div65, t141);
-    			append_dev(div65, div63);
-    			append_dev(div63, div60);
-    			append_dev(div60, t142);
-    			append_dev(div60, t143);
-    			append_dev(div63, t144);
-    			append_dev(div63, span14);
-    			append_dev(div63, div61);
-    			append_dev(div63, t146);
-    			append_dev(div63, div62);
-    			append_dev(div62, svg2);
-    			append_dev(svg2, g1);
+    			append_dev(div77, t131);
+    			append_dev(div77, div76);
+    			append_dev(div76, div51);
+    			mount_component(chart, div51, null);
+    			append_dev(div76, t132);
+    			append_dev(div76, div52);
+    			append_dev(div76, t133);
+    			append_dev(div76, div53);
+    			append_dev(div76, t134);
+    			append_dev(div76, div60);
+    			append_dev(div60, div59);
+    			if (if_block0) if_block0.m(div59, null);
+    			append_dev(div59, t135);
+    			append_dev(div59, div57);
+    			append_dev(div57, div54);
+    			append_dev(div54, t136);
+    			append_dev(div54, t137);
+    			append_dev(div57, t138);
+    			append_dev(div57, span14);
+    			append_dev(div57, div55);
+    			append_dev(div57, t140);
+    			append_dev(div57, div56);
+    			append_dev(div56, svg);
+    			append_dev(svg, g1);
     			append_dev(g1, g0);
     			append_dev(g0, path);
-    			append_dev(div65, t147);
-    			append_dev(div65, div64);
-    			append_dev(div82, t148);
-    			append_dev(div82, div69);
+    			append_dev(div59, t141);
+    			append_dev(div59, div58);
+    			append_dev(div76, t142);
+    			append_dev(div76, div63);
+    			append_dev(div63, div62);
+    			if (if_block1) if_block1.m(div62, null);
+    			append_dev(div62, t143);
+    			append_dev(div62, div61);
+    			append_dev(div61, t144);
+    			append_dev(div61, t145);
+    			append_dev(div76, t146);
+    			append_dev(div76, div71);
+    			append_dev(div71, div70);
+    			append_dev(div70, div69);
     			append_dev(div69, div68);
-    			if (if_block1) if_block1.m(div68, null);
-    			append_dev(div68, t149);
     			append_dev(div68, div67);
-    			append_dev(div67, t150);
-    			append_dev(div67, t151);
-    			append_dev(div82, t152);
-    			append_dev(div82, div77);
-    			append_dev(div77, div76);
-    			append_dev(div76, div75);
-    			append_dev(div75, div74);
-    			append_dev(div74, div73);
-    			append_dev(div73, div70);
-    			html_tag.m(div70);
-    			append_dev(div70, t153);
-    			append_dev(div70, input0);
+    			append_dev(div67, div64);
+    			html_tag.m(div64);
+    			append_dev(div64, t147);
+    			append_dev(div64, input0);
 
     			set_input_value(input0, ctx.InterventionAmt);
 
-    			append_dev(div73, t154);
-    			append_dev(div73, div71);
-    			append_dev(div71, t155);
-    			append_dev(div71, t156);
-    			append_dev(div71, t157);
-    			append_dev(div71, input1);
+    			append_dev(div67, t148);
+    			append_dev(div67, div65);
+    			append_dev(div65, t149);
+    			append_dev(div65, t150);
+    			append_dev(div65, t151);
+    			append_dev(div65, input1);
 
     			set_input_value(input1, ctx.duration);
 
-    			append_dev(div73, t158);
-    			append_dev(div73, div72);
-    			append_dev(div72, t159);
-    			append_dev(div72, t160);
-    			append_dev(div72, t161);
-    			append_dev(div72, input2);
+    			append_dev(div67, t152);
+    			append_dev(div67, div66);
+    			append_dev(div66, t153);
+    			append_dev(div66, t154);
+    			append_dev(div66, t155);
+    			append_dev(div66, input2);
 
     			set_input_value(input2, ctx.retardo);
 
-    			append_dev(div82, t162);
-    			append_dev(div82, div78);
+    			append_dev(div76, t156);
+    			append_dev(div76, div72);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(div78, null);
+    				each_blocks[i].m(div72, null);
     			}
 
-    			append_dev(div82, t163);
-    			append_dev(div82, div81);
-    			append_dev(div81, t164);
-    			append_dev(div81, div80);
-    			mount_component(checkbox7, div80, null);
-    			append_dev(div80, div79);
-    			insert_dev(target, t166, anchor);
+    			append_dev(div76, t157);
+    			append_dev(div76, div75);
+    			append_dev(div75, t158);
+    			append_dev(div75, div74);
+    			mount_component(checkbox7, div74, null);
+    			append_dev(div74, div73);
+    			insert_dev(target, t160, anchor);
     			insert_dev(target, p0, anchor);
-    			insert_dev(target, div84, anchor);
-    			insert_dev(target, t168, anchor);
-    			insert_dev(target, div108, anchor);
-    			append_dev(div108, div85);
-    			append_dev(div108, t169);
-    			append_dev(div108, div93);
-    			append_dev(div93, div86);
-    			append_dev(div93, t171);
-    			append_dev(div93, div87);
-    			append_dev(div87, t172);
-    			append_dev(div87, br1);
-    			append_dev(div93, t173);
-    			append_dev(div93, div88);
-    			append_dev(div88, t174);
-    			append_dev(div93, t175);
-    			append_dev(div93, input3);
+    			insert_dev(target, div78, anchor);
+    			insert_dev(target, t162, anchor);
+    			insert_dev(target, div102, anchor);
+    			append_dev(div102, div79);
+    			append_dev(div102, t163);
+    			append_dev(div102, div87);
+    			append_dev(div87, div80);
+    			append_dev(div87, t165);
+    			append_dev(div87, div81);
+    			append_dev(div81, t166);
+    			append_dev(div81, br1);
+    			append_dev(div87, t167);
+    			append_dev(div87, div82);
+    			append_dev(div82, t168);
+    			append_dev(div87, t169);
+    			append_dev(div87, input3);
 
     			set_input_value(input3, ctx.logN);
 
-    			append_dev(div93, t176);
-    			append_dev(div93, input4);
+    			append_dev(div87, t170);
+    			append_dev(div87, input4);
 
     			set_input_value(input4, ctx.N);
 
-    			append_dev(div93, t177);
-    			append_dev(div93, div89);
-    			append_dev(div89, t178);
-    			append_dev(div89, br2);
-    			append_dev(div93, t179);
-    			append_dev(div93, div90);
-    			append_dev(div90, t180);
-    			append_dev(div93, t181);
-    			append_dev(div93, input5);
+    			append_dev(div87, t171);
+    			append_dev(div87, div83);
+    			append_dev(div83, t172);
+    			append_dev(div83, br2);
+    			append_dev(div87, t173);
+    			append_dev(div87, div84);
+    			append_dev(div84, t174);
+    			append_dev(div87, t175);
+    			append_dev(div87, input5);
 
     			set_input_value(input5, ctx.I0);
 
-    			append_dev(div93, t182);
-    			append_dev(div93, input6);
+    			append_dev(div87, t176);
+    			append_dev(div87, input6);
 
     			set_input_value(input6, ctx.I0);
 
-    			append_dev(div93, t183);
-    			append_dev(div93, div91);
-    			append_dev(div91, t184);
-    			append_dev(div91, br3);
-    			append_dev(div93, t185);
-    			append_dev(div93, div92);
-    			append_dev(div92, t186);
-    			append_dev(div93, t187);
-    			append_dev(div93, input7);
+    			append_dev(div87, t177);
+    			append_dev(div87, div85);
+    			append_dev(div85, t178);
+    			append_dev(div85, br3);
+    			append_dev(div87, t179);
+    			append_dev(div87, div86);
+    			append_dev(div86, t180);
+    			append_dev(div87, t181);
+    			append_dev(div87, input7);
 
     			set_input_value(input7, ctx.E0);
 
-    			append_dev(div93, t188);
-    			append_dev(div93, input8);
+    			append_dev(div87, t182);
+    			append_dev(div87, input8);
 
     			set_input_value(input8, ctx.E0);
 
-    			append_dev(div108, t189);
-    			append_dev(div108, div97);
-    			append_dev(div97, div94);
-    			append_dev(div94, t190);
-    			html_tag_1.m(div94);
-    			append_dev(div97, t191);
-    			append_dev(div97, div95);
-    			append_dev(div95, t192);
-    			append_dev(div95, br4);
-    			append_dev(div97, t193);
-    			append_dev(div97, div96);
-    			append_dev(div96, t194);
-    			append_dev(div97, t195);
-    			append_dev(div97, input9);
+    			append_dev(div102, t183);
+    			append_dev(div102, div91);
+    			append_dev(div91, div88);
+    			append_dev(div88, t184);
+    			html_tag_1.m(div88);
+    			append_dev(div91, t185);
+    			append_dev(div91, div89);
+    			append_dev(div89, t186);
+    			append_dev(div89, br4);
+    			append_dev(div91, t187);
+    			append_dev(div91, div90);
+    			append_dev(div90, t188);
+    			append_dev(div91, t189);
+    			append_dev(div91, input9);
 
     			set_input_value(input9, ctx.R0);
 
-    			append_dev(div97, t196);
-    			append_dev(div97, input10);
+    			append_dev(div91, t190);
+    			append_dev(div91, input10);
 
     			set_input_value(input10, ctx.R0);
 
-    			append_dev(div108, t197);
-    			append_dev(div108, div103);
-    			append_dev(div103, div98);
-    			append_dev(div103, t199);
-    			append_dev(div103, div99);
-    			append_dev(div99, t200);
-    			html_tag_2.m(div99);
-    			append_dev(div99, t201);
-    			append_dev(div99, br5);
-    			append_dev(div103, t202);
-    			append_dev(div103, div100);
-    			append_dev(div100, t203);
-    			append_dev(div100, t204);
-    			append_dev(div103, t205);
-    			append_dev(div103, input11);
+    			append_dev(div102, t191);
+    			append_dev(div102, div97);
+    			append_dev(div97, div92);
+    			append_dev(div97, t193);
+    			append_dev(div97, div93);
+    			append_dev(div93, t194);
+    			html_tag_2.m(div93);
+    			append_dev(div93, t195);
+    			append_dev(div93, br5);
+    			append_dev(div97, t196);
+    			append_dev(div97, div94);
+    			append_dev(div94, t197);
+    			append_dev(div94, t198);
+    			append_dev(div97, t199);
+    			append_dev(div97, input11);
 
     			set_input_value(input11, ctx.D_incbation);
 
-    			append_dev(div103, t206);
-    			append_dev(div103, input12);
+    			append_dev(div97, t200);
+    			append_dev(div97, input12);
 
     			set_input_value(input12, ctx.D_incbation);
 
-    			append_dev(div103, t207);
-    			append_dev(div103, div101);
-    			append_dev(div101, t208);
-    			html_tag_3.m(div101);
-    			append_dev(div101, t209);
-    			append_dev(div101, br6);
-    			append_dev(div103, t210);
-    			append_dev(div103, div102);
-    			append_dev(div102, t211);
-    			append_dev(div102, t212);
-    			append_dev(div103, t213);
-    			append_dev(div103, input13);
+    			append_dev(div97, t201);
+    			append_dev(div97, div95);
+    			append_dev(div95, t202);
+    			html_tag_3.m(div95);
+    			append_dev(div95, t203);
+    			append_dev(div95, br6);
+    			append_dev(div97, t204);
+    			append_dev(div97, div96);
+    			append_dev(div96, t205);
+    			append_dev(div96, t206);
+    			append_dev(div97, t207);
+    			append_dev(div97, input13);
 
     			set_input_value(input13, ctx.D_infectious);
 
-    			append_dev(div103, t214);
-    			append_dev(div103, input14);
+    			append_dev(div97, t208);
+    			append_dev(div97, input14);
 
     			set_input_value(input14, ctx.D_infectious);
 
-    			append_dev(div108, t215);
-    			append_dev(div108, div107);
-    			append_dev(div107, div104);
-    			html_tag_4.m(div104);
-    			append_dev(div104, t216);
-    			append_dev(div107, t217);
-    			append_dev(div107, div105);
-    			append_dev(div107, t219);
-    			append_dev(div107, div106);
-    			append_dev(div106, t220);
-    			append_dev(div107, t221);
-    			append_dev(div107, input15);
+    			append_dev(div102, t209);
+    			append_dev(div102, div101);
+    			append_dev(div101, div98);
+    			html_tag_4.m(div98);
+    			append_dev(div98, t210);
+    			append_dev(div101, t211);
+    			append_dev(div101, div99);
+    			append_dev(div101, t213);
+    			append_dev(div101, div100);
+    			append_dev(div100, t214);
+    			append_dev(div101, t215);
+    			append_dev(div101, input15);
 
     			set_input_value(input15, ctx.R0p);
 
-    			append_dev(div107, t222);
-    			append_dev(div107, input16);
+    			append_dev(div101, t216);
+    			append_dev(div101, input16);
 
     			set_input_value(input16, ctx.R0p);
 
-    			insert_dev(target, t223, anchor);
+    			insert_dev(target, t217, anchor);
     			insert_dev(target, p1, anchor);
-    			insert_dev(target, div109, anchor);
-    			insert_dev(target, t225, anchor);
-    			insert_dev(target, div129, anchor);
-    			append_dev(div129, div110);
-    			append_dev(div129, t226);
-    			append_dev(div129, div116);
-    			append_dev(div116, div111);
-    			append_dev(div116, t228);
-    			append_dev(div116, div112);
-    			append_dev(div112, t229);
-    			append_dev(div112, br7);
-    			append_dev(div116, t230);
-    			append_dev(div116, div113);
-    			append_dev(div113, t231);
-    			append_dev(div113, t232);
-    			append_dev(div116, t233);
-    			append_dev(div116, input17);
+    			insert_dev(target, div103, anchor);
+    			insert_dev(target, t219, anchor);
+    			insert_dev(target, div123, anchor);
+    			append_dev(div123, div104);
+    			append_dev(div123, t220);
+    			append_dev(div123, div110);
+    			append_dev(div110, div105);
+    			append_dev(div110, t222);
+    			append_dev(div110, div106);
+    			append_dev(div106, t223);
+    			append_dev(div106, br7);
+    			append_dev(div110, t224);
+    			append_dev(div110, div107);
+    			append_dev(div107, t225);
+    			append_dev(div107, t226);
+    			append_dev(div110, t227);
+    			append_dev(div110, input17);
 
     			set_input_value(input17, ctx.CFR);
 
-    			append_dev(div116, t234);
-    			append_dev(div116, input18);
+    			append_dev(div110, t228);
+    			append_dev(div110, input18);
 
     			set_input_value(input18, ctx.CFR);
 
-    			append_dev(div116, t235);
-    			append_dev(div116, div114);
-    			append_dev(div114, t236);
-    			append_dev(div114, br8);
-    			append_dev(div116, t237);
-    			append_dev(div116, div115);
-    			append_dev(div115, t238);
-    			append_dev(div115, t239);
-    			append_dev(div116, t240);
-    			append_dev(div116, input19);
+    			append_dev(div110, t229);
+    			append_dev(div110, div108);
+    			append_dev(div108, t230);
+    			append_dev(div108, br8);
+    			append_dev(div110, t231);
+    			append_dev(div110, div109);
+    			append_dev(div109, t232);
+    			append_dev(div109, t233);
+    			append_dev(div110, t234);
+    			append_dev(div110, input19);
 
     			set_input_value(input19, ctx.Time_to_death);
 
-    			append_dev(div116, t241);
-    			append_dev(div116, input20);
+    			append_dev(div110, t235);
+    			append_dev(div110, input20);
 
     			set_input_value(input20, ctx.Time_to_death);
 
-    			append_dev(div129, t242);
-    			append_dev(div129, div122);
-    			append_dev(div122, div117);
-    			append_dev(div122, t244);
-    			append_dev(div122, div118);
-    			append_dev(div118, t245);
-    			append_dev(div118, br9);
-    			append_dev(div122, t246);
-    			append_dev(div122, div119);
-    			append_dev(div119, t247);
-    			append_dev(div119, t248);
-    			append_dev(div122, t249);
-    			append_dev(div122, input21);
+    			append_dev(div123, t236);
+    			append_dev(div123, div116);
+    			append_dev(div116, div111);
+    			append_dev(div116, t238);
+    			append_dev(div116, div112);
+    			append_dev(div112, t239);
+    			append_dev(div112, br9);
+    			append_dev(div116, t240);
+    			append_dev(div116, div113);
+    			append_dev(div113, t241);
+    			append_dev(div113, t242);
+    			append_dev(div116, t243);
+    			append_dev(div116, input21);
 
     			set_input_value(input21, ctx.D_recovery_severe);
 
-    			append_dev(div122, t250);
-    			append_dev(div122, input22);
+    			append_dev(div116, t244);
+    			append_dev(div116, input22);
 
     			set_input_value(input22, ctx.D_recovery_severe);
 
-    			append_dev(div122, t251);
-    			append_dev(div122, div120);
-    			append_dev(div120, t252);
-    			append_dev(div120, br10);
-    			append_dev(div122, t253);
-    			append_dev(div122, div121);
-    			append_dev(div121, t254);
-    			append_dev(div121, t255);
-    			append_dev(div122, t256);
-    			append_dev(div122, input23);
+    			append_dev(div116, t245);
+    			append_dev(div116, div114);
+    			append_dev(div114, t246);
+    			append_dev(div114, br10);
+    			append_dev(div116, t247);
+    			append_dev(div116, div115);
+    			append_dev(div115, t248);
+    			append_dev(div115, t249);
+    			append_dev(div116, t250);
+    			append_dev(div116, input23);
 
     			set_input_value(input23, ctx.D_recovery_mild);
 
-    			append_dev(div122, t257);
-    			append_dev(div122, input24);
+    			append_dev(div116, t251);
+    			append_dev(div116, input24);
 
     			set_input_value(input24, ctx.D_recovery_mild);
 
-    			append_dev(div129, t258);
-    			append_dev(div129, div128);
-    			append_dev(div128, div123);
-    			append_dev(div128, t260);
-    			append_dev(div128, div124);
-    			append_dev(div124, t261);
-    			append_dev(div124, br11);
-    			append_dev(div128, t262);
-    			append_dev(div128, div125);
-    			append_dev(div125, t263);
-    			append_dev(div125, t264);
-    			append_dev(div128, t265);
-    			append_dev(div128, input25);
+    			append_dev(div123, t252);
+    			append_dev(div123, div122);
+    			append_dev(div122, div117);
+    			append_dev(div122, t254);
+    			append_dev(div122, div118);
+    			append_dev(div118, t255);
+    			append_dev(div118, br11);
+    			append_dev(div122, t256);
+    			append_dev(div122, div119);
+    			append_dev(div119, t257);
+    			append_dev(div119, t258);
+    			append_dev(div122, t259);
+    			append_dev(div122, input25);
 
     			set_input_value(input25, ctx.P_SEVERE);
 
-    			append_dev(div128, t266);
-    			append_dev(div128, input26);
+    			append_dev(div122, t260);
+    			append_dev(div122, input26);
 
     			set_input_value(input26, ctx.P_SEVERE);
 
-    			append_dev(div128, t267);
-    			append_dev(div128, div126);
-    			append_dev(div126, t268);
-    			append_dev(div126, br12);
-    			append_dev(div128, t269);
-    			append_dev(div128, div127);
-    			append_dev(div127, t270);
-    			append_dev(div127, t271);
-    			append_dev(div128, t272);
-    			append_dev(div128, input27);
+    			append_dev(div122, t261);
+    			append_dev(div122, div120);
+    			append_dev(div120, t262);
+    			append_dev(div120, br12);
+    			append_dev(div122, t263);
+    			append_dev(div122, div121);
+    			append_dev(div121, t264);
+    			append_dev(div121, t265);
+    			append_dev(div122, t266);
+    			append_dev(div122, input27);
 
     			set_input_value(input27, ctx.D_hospital_lag);
 
-    			append_dev(div128, t273);
-    			append_dev(div128, input28);
+    			append_dev(div122, t267);
+    			append_dev(div122, input28);
 
     			set_input_value(input28, ctx.D_hospital_lag);
 
-    			insert_dev(target, t274, anchor);
-    			insert_dev(target, div130, anchor);
-    			insert_dev(target, t275, anchor);
+    			insert_dev(target, t268, anchor);
+    			insert_dev(target, div124, anchor);
+    			insert_dev(target, t269, anchor);
     			insert_dev(target, p2, anchor);
-    			append_dev(p2, t276);
+    			append_dev(p2, t270);
     			append_dev(p2, a0);
-    			append_dev(p2, t278);
+    			append_dev(p2, t272);
     			append_dev(p2, b1);
     			append_dev(b1, a1);
-    			append_dev(p2, t280);
+    			append_dev(p2, t274);
     			append_dev(p2, b2);
-    			append_dev(p2, t282);
+    			append_dev(p2, t276);
     			append_dev(p2, span15);
     			append_dev(span15, b3);
-    			append_dev(p2, t284);
+    			append_dev(p2, t278);
     			append_dev(p2, span16);
     			append_dev(span16, b4);
-    			append_dev(p2, t286);
+    			append_dev(p2, t280);
     			append_dev(p2, span17);
     			append_dev(span17, b5);
-    			append_dev(p2, t288);
+    			append_dev(p2, t282);
     			append_dev(p2, a2);
-    			append_dev(p2, t290);
+    			append_dev(p2, t284);
     			append_dev(p2, a3);
-    			append_dev(p2, t292);
+    			append_dev(p2, t286);
     			append_dev(p2, a4);
-    			append_dev(p2, t294);
+    			append_dev(p2, t288);
     			append_dev(p2, a5);
-    			append_dev(p2, t296);
+    			append_dev(p2, t290);
     			append_dev(p2, span18);
     			span18.innerHTML = ctx.ode_eqn;
-    			append_dev(p2, t297);
-    			insert_dev(target, t298, anchor);
+    			append_dev(p2, t291);
+    			insert_dev(target, t292, anchor);
     			insert_dev(target, p3, anchor);
-    			append_dev(p3, t299);
+    			append_dev(p3, t293);
     			append_dev(p3, a6);
-    			append_dev(p3, t301);
-    			insert_dev(target, t302, anchor);
+    			append_dev(p3, t295);
+    			insert_dev(target, t296, anchor);
     			insert_dev(target, p4, anchor);
-    			insert_dev(target, t304, anchor);
+    			insert_dev(target, t298, anchor);
     			insert_dev(target, p5, anchor);
-    			insert_dev(target, t306, anchor);
+    			insert_dev(target, t300, anchor);
     			insert_dev(target, p6, anchor);
-    			append_dev(p6, t307);
+    			append_dev(p6, t301);
     			append_dev(p6, a7);
-    			append_dev(p6, t309);
-    			insert_dev(target, t310, anchor);
+    			append_dev(p6, t303);
+    			insert_dev(target, t304, anchor);
     			insert_dev(target, p7, anchor);
-    			append_dev(p7, t311);
+    			append_dev(p7, t305);
     			append_dev(p7, a8);
-    			append_dev(p7, t313);
+    			append_dev(p7, t307);
     			append_dev(p7, a9);
-    			insert_dev(target, t315, anchor);
+    			insert_dev(target, t309, anchor);
     			insert_dev(target, p8, anchor);
-    			insert_dev(target, t317, anchor);
+    			insert_dev(target, t311, anchor);
     			insert_dev(target, p9, anchor);
-    			append_dev(p9, t318);
+    			append_dev(p9, t312);
     			append_dev(p9, a10);
-    			append_dev(p9, t320);
-    			insert_dev(target, t321, anchor);
+    			append_dev(p9, t314);
+    			insert_dev(target, t315, anchor);
     			insert_dev(target, p10, anchor);
-    			append_dev(p10, t322);
-    			append_dev(p10, t323);
-    			append_dev(p10, t324);
+    			append_dev(p10, t316);
+    			append_dev(p10, t317);
+    			append_dev(p10, t318);
     			append_dev(p10, a11);
-    			append_dev(p10, t326);
+    			append_dev(p10, t320);
     			append_dev(p10, input29);
 
     			set_input_value(input29, ctx.p_num_ind);
 
-    			append_dev(p10, t327);
-    			append_dev(p10, t328);
-    			append_dev(p10, t329);
+    			append_dev(p10, t321);
+    			append_dev(p10, t322);
+    			append_dev(p10, t323);
     			append_dev(p10, a12);
-    			append_dev(p10, t331);
+    			append_dev(p10, t325);
     			append_dev(p10, a13);
-    			append_dev(p10, t333);
-    			insert_dev(target, t334, anchor);
+    			append_dev(p10, t327);
+    			insert_dev(target, t328, anchor);
     			insert_dev(target, p11, anchor);
-    			insert_dev(target, t336, anchor);
-    			insert_dev(target, div131, anchor);
-    			append_dev(div131, table);
+    			insert_dev(target, t330, anchor);
+    			insert_dev(target, div125, anchor);
+    			append_dev(div125, table);
     			append_dev(table, tr0);
     			append_dev(tr0, th0);
-    			append_dev(tr0, t337);
+    			append_dev(tr0, t331);
     			append_dev(tr0, th1);
-    			append_dev(tr0, t339);
+    			append_dev(tr0, t333);
     			append_dev(tr0, th2);
-    			append_dev(th2, t340);
+    			append_dev(th2, t334);
     			append_dev(th2, br13);
-    			append_dev(th2, t341);
+    			append_dev(th2, t335);
     			html_tag_5.m(th2);
-    			append_dev(tr0, t342);
+    			append_dev(tr0, t336);
     			append_dev(tr0, th3);
-    			append_dev(th3, t343);
+    			append_dev(th3, t337);
     			append_dev(th3, br14);
-    			append_dev(th3, t344);
+    			append_dev(th3, t338);
     			html_tag_6.m(th3);
-    			append_dev(th3, t345);
-    			append_dev(tr0, t346);
+    			append_dev(th3, t339);
+    			append_dev(tr0, t340);
     			append_dev(tr0, th4);
-    			append_dev(th4, t347);
+    			append_dev(th4, t341);
     			append_dev(th4, br15);
-    			append_dev(th4, t348);
+    			append_dev(th4, t342);
     			html_tag_7.m(th4);
-    			append_dev(th4, t349);
-    			append_dev(table, t350);
+    			append_dev(th4, t343);
+    			append_dev(table, t344);
     			append_dev(table, tr1);
     			append_dev(tr1, td0);
     			append_dev(td0, a14);
-    			append_dev(tr1, t352);
+    			append_dev(tr1, t346);
     			append_dev(tr1, td1);
-    			append_dev(tr1, t354);
+    			append_dev(tr1, t348);
     			append_dev(tr1, td2);
-    			append_dev(tr1, t356);
+    			append_dev(tr1, t350);
     			append_dev(tr1, td3);
-    			append_dev(tr1, t358);
+    			append_dev(tr1, t352);
     			append_dev(tr1, td4);
-    			append_dev(table, t360);
+    			append_dev(table, t354);
     			append_dev(table, tr2);
     			append_dev(tr2, td5);
     			append_dev(td5, a15);
-    			append_dev(tr2, t362);
+    			append_dev(tr2, t356);
     			append_dev(tr2, td6);
-    			append_dev(tr2, t364);
+    			append_dev(tr2, t358);
     			append_dev(tr2, td7);
-    			append_dev(tr2, t366);
+    			append_dev(tr2, t360);
     			append_dev(tr2, td8);
-    			append_dev(tr2, t368);
+    			append_dev(tr2, t362);
     			append_dev(tr2, td9);
-    			append_dev(table, t370);
+    			append_dev(table, t364);
     			append_dev(table, tr3);
     			append_dev(tr3, td10);
     			append_dev(td10, a16);
-    			append_dev(tr3, t372);
+    			append_dev(tr3, t366);
     			append_dev(tr3, td11);
-    			append_dev(tr3, t374);
+    			append_dev(tr3, t368);
     			append_dev(tr3, td12);
-    			append_dev(tr3, t376);
+    			append_dev(tr3, t370);
     			append_dev(tr3, td13);
-    			append_dev(tr3, t378);
+    			append_dev(tr3, t372);
     			append_dev(tr3, td14);
-    			append_dev(table, t380);
+    			append_dev(table, t374);
     			append_dev(table, tr4);
     			append_dev(tr4, td15);
     			append_dev(td15, a17);
-    			append_dev(tr4, t382);
+    			append_dev(tr4, t376);
     			append_dev(tr4, td16);
-    			append_dev(tr4, t384);
+    			append_dev(tr4, t378);
     			append_dev(tr4, td17);
-    			append_dev(tr4, t386);
+    			append_dev(tr4, t380);
     			append_dev(tr4, td18);
-    			append_dev(tr4, t387);
+    			append_dev(tr4, t381);
     			append_dev(tr4, td19);
-    			append_dev(table, t388);
+    			append_dev(table, t382);
     			append_dev(table, tr5);
     			append_dev(tr5, td20);
     			append_dev(td20, a18);
-    			append_dev(tr5, t390);
+    			append_dev(tr5, t384);
     			append_dev(tr5, td21);
-    			append_dev(tr5, t392);
+    			append_dev(tr5, t386);
     			append_dev(tr5, td22);
-    			append_dev(tr5, t394);
+    			append_dev(tr5, t388);
     			append_dev(tr5, td23);
-    			append_dev(tr5, t396);
+    			append_dev(tr5, t390);
     			append_dev(tr5, td24);
-    			append_dev(table, t397);
+    			append_dev(table, t391);
     			append_dev(table, tr6);
     			append_dev(tr6, td25);
     			append_dev(td25, a19);
-    			append_dev(tr6, t399);
+    			append_dev(tr6, t393);
     			append_dev(tr6, td26);
-    			append_dev(tr6, t401);
+    			append_dev(tr6, t395);
     			append_dev(tr6, td27);
-    			append_dev(tr6, t403);
+    			append_dev(tr6, t397);
     			append_dev(tr6, td28);
-    			append_dev(tr6, t405);
+    			append_dev(tr6, t399);
     			append_dev(tr6, td29);
-    			append_dev(table, t407);
+    			append_dev(table, t401);
     			append_dev(table, tr7);
     			append_dev(tr7, td30);
     			append_dev(td30, a20);
-    			append_dev(tr7, t409);
+    			append_dev(tr7, t403);
     			append_dev(tr7, td31);
-    			append_dev(tr7, t411);
+    			append_dev(tr7, t405);
     			append_dev(tr7, td32);
-    			append_dev(tr7, t413);
+    			append_dev(tr7, t407);
     			append_dev(tr7, td33);
-    			append_dev(tr7, t415);
+    			append_dev(tr7, t409);
     			append_dev(tr7, td34);
-    			append_dev(table, t417);
+    			append_dev(table, t411);
     			append_dev(table, tr8);
     			append_dev(tr8, td35);
     			append_dev(td35, a21);
-    			append_dev(tr8, t419);
+    			append_dev(tr8, t413);
     			append_dev(tr8, td36);
-    			append_dev(tr8, t421);
+    			append_dev(tr8, t415);
     			append_dev(tr8, td37);
-    			append_dev(tr8, t422);
+    			append_dev(tr8, t416);
     			append_dev(tr8, td38);
-    			append_dev(tr8, t424);
+    			append_dev(tr8, t418);
     			append_dev(tr8, td39);
-    			append_dev(table, t425);
+    			append_dev(table, t419);
     			append_dev(table, tr9);
     			append_dev(tr9, td40);
     			append_dev(td40, a22);
-    			append_dev(tr9, t427);
+    			append_dev(tr9, t421);
     			append_dev(tr9, td41);
-    			append_dev(tr9, t429);
+    			append_dev(tr9, t423);
     			append_dev(tr9, td42);
-    			append_dev(tr9, t431);
+    			append_dev(tr9, t425);
     			append_dev(tr9, td43);
-    			append_dev(tr9, t432);
+    			append_dev(tr9, t426);
     			append_dev(tr9, td44);
-    			append_dev(table, t433);
+    			append_dev(table, t427);
     			append_dev(table, tr10);
     			append_dev(tr10, td45);
     			append_dev(td45, a23);
-    			append_dev(tr10, t435);
+    			append_dev(tr10, t429);
     			append_dev(tr10, td46);
-    			append_dev(tr10, t437);
+    			append_dev(tr10, t431);
     			append_dev(tr10, td47);
-    			append_dev(tr10, t438);
+    			append_dev(tr10, t432);
     			append_dev(tr10, td48);
-    			append_dev(tr10, t440);
+    			append_dev(tr10, t434);
     			append_dev(tr10, td49);
-    			append_dev(tr10, t442);
+    			append_dev(tr10, t436);
     			append_dev(tr10, td50);
-    			append_dev(table, t443);
+    			append_dev(table, t437);
     			append_dev(table, tr11);
     			append_dev(tr11, td51);
     			append_dev(td51, a24);
-    			append_dev(tr11, t445);
+    			append_dev(tr11, t439);
     			append_dev(tr11, td52);
-    			append_dev(tr11, t447);
+    			append_dev(tr11, t441);
     			append_dev(tr11, td53);
-    			append_dev(tr11, t449);
+    			append_dev(tr11, t443);
     			append_dev(tr11, td54);
-    			append_dev(tr11, t450);
+    			append_dev(tr11, t444);
     			append_dev(tr11, td55);
-    			insert_dev(target, t451, anchor);
+    			insert_dev(target, t445, anchor);
     			insert_dev(target, p12, anchor);
-    			append_dev(p12, t452);
+    			append_dev(p12, t446);
     			append_dev(p12, a25);
-    			append_dev(p12, t454);
+    			append_dev(p12, t448);
     			append_dev(p12, a26);
-    			append_dev(p12, t456);
-    			insert_dev(target, t457, anchor);
+    			append_dev(p12, t450);
+    			insert_dev(target, t451, anchor);
     			insert_dev(target, p13, anchor);
     			append_dev(p13, b6);
     			append_dev(p13, br16);
-    			append_dev(p13, t459);
+    			append_dev(p13, t453);
     			html_tag_8.m(p13);
-    			append_dev(p13, t460);
+    			append_dev(p13, t454);
     			append_dev(p13, i14);
-    			append_dev(p13, t462);
+    			append_dev(p13, t456);
     			append_dev(p13, i15);
-    			append_dev(p13, t464);
+    			append_dev(p13, t458);
     			append_dev(p13, i16);
-    			append_dev(p13, t466);
-    			insert_dev(target, t467, anchor);
-    			insert_dev(target, div134, anchor);
-    			append_dev(div134, div133);
-    			append_dev(div133, div132);
-    			append_dev(div133, t469);
-    			append_dev(div133, form);
+    			append_dev(p13, t460);
+    			insert_dev(target, t461, anchor);
+    			insert_dev(target, div128, anchor);
+    			append_dev(div128, div127);
+    			append_dev(div127, div126);
+    			append_dev(div127, t463);
+    			append_dev(div127, form);
     			append_dev(form, textarea);
     			current = true;
     		},
@@ -26194,20 +25942,20 @@
     				} else {
     					if_block0 = create_if_block_1$1(ctx);
     					if_block0.c();
-    					if_block0.m(div65, t141);
+    					if_block0.m(div59, t135);
     				}
     			} else if (if_block0) {
     				if_block0.d(1);
     				if_block0 = null;
     			}
 
-    			if ((!current || changed.InterventionTime) && t143_value !== (t143_value = format("d")(ctx.InterventionTime) + "")) {
-    				set_data_dev(t143, t143_value);
+    			if ((!current || changed.InterventionTime) && t137_value !== (t137_value = format("d")(ctx.InterventionTime) + "")) {
+    				set_data_dev(t137, t137_value);
     			}
 
     			if (!current || changed.xScaleTime || changed.InterventionTime) {
-    				set_style(div65, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
-    				set_style(div65, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    				set_style(div59, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
+    				set_style(div59, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
     			}
 
     			if (changed.xScaleTime || changed.InterventionTime || changed.duration) show_if = ctx.xScaleTime(ctx.InterventionTime+ctx.duration) >= 100;
@@ -26218,20 +25966,20 @@
     				} else {
     					if_block1 = create_if_block$1(ctx);
     					if_block1.c();
-    					if_block1.m(div68, t149);
+    					if_block1.m(div62, t143);
     				}
     			} else if (if_block1) {
     				if_block1.d(1);
     				if_block1 = null;
     			}
 
-    			if ((!current || changed.InterventionTime || changed.duration) && t151_value !== (t151_value = format("d")(ctx.InterventionTime+ctx.duration) + "")) {
-    				set_data_dev(t151, t151_value);
+    			if ((!current || changed.InterventionTime || changed.duration) && t145_value !== (t145_value = format("d")(ctx.InterventionTime+ctx.duration) + "")) {
+    				set_data_dev(t145, t145_value);
     			}
 
     			if (!current || changed.xScaleTime || changed.InterventionTime || changed.duration) {
-    				set_style(div68, "left", "" + ctx.xScaleTime(ctx.InterventionTime+ctx.duration) + "px");
-    				set_style(div68, "visibility", ((ctx.xScaleTime(ctx.InterventionTime+ctx.duration) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    				set_style(div62, "left", "" + ctx.xScaleTime(ctx.InterventionTime+ctx.duration) + "px");
+    				set_style(div62, "visibility", ((ctx.xScaleTime(ctx.InterventionTime+ctx.duration) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
     			}
 
     			if ((!current || changed.R0 || changed.InterventionAmt) && raw0_value !== (raw0_value = math_inline("\\mathcal{R}_t=" + (ctx.R0*ctx.InterventionAmt).toFixed(2)) + "")) {
@@ -26240,21 +25988,21 @@
 
     			if (changed.InterventionAmt) set_input_value(input0, ctx.InterventionAmt);
 
-    			if ((!current || changed.duration) && t156_value !== (t156_value = (ctx.duration).toFixed(0) + "")) {
-    				set_data_dev(t156, t156_value);
+    			if ((!current || changed.duration) && t150_value !== (t150_value = (ctx.duration).toFixed(0) + "")) {
+    				set_data_dev(t150, t150_value);
     			}
 
     			if (changed.duration) set_input_value(input1, ctx.duration);
 
-    			if ((!current || changed.retardo) && t160_value !== (t160_value = (ctx.retardo).toFixed(0) + "")) {
-    				set_data_dev(t160, t160_value);
+    			if ((!current || changed.retardo) && t154_value !== (t154_value = (ctx.retardo).toFixed(0) + "")) {
+    				set_data_dev(t154, t154_value);
     			}
 
     			if (changed.retardo) set_input_value(input2, ctx.retardo);
 
     			if (!current || changed.xScaleTime || changed.InterventionTime) {
-    				set_style(div76, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
-    				set_style(div76, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
+    				set_style(div70, "left", "" + ctx.xScaleTime(ctx.InterventionTime) + "px");
+    				set_style(div70, "visibility", ((ctx.xScaleTime(ctx.InterventionTime) < (width$1 - ctx.padding.right)) ? 'visible':'hidden'));
     			}
 
     			if (changed.xScaleTime || changed.milestones) {
@@ -26271,7 +26019,7 @@
     						each_blocks[i] = create_each_block$1(child_ctx);
     						each_blocks[i].c();
     						transition_in(each_blocks[i], 1);
-    						each_blocks[i].m(div78, null);
+    						each_blocks[i].m(div72, null);
     					}
     				}
 
@@ -26289,18 +26037,18 @@
     			checkbox7.$set(checkbox7_changes);
 
     			if (!current || changed.xScaleTime || changed.InterventionTime) {
-    				set_style(div81, "opacity", (ctx.xScaleTime(ctx.InterventionTime) >= 192? 1.0 : 0.2));
+    				set_style(div75, "opacity", (ctx.xScaleTime(ctx.InterventionTime) >= 192? 1.0 : 0.2));
     			}
 
-    			if ((!current || changed.N) && t174_value !== (t174_value = format(",")(ctx.Math.round(ctx.N)) + "")) {
-    				set_data_dev(t174, t174_value);
+    			if ((!current || changed.N) && t168_value !== (t168_value = format(",")(ctx.Math.round(ctx.N)) + "")) {
+    				set_data_dev(t168, t168_value);
     			}
 
     			if (changed.logN) set_input_value(input3, ctx.logN);
     			if (changed.N) set_input_value(input4, ctx.N);
 
     			if (!current || changed.I0) {
-    				set_data_dev(t180, ctx.I0);
+    				set_data_dev(t174, ctx.I0);
     			}
 
     			if (changed.I0) set_input_value(input5, ctx.I0);
@@ -26308,7 +26056,7 @@
     			input6_updating = false;
 
     			if (!current || changed.E0) {
-    				set_data_dev(t186, ctx.E0);
+    				set_data_dev(t180, ctx.E0);
     			}
 
     			if (changed.E0) set_input_value(input7, ctx.E0);
@@ -26316,15 +26064,15 @@
     			input8_updating = false;
 
     			if (!current || changed.R0) {
-    				set_data_dev(t194, ctx.R0);
+    				set_data_dev(t188, ctx.R0);
     			}
 
     			if (changed.R0) set_input_value(input9, ctx.R0);
     			if (!input10_updating && changed.R0) set_input_value(input10, ctx.R0);
     			input10_updating = false;
 
-    			if ((!current || changed.D_incbation) && t203_value !== (t203_value = (ctx.D_incbation).toFixed(2) + "")) {
-    				set_data_dev(t203, t203_value);
+    			if ((!current || changed.D_incbation) && t197_value !== (t197_value = (ctx.D_incbation).toFixed(2) + "")) {
+    				set_data_dev(t197, t197_value);
     			}
 
     			if (changed.D_incbation) set_input_value(input11, ctx.D_incbation);
@@ -26332,7 +26080,7 @@
     			input12_updating = false;
 
     			if (!current || changed.D_infectious) {
-    				set_data_dev(t211, ctx.D_infectious);
+    				set_data_dev(t205, ctx.D_infectious);
     			}
 
     			if (changed.D_infectious) set_input_value(input13, ctx.D_infectious);
@@ -26340,15 +26088,15 @@
     			input14_updating = false;
 
     			if (!current || changed.R0p) {
-    				set_data_dev(t220, ctx.R0p);
+    				set_data_dev(t214, ctx.R0p);
     			}
 
     			if (changed.R0p) set_input_value(input15, ctx.R0p);
     			if (!input16_updating && changed.R0p) set_input_value(input16, ctx.R0p);
     			input16_updating = false;
 
-    			if ((!current || changed.CFR) && t231_value !== (t231_value = (ctx.CFR*100).toFixed(2) + "")) {
-    				set_data_dev(t231, t231_value);
+    			if ((!current || changed.CFR) && t225_value !== (t225_value = (ctx.CFR*100).toFixed(2) + "")) {
+    				set_data_dev(t225, t225_value);
     			}
 
     			if (changed.CFR) set_input_value(input17, ctx.CFR);
@@ -26356,7 +26104,7 @@
     			input18_updating = false;
 
     			if (!current || changed.Time_to_death) {
-    				set_data_dev(t238, ctx.Time_to_death);
+    				set_data_dev(t232, ctx.Time_to_death);
     			}
 
     			if (changed.Time_to_death) set_input_value(input19, ctx.Time_to_death);
@@ -26373,7 +26121,7 @@
     			}
 
     			if (!current || changed.D_recovery_severe) {
-    				set_data_dev(t247, ctx.D_recovery_severe);
+    				set_data_dev(t241, ctx.D_recovery_severe);
     			}
 
     			if (changed.D_recovery_severe) set_input_value(input21, ctx.D_recovery_severe);
@@ -26381,15 +26129,15 @@
     			input22_updating = false;
 
     			if (!current || changed.D_recovery_mild) {
-    				set_data_dev(t254, ctx.D_recovery_mild);
+    				set_data_dev(t248, ctx.D_recovery_mild);
     			}
 
     			if (changed.D_recovery_mild) set_input_value(input23, ctx.D_recovery_mild);
     			if (!input24_updating && changed.D_recovery_mild) set_input_value(input24, ctx.D_recovery_mild);
     			input24_updating = false;
 
-    			if ((!current || changed.P_SEVERE) && t263_value !== (t263_value = (ctx.P_SEVERE*100).toFixed(2) + "")) {
-    				set_data_dev(t263, t263_value);
+    			if ((!current || changed.P_SEVERE) && t257_value !== (t257_value = (ctx.P_SEVERE*100).toFixed(2) + "")) {
+    				set_data_dev(t257, t257_value);
     			}
 
     			if (changed.P_SEVERE) set_input_value(input25, ctx.P_SEVERE);
@@ -26397,7 +26145,7 @@
     			input26_updating = false;
 
     			if (!current || changed.D_hospital_lag) {
-    				set_data_dev(t270, ctx.D_hospital_lag);
+    				set_data_dev(t264, ctx.D_hospital_lag);
     			}
 
     			if (changed.D_hospital_lag) set_input_value(input27, ctx.D_hospital_lag);
@@ -26408,8 +26156,8 @@
     				span18.innerHTML = ctx.ode_eqn;
     			}
 
-    			if ((!current || changed.indexToTime || changed.active_) && t323_value !== (t323_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "")) {
-    				set_data_dev(t323, t323_value);
+    			if ((!current || changed.indexToTime || changed.active_) && t317_value !== (t317_value = ctx.Math.round(ctx.indexToTime(ctx.active_)) + "")) {
+    				set_data_dev(t317, t317_value);
     			}
 
     			if (changed.p_num_ind && (input29.value !== ctx.p_num_ind)) set_input_value(input29, ctx.p_num_ind);
@@ -26418,8 +26166,8 @@
     				set_style(input29, "width", "" + (ctx.Math.ceil(ctx.Math.log10(ctx.p_num_ind))*9.5 + 5) + "px");
     			}
 
-    			if ((!current || changed.Iters || changed.active_ || changed.p_num_ind) && t328_value !== (t328_value = ((1-(ctx.Math.pow(1 - (ctx.Iters[ctx.active_][2])*(0.45/100), ctx.p_num_ind)))*100).toFixed(5) + "")) {
-    				set_data_dev(t328, t328_value);
+    			if ((!current || changed.Iters || changed.active_ || changed.p_num_ind) && t322_value !== (t322_value = ((1-(ctx.Math.pow(1 - (ctx.Iters[ctx.active_][2])*(0.45/100), ctx.p_num_ind)))*100).toFixed(5) + "")) {
+    				set_data_dev(t322, t322_value);
     			}
 
     			if (!current || changed.state) {
@@ -26502,7 +26250,7 @@
     				detach_dev(t2);
     				detach_dev(button);
     				detach_dev(t4);
-    				detach_dev(div83);
+    				detach_dev(div77);
     			}
 
     			destroy_component(checkbox0);
@@ -26543,46 +26291,46 @@
     			destroy_component(checkbox7);
 
     			if (detaching) {
-    				detach_dev(t166);
+    				detach_dev(t160);
     				detach_dev(p0);
-    				detach_dev(div84);
-    				detach_dev(t168);
-    				detach_dev(div108);
-    				detach_dev(t223);
+    				detach_dev(div78);
+    				detach_dev(t162);
+    				detach_dev(div102);
+    				detach_dev(t217);
     				detach_dev(p1);
-    				detach_dev(div109);
-    				detach_dev(t225);
-    				detach_dev(div129);
-    				detach_dev(t274);
-    				detach_dev(div130);
-    				detach_dev(t275);
+    				detach_dev(div103);
+    				detach_dev(t219);
+    				detach_dev(div123);
+    				detach_dev(t268);
+    				detach_dev(div124);
+    				detach_dev(t269);
     				detach_dev(p2);
-    				detach_dev(t298);
+    				detach_dev(t292);
     				detach_dev(p3);
-    				detach_dev(t302);
+    				detach_dev(t296);
     				detach_dev(p4);
-    				detach_dev(t304);
+    				detach_dev(t298);
     				detach_dev(p5);
-    				detach_dev(t306);
+    				detach_dev(t300);
     				detach_dev(p6);
-    				detach_dev(t310);
+    				detach_dev(t304);
     				detach_dev(p7);
-    				detach_dev(t315);
+    				detach_dev(t309);
     				detach_dev(p8);
-    				detach_dev(t317);
+    				detach_dev(t311);
     				detach_dev(p9);
-    				detach_dev(t321);
+    				detach_dev(t315);
     				detach_dev(p10);
-    				detach_dev(t334);
+    				detach_dev(t328);
     				detach_dev(p11);
-    				detach_dev(t336);
-    				detach_dev(div131);
-    				detach_dev(t451);
+    				detach_dev(t330);
+    				detach_dev(div125);
+    				detach_dev(t445);
     				detach_dev(p12);
-    				detach_dev(t457);
+    				detach_dev(t451);
     				detach_dev(p13);
-    				detach_dev(t467);
-    				detach_dev(div134);
+    				detach_dev(t461);
+    				detach_dev(div128);
     			}
 
     			run_all(dispose);

@@ -786,7 +786,7 @@
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 10px; position:relative;">Muertes.</div>
       </div>
 
-     <!-- Data points -->
+     <!-- Data points 
       <div style="position:absolute; left:0px; top:{legendheight*4+180}px; width: 180px; height: 100px">
       <svg>
 	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
@@ -801,7 +801,7 @@
           <div class="legendtitle">Decesos Arg.</div>
         </div>
       </div>
-
+-->
 
 
 
@@ -1188,12 +1188,14 @@ a más personas.
 </p>
 
 <p class ="center">
-Gracias a la generosidad de Mario Lamfri (CONAE) quien lleva un proyecto paralelo a este para el
-ministerio de salud de la provincia de Córdoba, se añadió la facilidad de poder descargar los datos
-del modelo a un archivo csv, que facilita su manipulacion en planillas de cálculo. Mario también nos
+Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de
+CONAE, quien lleva un proyecto paralelo a este para el ministerio de salud de la provincia de Córdoba, 
+se añadió la facilidad de poder descargar los datos del modelo a un archivo csv, que facilita 
+su manipulacion en planillas de cálculo. También nos
 ayudó a mejorar la interface de entrada permitiendo el ingreso de texto. El desarrollo de esta
-calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga
-y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. 
+calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga,
+y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el
+apoyo y asesoría de Mario Lamfri.
 </p>
 
 

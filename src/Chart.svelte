@@ -209,6 +209,7 @@
       {/each}
     </g>
 
+<!-- Data points 
     <g class="points">
       {#each confirmados as point}
     	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" />
@@ -220,7 +221,7 @@
     	<circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" />
       {/each}
     </g>
-
+-->
 
     <g class='bars'>
 
