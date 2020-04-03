@@ -80,6 +80,7 @@
   $: dt                = 2
   $: P_SEVERE          = 0.2
   $: duration          = 30
+  $: interpolation_steps  = 40
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -96,12 +97,13 @@
                "retardo":retardo,
                "InterventionAmt":InterventionAmt,
                "duration":duration,
+               "interpolation_steps":interpolation_steps,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration) {
+  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps) {
 
-    var interpolation_steps = 40
+    // var interpolation_steps = 40
     var steps = 110*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
@@ -156,12 +158,14 @@
     var P  = []
     var TI = []
     var Iters = []
+    var tata = []
     while (steps--) { 
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infected   Exposed
         P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
         Iters.push(v)
         TI.push(N*(1-v[0]))
+	tata.push(t)
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
@@ -173,14 +177,16 @@
             "total": 1-v[0],
             "total_infected": TI,
             "Iters":Iters,
-            "dIters": f}
+            "dIters": f,
+            "dias": tata
+	    }
   }
 
   function max(P, checked) {
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration)
+  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo,InterventionAmt, duration,interpolation_steps)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -309,6 +315,7 @@
       if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
       if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
+      if (!(parsed.interpolation_steps === undefined)) {interpolation_steps = parseFloat(parsed.interpolation_steps)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
       if (!(parsed.P_SEVERE === undefined)) {P_SEVERE = parseFloat(parsed.P_SEVERE)}
       if (!(parsed.Time_to_death === undefined)) {Time_to_death = parseFloat(parsed.Time_to_death)}
@@ -406,8 +413,13 @@
 
 
   function download_all_csv(){
-    download_csv({ filename: "chart-data.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'], data:P, scale_factor:1 });
-    download_csv({ filename: "chart-data-full.csv",header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N});
+
+     var Soln            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,retardo, InterventionAmt, duration,40)
+    var Pn              = Soln["P"].slice(0,100)
+    var dias              = Soln["dias"]
+    download_csv({ filename:
+    "chart-data.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    download_csv({ filename: "chart-data-full.csv",header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
@@ -420,9 +432,9 @@
     csv+='\n';
 
     for(var i = 0; i < args.data.length; i++){
-      csv+=2*i+',';
+      csv+=Math.round(args.dias[i])+',';
       for(var j=0;j<args.data[i].length;j++){
-        csv+=Math.round(args.data[i][j]*args.scale_factor)+',';
+        csv+=args.data[i][j]*args.scale_factor+',';
       }
       csv+='\n';
     }

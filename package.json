@@ -19,6 +19,7 @@
     "d3-selection": "^1.4.1",
     "d3-time-format": "^2.2.3",
     "d3-tip": "^0.9.1",
+    "js-call-r": "0.0.4",
     "katex": "^0.11.1",
     "ndarray": "^1.0.18",
     "ndarray-scratch": "^1.2.0",
