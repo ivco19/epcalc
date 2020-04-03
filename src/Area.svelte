@@ -220,18 +220,6 @@
       {/each}
     </g>
 
-    <g class="points">
-      {#each confirmados as point}
-    	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" />
-      {/each}
-    </g>
-
-   <g class="points">
-      {#each muertos as point}
-    	<circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" />
-      {/each}
-    </g>
-
 
     <g class='bars'>
 
@@ -256,7 +244,7 @@
                 on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
                 class="bar"
                 x="{xScale(i) + 2}"
-                y="{yScale( sum(y[i].slice(j,j+1), checked) )}"
+                y="{yScale( y[i][j]*checked[j] )}"
                 width="{barWidth}"
                 height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" 
                 style="fill:{colors[j]};
@@ -270,16 +258,16 @@
                 class="bar"
                 x="{xScale(i) + 2}"
                 y="{(function () { 
-                        var z = yScale( sum(y[i].slice(j,j+1), checked) ); 
+                        var z = yScale( y[i][j]*checked[j] ); 
                         return Math.min(isNaN(z) ? 0: z, height - padding.top)
                       })()  
                     }"
                 width="{barWidth}"
                 height="{(function () {
-                  var top = yScaleL( sum(y[i].slice(j,j+1),checked) + 0.0001 )
-                  var btm = yScaleL( sum(y[i].slice(j,j),checked) + 0.0001)
+                  var top = yScaleL( y[i][j]*checked[j] + 0.0001 )
+                  var btm = yScaleL( 0.0001)
                   var z = top - btm; 
-                  if (z + yScale( sum(y[i].slice(j,j+1), checked) ) > height - padding.top) {
+                  if (z + yScale( y[i][j]*checked[j] ) > height - padding.top) {
                     return top
                   } else {
                     return Math.max(isNaN(z) ? 0 : z,0)
@@ -292,6 +280,19 @@
 
       {/each}
     </g>
+
+    <g class="points">
+      {#each confirmados as point}
+    	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+      {/each}
+    </g>
+
+   <g class="points">
+      {#each muertos as point}
+    	<circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+      {/each}
+    </g>
+
 
 <!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
 

@@ -791,7 +791,7 @@
       <svg>
 	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Confirmados Arg.</div>
+          <div class="legendtitle">Activos Arg.</div>
         </div>
       </div>
       <div style="position:absolute; left:0px; top:{legendheight*4+200}px; width: 180px; height: 100px">
