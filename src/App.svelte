@@ -80,6 +80,7 @@
   $: dt                = 2
   $: P_SEVERE          = 0.2
   $: duration          = 30
+  $: interpolation_steps  = 40
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -96,13 +97,16 @@
                "retardo":retardo,
                "InterventionAmt":InterventionAmt,
                "duration":duration,
+               "interpolation_steps":interpolation_steps,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration) {
+  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation,
+  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+  InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps,rango) {
 
-    var interpolation_steps = 40
-    var steps = 110*interpolation_steps
+    // var interpolation_steps = 40
+    var steps = rango*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
@@ -156,12 +160,14 @@
     var P  = []
     var TI = []
     var Iters = []
+    var tata = []
     while (steps--) { 
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infected   Exposed
         P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
         Iters.push(v)
         TI.push(N*(1-v[0]))
+	tata.push(t)
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
@@ -173,14 +179,18 @@
             "total": 1-v[0],
             "total_infected": TI,
             "Iters":Iters,
-            "dIters": f}
+            "dIters": f,
+            "dias": tata
+	    }
   }
 
   function max(P, checked) {
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo, InterventionAmt, duration)
+  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
+  retardo,InterventionAmt, duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -309,6 +319,7 @@
       if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
       if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
+      if (!(parsed.interpolation_steps === undefined)) {interpolation_steps = parseFloat(parsed.interpolation_steps)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
       if (!(parsed.P_SEVERE === undefined)) {P_SEVERE = parseFloat(parsed.P_SEVERE)}
       if (!(parsed.Time_to_death === undefined)) {Time_to_death = parseFloat(parsed.Time_to_death)}
@@ -404,10 +415,87 @@
   $: milestones = get_milestones(P)
   $: log = true
 
+  function retrieve_backend_csv(){
+
+      alert("Esta función requiere utilizar un servidor backend con nuestro modelo en R. Es posible\n correr una versión full funcional en su propio computador corriendo epcalc y el backend (Ver más\n detalles en https://github.com/ivco19/epyRba). Esta web pública no dispone de acceso, si\n usted forma parte de algún organismo que utiliza esta versión de la calculadora y necesita\n acceder a datos con precisión numérica alta, le pedimos que nos contacte\n (información de contacto en https://ivco19.github.io/). ")
+
+// descomentar este bloque de codigo para poder descargar desde el backend
+// puede ser necesario cambiar el url del query dependiendo donde este el servidor funcionando.
+//   var dias=[]
+//   for (var i = 0; i < 365; i++) {
+//      dias.push(i)
+//   }
+//
+//var data = {
+//    'Time_to_death': Time_to_death,
+//    'D_incbation'  : D_incbation,
+//    'D_infectious' : D_infectious,
+//    'R0'           : R0,
+//    'R0p'          : R0p,
+//    'D_recovery_mild'  : D_recovery_mild,
+//    'D_recovery_severe': D_recovery_severe,
+//    'D_hospital_lag'   : D_hospital_lag,
+//    'retardo': retardo,
+//    'D_death': D_death,
+//    'p_fatal': CFR,
+//    'InterventionTime': InterventionTime,
+//    'InterventionAmt': InterventionAmt,
+//    'p_severe': P_SEVERE,
+//    'E0': E0,
+//    'duration': duration,
+//    'N': N,
+//    'I0': I0,
+//    'timepoints': dias
+//}
+//
+//
+//fetch('http://localhost:5001/seir', {
+//    method: 'POST',
+//    headers: {
+//        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+//    },
+//    body: "query=" + JSON.stringify(data)
+//}).then(res => {
+//    if(!res.ok)
+//    {
+//        alert('Backend error o query bad formed')
+//        throw new Error('Error en backend!');
+//    }
+//    return res;
+//}).then(data => {
+//    data.text().then(text => {
+//    filename = 'resultados_precisos.csv';
+//
+//    if (!text.match(/^data:text\/csv/i)) {
+//      text = 'data:text/csv;charset=utf-8,' + text;
+//    }
+//
+//    var data, filename, link;
+//    data = encodeURI(text);
+//    link = document.createElement('a');
+//    link.setAttribute('href', data);
+//    link.setAttribute('download', filename);
+//    document.body.appendChild(link); // Required for FF
+//    link.click();
+//    document.body.removeChild(link);
+//
+//    });
+//}).catch(err => {
+//    throw new Error('Error!!');
+//});
+//
+  }
+
 
   function download_all_csv(){
-    download_csv({ filename: "chart-data.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'], data:P, scale_factor:1 });
-    download_csv({ filename: "chart-data-full.csv",header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N});
+
+     var Soln            = get_solution(1, N, I0,E0, R0,R0p, D_incbation,
+     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+     InterventionTime,retardo, InterventionAmt, duration,40,365)
+    var Pn              = Soln["P"]
+    var dias              = Soln["dias"]
+    download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
@@ -420,9 +508,9 @@
     csv+='\n';
 
     for(var i = 0; i < args.data.length; i++){
-      csv+=2*i+',';
+      csv+=Math.round(args.dias[i])+',';
       for(var j=0;j<args.data[i].length;j++){
-        csv+=Math.round(args.data[i][j]*args.scale_factor)+',';
+        csv+=args.data[i][j]*args.scale_factor+',';
       }
       csv+='\n';
     }
@@ -644,8 +732,9 @@
 </style>
 
 <h2>Calculadora Epidémica SEIR</h2>
-<button id="downloadCSV" on:click={download_all_csv}>Descargar como CSV</button>
-
+<button id="downloadCSV" on:click={download_all_csv}>Descargar resultados <br> (aproximados ~1%)</button>
+<button id="downloadR" on:click={retrieve_backend_csv}>Descargar resultados <br> (precisos)</button>
+  
 <div class="chart" style="display: flex; max-width: 1120px">
 
   <div style="flex: 0 0 270px; width:270px;">
