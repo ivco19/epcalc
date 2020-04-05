@@ -101,10 +101,12 @@
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps) {
+  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation,
+  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+  InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps,rango) {
 
     // var interpolation_steps = 40
-    var steps = 110*interpolation_steps
+    var steps = rango*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
@@ -186,7 +188,9 @@
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious, D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, retardo,InterventionAmt, duration,interpolation_steps)
+  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
+  retardo,InterventionAmt, duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -411,15 +415,83 @@
   $: milestones = get_milestones(P)
   $: log = true
 
+  function retrieve_backend_csv(){
+
+   var dias=[]
+   for (var i = 0; i < 365; i++) {
+      dias.push(i)
+   }
+
+var data = {
+    'Time_to_death': Time_to_death,
+    'D_incbation'  : D_incbation,
+    'D_infectious' : D_infectious,
+    'R0'           : R0,
+    'R0p'          : R0p,
+    'D_recovery_mild'  : D_recovery_mild,
+    'D_recovery_severe': D_recovery_severe,
+    'D_hospital_lag'   : D_hospital_lag,
+    'retardo': retardo,
+    'D_death': D_death,
+    'p_fatal': CFR,
+    'InterventionTime': InterventionTime,
+    'InterventionAmt': InterventionAmt,
+    'p_severe': P_SEVERE,
+    'E0': E0,
+    'duration': duration,
+    'N': N,
+    'I0': I0,
+    'timepoints': dias
+}
+
+
+fetch('http://localhost:5001/seir', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: "query=" + JSON.stringify(data)
+}).then(res => {
+    if(!res.ok)
+    {
+        alert('Backend error o query bad formed')
+        throw new Error('Error en backend!');
+    }
+    return res;
+}).then(data => {
+    data.text().then(text => {
+    filename = 'resultados_precisos.csv';
+
+    if (!text.match(/^data:text\/csv/i)) {
+      text = 'data:text/csv;charset=utf-8,' + text;
+    }
+
+    var data, filename, link;
+    data = encodeURI(text);
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link); // Required for FF
+    link.click();
+    document.body.removeChild(link);
+
+    });
+}).catch(err => {
+    throw new Error('Error!!');
+});
+
+  }
+
 
   function download_all_csv(){
 
-     var Soln            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,retardo, InterventionAmt, duration,40)
-    var Pn              = Soln["P"].slice(0,100)
+     var Soln            = get_solution(1, N, I0,E0, R0,R0p, D_incbation,
+     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+     InterventionTime,retardo, InterventionAmt, duration,40,365)
+    var Pn              = Soln["P"]
     var dias              = Soln["dias"]
-    download_csv({ filename:
-    "chart-data.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
-    download_csv({ filename: "chart-data-full.csv",header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
+    download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
@@ -656,8 +728,9 @@
 </style>
 
 <h2>Calculadora Epidémica SEIR</h2>
-<button id="downloadCSV" on:click={download_all_csv}>Descargar como CSV</button>
-
+<button id="downloadCSV" on:click={download_all_csv}>Descargar resultados <br> (aproximados)</button>
+<button id="downloadR" on:click={retrieve_backend_csv}>Descargar resultados <br> (precisos)</button>
+  
 <div class="chart" style="display: flex; max-width: 1120px">
 
   <div style="flex: 0 0 270px; width:270px;">
