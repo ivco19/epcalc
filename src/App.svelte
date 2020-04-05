@@ -64,7 +64,7 @@
   $: I0                = 1
   $: E0                = 15 
   $: R0                = 3.57
-  $: R0p               = 1.7
+  $: R0p               = 3.57
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
   $: D_recovery_mild   = (8 - 2.9)  
@@ -444,8 +444,9 @@ var data = {
     'timepoints': dias
 }
 
-
-fetch('http://localhost:5001/seir', {
+//para un deploy local actualizar url
+//fetch('http://localhost:5001/seir', {
+fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -489,9 +490,10 @@ fetch('http://localhost:5001/seir', {
      D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
      InterventionTime,retardo, InterventionAmt, duration,40,365)
     var Pn              = Soln["P"]
-    var dias              = Soln["dias"]
-    download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
-    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
+    var dias            = Soln["dias"]
+    var Itersn          = Soln["Iters"]
+    //download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    download_csv({ filename:"resultados_aproximados.csv" ,header:['Susceptible', 'Expuesto','Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ','Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Itersn, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
