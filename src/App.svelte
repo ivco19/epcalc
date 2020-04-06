@@ -64,17 +64,17 @@
   $: I0                = 1
   $: E0                = 15 
   $: R0                = 3.57
-  $: R0p               = 1.7
-  $: D_incbation       = 5.2       
-  $: D_infectious      = 2.9 
-  $: D_recovery_mild   = (8 - 2.9)  
+  $: R0p               = 3.00
+  $: D_incbation       = 5.2
+  $: D_infectious      = 2.9
+  $: D_recovery_mild   = (8 - 2.9)
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
-  $: D_death           = Time_to_death - D_infectious 
-  $: CFR               = 0.021  
-  $: InterventionTime  = 18  
-  $: retardo  = 2  
-  $: InterventionAmt   = 2.407/R0 //0.3331385
+  $: D_death           = Time_to_death - D_infectious
+  $: CFR               = 0.021
+  $: InterventionTime  = 18
+  $: retardo           = 5
+  $: InterventionAmt   = 1.78/R0 //0.3331385
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -1278,12 +1278,14 @@ a más personas.
 
 <p class ="center">
 Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de
-CONAE, quien lleva un proyecto paralelo a este para el ministerio de salud de la provincia de
-Córdoba, se añadió la facilidad de poder descargar los datos del modelo a un archivo csv, que
-facilita su manipulacion en planillas de cálculo. También nos ayudó a mejorar la interface de
-entrada permitiendo el ingreso de texto. El desarrollo de esta calculadora no hubiese sido posible
-sin los aportes significativos de Juan Cabral, Rodrigo Quiroga, y todo el equipo de 
-<a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el apoyo y asesoría de Mario Lamfri.
+CONAE, se añadió la facilidad de poder descargar los datos del modelo implementado en java script a un archivo csv, que facilita 
+su manipulacion en planillas de cálculo. Los resultados este modelo tienen un error relativo
+por debajo del 1%. Gracias al proyecto <a href="https://github.com/ivco19/epyRba">EPyRBa</a> pudimos implementar una versión en R del modelo que permite
+descargar en archivo csv con una precisión mayor al 0.000001%. El desarrollo de esta
+calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga,
+y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el
+apoyo y asesoría de Mario Lamfri. Este proyecto público da soporte a una versión desarrollada para
+el Ministerio de Salud de la Provincia de Córdoba.
 </p>
 
 
