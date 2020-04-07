@@ -2,7 +2,7 @@
   
   import { scaleLinear } from "d3-scale";
   // import { Date } from "d3-time"
-  import Area from './Area.svelte';
+  import Polys from './Polys.svelte';
   import { onMount } from 'svelte';
   import { selectAll } from 'd3-selection'
   import { drag } from 'd3-drag';
@@ -185,7 +185,16 @@
   }
 
   function max(P, checked) {
-    return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
+    var maxi=-1.0
+    for(var i = 0; i < P.length; i++){
+      for(var j=0;j< P[i].length;j++){
+        if(P[i][j]*checked[j]>maxi)
+        {
+          maxi=P[i][j];
+        }
+      }
+    }
+    return maxi;
   }
 
   $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
@@ -805,7 +814,7 @@
 
       <!-- Removed -->
       <div style="position:absolute; left:0px; top:{legendheight*3}px; width: 180px; height: 100px">
-
+n
         <Checkbox color="grey" callback={(s) => {checked[1] = s; checked[0] = s; checked[2] = s} }/>
         <Arrow height="56" arrowhead="" dasharray="3 2"/>
 
@@ -899,8 +908,8 @@
 
   <div style="flex: 0 0 890px; width:890px; height: {height+128}px; position:relative;">
 
-    <div style="position:relative; top:60px; left: 10px">
-      <Area bind:checked={checked}
+      <div style="position:relative; top:60px; left: 10px">
+        <Polys bind:checked={checked}
              bind:active={active}
              y = {P} 
              xmax = {Xmax} 
@@ -912,7 +921,7 @@
              N={N}
              ymax={lock ? Plock: Pmax}
              InterventionTime={InterventionTime}
-	     retardo={retardo}
+	           retardo={retardo}
              colors={colors}
              log={!log}/>
       </div>

@@ -87,50 +87,6 @@
     .domain([1,  ymax/1])
     .range([0, height - padding.bottom - padding.top]);
 
-var points0 = [];
-var points1 = [];
-var points2 = [];
-var points3 = [];
-var points4 = [];
-
-for(var j=0;j<y.length;j++){
-    var p = { 
-        x: j,
-        y: y[j][0]
-    };
-    points0.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][1]
-    };
-    points1.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][2]
-    };
-    points2.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][3]
-    };
-    points3.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][4]
-    };
-    points4.push(p);
-}
-
-	$: path0 = `M${points0.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path1 = `M${points1.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path2 = `M${points2.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path3 = `M${points3.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path4 = `M${points4.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-
 
   $: innerWidth = width - (padding.left + padding.right);
   $: barWidth = innerWidth / y.length - 1.5;
@@ -264,9 +220,64 @@ for(var j=0;j<y.length;j++){
       {/each}
     </g>
 
-    <g class="points">
-      {#each points0 as pnt}
-    	<circle cx="{xScale(pnt.x)}" cy="{yScale(pnt.y)}" r='4' fill="{colors[0]}" style="opacity: 0.9" />
+
+    <g class='bars'>
+
+      {#each range(y.length) as i}
+        <rect
+          on:mouseover={() => showTip(i)}
+          on:mouseout={() => showTip(-1)}
+          on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
+          class="bar"
+          x="{xScale(i) + 2}"
+          y="{0}"
+          width="{barWidth+3}"
+          height="{height}"
+          style="fill:white; opacity: 0.3">     
+        </rect>
+
+        {#each range(colors.length) as j}
+          {#if !log}
+              <rect
+                on:mouseover={() => showTip(i)}
+                on:mouseout={() => showTip(-1)}
+                on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
+                class="bar"
+                x="{xScale(i) + 2}"
+                y="{yScale( y[i][j]*checked[j] )}"
+                width="{barWidth}"
+                height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" 
+                style="fill:{colors[j]};
+                       opacity:{active == i ? 0.9: 0.3}">     
+              </rect>
+          {:else}
+              <rect
+                on:mouseover={() => showTip(i)}
+                on:mouseout={() => showTip(-1)}
+                on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
+                class="bar"
+                x="{xScale(i) + 2}"
+                y="{(function () { 
+                        var z = yScale( y[i][j]*checked[j] ); 
+                        return Math.min(isNaN(z) ? 0: z, height - padding.top)
+                      })()  
+                    }"
+                width="{barWidth}"
+                height="{(function () {
+                  var top = yScaleL( y[i][j]*checked[j] + 0.0001 )
+                  var btm = yScaleL( 0.0001)
+                  var z = top - btm; 
+                  if (z + yScale( y[i][j]*checked[j] ) > height - padding.top) {
+                    return top
+                  } else {
+                    return Math.max(isNaN(z) ? 0 : z,0)
+                  }})()}" 
+                style="fill:{colors[j]};
+                       opacity:{active == i ? 0.9: 0.3}">     
+              </rect>
+          {/if}
+        {/each}
+
       {/each}
     </g>
 
@@ -279,6 +290,24 @@ for(var j=0;j<y.length;j++){
    <g class="points">
       {#each muertos as point}
     	<circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+      {/each}
+    </g>
+
+
+<!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
+
+    <g class='bars'>
+      {#each range(data.length) as i}
+        <rect
+          class="bar"
+          x="{xScale( i+28 ) + 2}"
+          y="{yScale( data[i][1] )}"
+          width="{barWidth}"
+          height="{height - padding.bottom - yScale( data[i][1] )}"
+          style="fill:black; 
+                 opacity: 0.3;
+                 box-shadow: 4px 10px 5px 2px rgba(0,0,0,0.75);">     
+        </rect>
       {/each}
     </g>
 

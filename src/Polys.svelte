@@ -87,50 +87,6 @@
     .domain([1,  ymax/1])
     .range([0, height - padding.bottom - padding.top]);
 
-var points0 = [];
-var points1 = [];
-var points2 = [];
-var points3 = [];
-var points4 = [];
-
-for(var j=0;j<y.length;j++){
-    var p = { 
-        x: j,
-        y: y[j][0]
-    };
-    points0.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][1]
-    };
-    points1.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][2]
-    };
-    points2.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][3]
-    };
-    points3.push(p);
-
-    var p = { 
-        x: j,
-        y: y[j][4]
-    };
-    points4.push(p);
-}
-
-	$: path0 = `M${points0.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path1 = `M${points1.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path2 = `M${points2.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path3 = `M${points3.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-	$: path4 = `M${points4.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
-
 
   $: innerWidth = width - (padding.left + padding.right);
   $: barWidth = innerWidth / y.length - 1.5;
@@ -264,21 +220,95 @@ for(var j=0;j<y.length;j++){
       {/each}
     </g>
 
-    <g class="points">
-      {#each points0 as pnt}
-    	<circle cx="{xScale(pnt.x)}" cy="{yScale(pnt.y)}" r='4' fill="{colors[0]}" style="opacity: 0.9" />
+
+    <g class='bars'>
+
+      {#each range(y.length -1 ) as i}
+        <rect
+          on:mouseover={() => showTip(i)}
+          on:mouseout={() => showTip(-1)}
+          on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
+          class="bar"
+          x="{xScale(i) + 2}"
+          y="{0}"
+          width="{barWidth+3}"
+          height="{height}"
+          style="fill:white; opacity: 0.3">     
+        </rect>
+
+        {#each range(colors.length) as j}
+          {#if !log}
+              <line
+                x1="{xScale(i*checked[j]) }"
+                y1="{yScale( y[i][j]*checked[j] )}"
+                x2="{xScale((i+1)*checked[j]) }"
+                y2="{yScale( y[i+1][j]*checked[j] )}"
+                style="stroke:{colors[j]};stroke-width:3">     
+              </line>
+          {:else}
+             {#if y[i][j]>0}
+                 <line
+                   x1="{xScale(i*checked[j]) }"
+                   y1="{(function () { 
+                           var z = yScale( y[i][j]*checked[j] ); 
+                           return Math.min(isNaN(z) ? 0: z, yScale(0.1))
+                         })()  
+                       }"
+                   x2="{xScale((i+1)*checked[j]) }"
+                   y2="{(function () { 
+                           var z = yScale( y[i+1][j]*checked[j] ); 
+                           return Math.min(isNaN(z) ? 0: z, yScale(0.1))
+                         })()  
+                       }"
+                   style="stroke:{colors[j]};stroke-width:3">     
+                 </line>
+             {/if}
+          {/if}
+        {/each}
+
       {/each}
     </g>
 
     <g class="points">
       {#each confirmados as point}
-    	<circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+          {#if !log}
+    	        <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+          {:else}
+            {#if point.y>0}
+    	          <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+            {/if}
+          {/if}
       {/each}
     </g>
 
    <g class="points">
       {#each muertos as point}
-    	<circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+          {#if !log}
+    	        <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+          {:else}
+            {#if point.y>0}
+    	          <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+            {/if}
+          {/if}
+
+      {/each}
+    </g>
+
+
+<!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
+
+    <g class='bars'>
+      {#each range(data.length) as i}
+        <rect
+          class="bar"
+          x="{xScale( i+28 ) + 2}"
+          y="{yScale( data[i][1] )}"
+          width="{barWidth}"
+          height="{height - padding.bottom - yScale( data[i][1] )}"
+          style="fill:black; 
+                 opacity: 0.3;
+                 box-shadow: 4px 10px 5px 2px rgba(0,0,0,0.75);">     
+        </rect>
       {/each}
     </g>
 
