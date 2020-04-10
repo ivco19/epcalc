@@ -3,6 +3,7 @@
   import { scaleLinear } from "d3-scale";
   // import { Date } from "d3-time"
   import Polys from './Polys.svelte';
+  import Polys2 from './Polys2.svelte';
   import { onMount } from 'svelte';
   import { selectAll } from 'd3-selection'
   import { drag } from 'd3-drag';
@@ -64,7 +65,8 @@
   $: I0                = 1
   $: E0                = 15 
   $: R0                = 3.2
-  $: R0p               = 3.00
+  $: R0p               = 3.2
+  $: R0i               = 2.5
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
   $: D_recovery_mild   = (8 - 2.9)
@@ -74,13 +76,18 @@
   $: CFR               = 0.021
   $: InterventionTime  = 18
   $: retardo           = 4
-  $: InterventionAmt   = 1.12/R0 //0.3331385
+  $: R0t               = 1.12
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 30
+  $: duration          = 35
   $: interpolation_steps  = 40
+  $: R0s = {
+    values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena
+    dias:   [0,10,14,14+duration,1500]  // intervalos de tiempo: 0 , 12/3, 20/3 , 20/3+duracion, infinito
+  }
+
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -95,7 +102,7 @@
                "CFR":CFR,
                "InterventionTime":InterventionTime,
                "retardo":retardo,
-               "InterventionAmt":InterventionAmt,
+               "R0t":R0t,
                "duration":duration,
                "interpolation_steps":interpolation_steps,
                "D_hospital_lag":D_hospital_lag,
@@ -103,7 +110,7 @@
 
   function get_solution(dt, N, I0,E0, R0,R0p, D_incbation,
   D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-  InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps,rango) {
+  InterventionTime,  retardo, R0t, duration, interpolation_steps,rango) {
 
     // var interpolation_steps = 40
     var steps = rango*interpolation_steps
@@ -115,7 +122,7 @@
 
       // SEIR ODE
       if (t > InterventionTime+retardo && t < InterventionTime+retardo + duration){
-        var beta = (InterventionAmt)*R0/(D_infectious)
+        var beta = R0t/(D_infectious)
       } else if (t > InterventionTime+retardo + duration) {
         var beta = R0p/(D_infectious)        
       } else {
@@ -213,7 +220,7 @@
 
   $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
-  retardo,InterventionAmt, duration,interpolation_steps,110)
+  retardo,R0t, duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
   $: rm = sumactivos(P);
   $: timestep       = dt
@@ -344,7 +351,7 @@
       if (!(parsed.CFR === undefined)) {CFR = parseFloat(parsed.CFR)}
       if (!(parsed.InterventionTime === undefined)) {InterventionTime = parseFloat(parsed.InterventionTime)}
       if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
-      if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
+      if (!(parsed.R0t === undefined)) {R0t = parseFloat(parsed.R0t)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.interpolation_steps === undefined)) {interpolation_steps = parseFloat(parsed.interpolation_steps)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
@@ -518,7 +525,7 @@
 
      var Soln            = get_solution(1, N, I0,E0, R0,R0p, D_incbation,
      D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-     InterventionTime,retardo, InterventionAmt, duration,40,365)
+     InterventionTime,retardo, R0t, duration,40,365)
     var Pn              = Soln["P"]
     var dias              = Soln["dias"]
     download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
@@ -632,6 +639,7 @@
   .minorTitleColumn{
     flex: 60px;
     padding: 3px;
+    font-size: 20px;
     border-bottom: 2px solid #999;
   }
 
@@ -832,7 +840,6 @@
 
       <!-- Removed -->
       <div style="position:absolute; left:0px; top:{legendheight*3}px; width: 180px; height: 100px">
-n
         <Checkbox color="grey" callback={(s) => {checked[1] = s; checked[0] = s; checked[2] = s} }/>
         <Arrow height="56" arrowhead="" dasharray="3 2"/>
 
@@ -1068,8 +1075,8 @@ n
               <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
               <div style="pointer-events: all">
                 <!--<div class="slidertext" on:mousedown={lock_yaxis}>Disminución: {100*(InterventionAmt).toFixed(2)}%-->
-                <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2))}
-                <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
+                <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0t).toFixed(2))}
+                <input class="range" type=range bind:value={R0t} min=0 max=5 step=0.01 on:mousedown={lock_yaxis}>
 	        </div>
                 <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)} días
                 <input class="range" type=range bind:value={duration} min=0 max=60 step=1 on:mousedown={lock_yaxis}>
@@ -1156,6 +1163,30 @@ n
    </div>
 
 </div>
+<div class="chart" style="display: flex; max-width: 1120px">
+  <div style="flex: 0 0 270px; width:270px;"> </div>
+  <div style="flex: 0 0 890px; width:890px; height: 200px; position:relative;">
+      <div style="position:relative; top:0px; left: 10px">
+        <Polys2 bind:checked={checked}
+             bind:active={active}
+             y = {P} 
+             toto = {rm} 
+             xmax = {Xmax} 
+             total_infected = {total_infected} 
+             deaths = {deaths} 
+             total = {total} 
+             timestep={timestep}
+             tmax={tmax}
+             N={N}
+             ymax={lock ? Plock: Pmax}
+             InterventionTime={InterventionTime}
+	           retardo={retardo}
+             colors={colors}
+             log={false}/>
+      </div>
+  </div>
+  </div>
+
 
 
 <!-- <div style="height:220px;">
@@ -1165,37 +1196,58 @@ n
     <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
   </div>-->
   <p class = "center">
-    <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Dinámica de transmisión</div>
+  <div class="row">
+    <div style="flex: 0 0 20 width:948px" class="minorTitleColumn">Dinámica de transmisión</div>
+  </div>
   <div class="row">
     <div style="flex: 0 0 20; width:20px"></div>
 
     <div class="column">
-      <div class="paneltitle">Parámetros de Población</div>
-      <div class="paneldesc" style="height:30px">Tamaño poblacional.<br></div>
+      <div class="paneltitle" style="padding-top: 10px">Parámetros de Población</div>
+      <div class="paneldesc" style="height:26px">Tamaño poblacional</div>
       <div class="slidertext">{format(",")(Math.round(N))}</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={logN} min={5} max=25 step=0.01>
-      <input style="margin-bottom: 8px"type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales.<br></div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={logN} min={5} max=25 step=0.01>
+      <input style="margin-bottom: 8px" type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales<br></div>
       <div class="slidertext">{I0}</div>
-      <input class="range" type=range bind:value={I0} min={1} max=100 step=1>
-      <input type=number bind:value={I0} min={1} max=100 step=1>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales.<br></div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={I0} min={1} max=100 step=1>
+      <input style="margin-bottom: 8px" type=number bind:value={I0} min={1} max=100 step=1>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales<br></div>
       <div class="slidertext">{E0}</div>
       <input class="range" type=range bind:value={E0} min={1} max=100 step=1>
       <input type=number bind:value={E0} min={1} max=100 step=1>
     </div>
 
     <div class="column">
-      <div class="paneltitle">Ritmo reproductivo básico {@html math_inline("\\mathcal{R}_0")} </div>
-      <div class="paneldesc">Número promedio de casos nuevos que genera un individuo a lo largo de un período infeccioso. <br></div>
-      <div class="slidertext">{R0}</div>
-      <input class="range" type=range bind:value={R0} min=0.01 max=10 step=0.01> 
-      <input type=number bind:value={R0} min=0.01 max=10 step=0.01>
+      <div class="paneltitle" style="padding-top: 10px">Intervenciones sobre {@html math_inline("\\mathcal{R}_0")} </div>
+      <div class="paneldesc"> Al comenzar la epidemia en el país. <br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0} min=0.01 max=10 step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0} min=0.01 max=10 step=0.01>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Por medidas previas a la cuarentena (desde el 12/3) <br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0i}</div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={R0i} min=0.01 max={R0} step=0.01> 
+      <input  style="margin-bottom: 8px" type=number bind:value={R0i} min=0.01 max={R0} step=0.01>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Durante la cuarentena (desde 20/3) <br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0t}</div>
+      <input class="range" type=range bind:value={R0t} min=0.01 max={R0} step=0.01> 
+      <input type=number bind:value={R0t} min=0.01 max={R0} step=0.01>
+    </div>
+    <div class="column">
+      <div class="paneldesc"style="padding-top: 47px">Duración de cuarentena <br></div>
+      <div class="slidertext">{(duration).toFixed(0)} días</div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={duration} min=0 max=120 step=1> 
+      <input style="margin-bottom: 8px" type=number bind:value={duration} min=0 max=120 step=1>
+    <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">{@html math_inline("\\mathcal{R}_0")} Luego del fin de la cuarentena <br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0p}</div>
+      <input class="range" type=range bind:value={R0p} min=0.01 max={R0} step=0.01> 
+      <input type=number bind:value={R0p} min=0.01 max={R0} step=0.01>
+
     </div>
 
 
     <div class="column">
-      <div class="paneltitle">Tiempos de Transmisión</div>
+      <div class="paneltitle" style="padding-top: 10px">Tiempos de Transmisión</div>
       <div class="paneldesc" style="height:50px">Duración del periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
       <div class="slidertext">{(D_incbation).toFixed(2)} días</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={D_incbation} min={0.15} max=24 step=0.0001>
@@ -1206,17 +1258,12 @@ n
       <input type=number bind:value={D_infectious} min={0} max=24 step=0.01>
     </div>
 
-   <div class="column">
-      <div class="paneltitle">{@html math_inline("\\mathcal{R}_0")} post-intervención </div>
-      <div class="paneldesc" style="height:30px">Tasa luego de la cuarentena </div>
-      <div class="slidertext">{R0p}</div>
-      <input class="range" type=range bind:value={R0p} min=0.01 max=10 step=0.01> 
-      <input type=number bind:value={R0p} min={0.01} max=10 step=0.01>
-    </div>
 </div>
 
   <p class = "center">
-    <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
+  <div class="row">
+    <div style="flex: 0 0 20 width:948px" class="minorTitleColumn">Dinámica Clínica</div>
+  </div>
   <div class="row">
    <div style="flex: 0 0 20; width:20px"></div> 
 
