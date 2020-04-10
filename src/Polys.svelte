@@ -41,6 +41,7 @@
 
 
   export let y;
+  export let toto;
   export let tmax;
   export let xmax; 
   export let deaths;
@@ -53,14 +54,14 @@
   export let InterventionTime;
   export let colors; 
   export let log = false;
-  export let confirmados=pnts.i;
-  export let muertos=pnts.d;
+  export let confirmados=pnts.c;
+  export let muertos=pnts.m;
   export let retardo;
 
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
   let width  = 750;
-  let height = 420;
+  let height = 520;
 
 
   $: xScale = scaleLinear()
@@ -236,7 +237,7 @@
           style="fill:white; opacity: 0.3">     
         </rect>
 
-        {#each range(colors.length) as j}
+        {#each range(5) as j}
           {#if !log}
               <line
                 x1="{xScale(i*checked[j]) }"
@@ -265,6 +266,33 @@
              {/if}
           {/if}
         {/each}
+          {#if !log}
+              <line
+                x1="{xScale(i*checked[7]) }"
+                y1="{yScale( toto[i]*checked[7] )}"
+                x2="{xScale((i+1)*checked[7]) }"
+                y2="{yScale( toto[i+1]*checked[7] )}"
+                style="stroke:{colors[7]};stroke-width:3">     
+              </line>
+          {:else}
+             {#if toto[i]>0}
+                 <line
+                   x1="{xScale(i*checked[7]) }"
+                   y1="{(function () { 
+                           var z = yScale( toto[i]*checked[7] ); 
+                           return Math.min(isNaN(z) ? 0: z, yScale(0.1))
+                         })()  
+                       }"
+                   x2="{xScale((i+1)*checked[7]) }"
+                   y2="{(function () { 
+                           var z = yScale( toto[i+1]*checked[7] ); 
+                           return Math.min(isNaN(z) ? 0: z, yScale(0.1))
+                         })()  
+                       }"
+                   style="stroke:{colors[7]};stroke-width:3">     
+                 </line>
+             {/if}
+          {/if}
 
       {/each}
     </g>
@@ -272,10 +300,10 @@
     <g class="points">
       {#each confirmados as point}
           {#if !log}
-    	        <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+    	        <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[5]}" style="opacity: 0.9" />
           {:else}
             {#if point.y>0}
-    	          <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[2]}" style="opacity: 0.9" />
+    	          <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[5]}" style="opacity: 0.9" />
             {/if}
           {/if}
       {/each}
@@ -284,10 +312,10 @@
    <g class="points">
       {#each muertos as point}
           {#if !log}
-    	        <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+    	        <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[6]}" style="opacity: 0.9" />
           {:else}
             {#if point.y>0}
-    	          <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[1]}" style="opacity: 0.9" />
+    	          <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[6]}" style="opacity: 0.9" />
             {/if}
           {/if}
 

@@ -63,7 +63,7 @@
   $: N                 = Math.exp(logN)
   $: I0                = 1
   $: E0                = 15 
-  $: R0                = 3.57
+  $: R0                = 3.2
   $: R0p               = 3.00
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
@@ -73,8 +73,8 @@
   $: D_death           = Time_to_death - D_infectious
   $: CFR               = 0.021
   $: InterventionTime  = 18
-  $: retardo           = 5
-  $: InterventionAmt   = 1.78/R0 //0.3331385
+  $: retardo           = 4
+  $: InterventionAmt   = 1.12/R0 //0.3331385
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -184,7 +184,7 @@
 	    }
   }
 
-  function max(P, checked) {
+  function max(P, rm,checked) {
     var maxi=-1.0
     for(var i = 0; i < P.length; i++){
       for(var j=0;j< P[i].length;j++){
@@ -193,14 +193,29 @@
           maxi=P[i][j];
         }
       }
+      if(rm[i]*checked[7]>maxi)
+      {
+          maxi=rm[i];
+      }
+
     }
     return maxi;
   }
+
+  function sumactivos(P) {
+     var rmt=[]
+     for (var i = 0; i < P.length; i++) {
+        rmt.push(P[i][0]+P[i][2]+P[i][3]);
+     }
+    return(rmt);
+  }
+
 
   $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
   retardo,InterventionAmt, duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
+  $: rm = sumactivos(P);
   $: timestep       = dt
   $: tmax           = dt*100
   $: deaths         = Sol["deaths"]
@@ -208,10 +223,13 @@
   $: total_infected = Sol["total_infected"].slice(0,100)
   $: Iters          = Sol["Iters"]
   $: dIters         = Sol["dIters"]
-  $: Pmax           = max(P, checked)
+  $: Pmax           = max(P, rm, checked)
   $: lock           = false
 
-  var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
+
+  // var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
+  //var colors = [ "#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+  var colors = [ "#8dd3c7","#d1d128","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9"]
 
   var Plock = 1
 
@@ -348,7 +366,7 @@
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
   let width  = 750;
-  let height = 400;
+  let height = 500;
 
   $: xScaleTime = scaleLinear()
     .domain([0, tmax])
@@ -364,7 +382,7 @@
 
   window.addEventListener('mouseup', unlock_yaxis);
 
-  $: checked = [true, true, false, true, true]
+  $: checked = [true, true, false, true, true,true,true,true]
   $: active  = 0
   $: active_ = active >= 0 ? active : Iters.length - 1
 
@@ -884,17 +902,24 @@ n
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 10px; position:relative;">Muertes.</div>
       </div>
 
-     <!-- Data points -->
-      <div style="position:absolute; left:0px; top:{legendheight*4+180}px; width: 180px; height: 100px">
-      <svg>
-	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
+      <div style="position:absolute; left:0px; top:{legendheight*5 + 120+2}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[7]}" bind:checked={checked[7]}/>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Activos Arg.</div>
+          <div class="legendtitle">I+R+D</div>
+        </div>
+        <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 1px; position:relative;">Confirmados por el modelo.</div>
+      </div>
+
+
+     <!-- Data points -->
+      <div style="position:absolute; left:0px; top:{legendheight*4+220}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[5]}" bind:checked={checked[5]}/>
+        <div class="legend" style="position:absolute;">
+          <div class="legendtitle">Confirmados Arg.</div>
         </div>
       </div>
-      <div style="position:absolute; left:0px; top:{legendheight*4+200}px; width: 180px; height: 100px">
-      <svg>
-	<circle cx=7px cy=10px r='4' fill="{colors[1]}"/></svg>
+      <div style="position:absolute; left:0px; top:{legendheight*4+240}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[6]}" bind:checked={checked[6]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Decesos Arg.</div>
         </div>
@@ -912,6 +937,7 @@ n
         <Polys bind:checked={checked}
              bind:active={active}
              y = {P} 
+             toto = {rm} 
              xmax = {Xmax} 
              total_infected = {total_infected} 
              deaths = {deaths} 
@@ -923,7 +949,7 @@ n
              InterventionTime={InterventionTime}
 	           retardo={retardo}
              colors={colors}
-             log={!log}/>
+             log={log}/>
       </div>
 
       <div id="xAxisDrag"
@@ -1004,18 +1030,18 @@ n
                     visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
                     width:2px;
                     background-color:#FFF;
-                    border-right: 1px dashed red;
+                    border-right: 1px dashed black;
                     pointer-events: all;
                     cursor:col-resize;
                     height:{height+69}px">
 
         {#if xScaleTime(InterventionTime+duration) >= 100}
-          <div style="position:absolute; opacity: 0.5; top:-25px; right:-125px; width: 120px">
-	  <span style="font-size: 13px; color:#FF0000">{@html math_inline("\\mathcal{R}_0=" + (R0p).toFixed(2) )}→ </span>
+          <div style="position:absolute; opacity: 1.0; top:-25px; right:-125px; width: 120px">
+	  <span style="font-size: 13px; color:#777777">{@html math_inline("\\mathcal{R}_0=" + (R0p).toFixed(2) )}→ </span>
           </div>      
         {/if}
 
-	  <div style="font-size: 13px; color:#FF0000; position:absolute; top:105px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
+	  <div style="font-size: 13px; color:#777777 ; position:absolute; top:105px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
 	   </div>
 
 
@@ -1121,9 +1147,9 @@ n
             {/each}
       </div>
     
-     <div style="opacity:{xScaleTime(InterventionTime) >= 192? 1.0 : 0.2}">  -->
-      <div class="tick" style="color: #AAA; position:absolute; pointer-events:all; left:10px; top: 10px">
-        <Checkbox color="#CCC" bind:checked={log}/><div style="position: relative; top: 4px; left:20px">escala lineal</div>
+     <div style="opacity:{xScaleTime(InterventionTime) >= 550? 0.2 : 1.0}"> 
+      <div class="tick" style="color: #AAA; position:absolute; pointer-events:all; left:690px; top: 10px">
+        <Checkbox color="#CCC" bind:checked={log}/><div style="position: relative; top: 4px; left:20px">escala logarítmica</div>
      </div>
     </div>
 
