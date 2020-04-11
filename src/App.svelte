@@ -181,7 +181,7 @@
         Iters.push(v)
         TI.push(N*(1-v[0]))
         tata.push(t)
-        roro.push(bata(t))
+        roro.push(bata(t)*D_infectious)
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
@@ -240,6 +240,7 @@
   $: Iters          = Sol["Iters"]
   $: dIters         = Sol["dIters"]
   $: Pmax           = max(P, rm, checked)
+  $: r0max          = Math.max(...R0s.values)
   $: lock           = false
 
 
@@ -1109,7 +1110,7 @@
              timestep={timestep}
              tmax={tmax}
              N={N}
-             ymax={Math.max(...R0s.values)}
+             ymax={r0max}
              InterventionTime={InterventionTime}
 	           retardo={retardo}
              colors={colors}
