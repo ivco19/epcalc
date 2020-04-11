@@ -65,8 +65,9 @@
   $: I0                = 1
   $: E0                = 15 
   $: R0                = 3.2
-  $: R0p               = 3.2
   $: R0i               = 2.5
+  $: R0t               = 1.12
+  $: R0p               = 3.2
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
   $: D_recovery_mild   = (8 - 2.9)
@@ -75,17 +76,17 @@
   $: D_death           = Time_to_death - D_infectious
   $: CFR               = 0.021
   $: InterventionTime  = 18
-  $: retardo           = 4
-  $: R0t               = 1.12
+  $: IntervPrevia      = 10
+  $: retardo           = 8
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 35
+  $: duration          = 38
   $: interpolation_steps  = 40
   $: R0s = {
     values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena
-    dias:   [0,10,14,14+duration,1500]  // intervalos de tiempo: 0 , 12/3, 20/3 , 20/3+duracion, infinito
+    dias:   [0,IntervPrevia,InterventionTime,InterventionTime+duration,1500]  // intervalos de tiempo: 0 , 12/3, 20/3 , 20/3+duracion, infinito
   }
 
 
@@ -108,9 +109,9 @@
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation,
+  function get_solution(dt, N, I0,E0, R0s, D_incbation,
   D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-  InterventionTime,  retardo, R0t, duration, interpolation_steps,rango) {
+  InterventionTime,  retardo, duration, interpolation_steps,rango) {
 
     // var interpolation_steps = 40
     var steps = rango*interpolation_steps
@@ -118,16 +119,20 @@
     var sample_step = interpolation_steps
 
     var method = Integrators["RK4"]
+
+    function bata(t){
+      var beta = R0s.values[0]/(D_infectious);
+      for(var ii = 0; ii < R0s.values.length; ii++){
+         if (t >= R0s.dias[ii]+retardo && t < R0s.dias[ii+1]+retardo + duration){
+           beta = R0s.values[ii]/(D_infectious)
+         }
+      }
+      return beta
+    }
+ 
     function f(t, x){
 
-      // SEIR ODE
-      if (t > InterventionTime+retardo && t < InterventionTime+retardo + duration){
-        var beta = R0t/(D_infectious)
-      } else if (t > InterventionTime+retardo + duration) {
-        var beta = R0p/(D_infectious)        
-      } else {
-        var beta = R0/(D_infectious)
-      }
+      var beta = bata(t);
       var a     = 1/D_incbation
       var gamma = 1/D_infectious
       
@@ -168,13 +173,15 @@
     var TI = []
     var Iters = []
     var tata = []
+    var roro = []
     while (steps--) { 
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infected   Exposed
         P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
         Iters.push(v)
         TI.push(N*(1-v[0]))
-	tata.push(t)
+        tata.push(t)
+        roro.push(bata(t))
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
@@ -187,7 +194,8 @@
             "total_infected": TI,
             "Iters":Iters,
             "dIters": f,
-            "dias": tata
+            "dias": tata,
+            "R0func": roro
 	    }
   }
 
@@ -218,10 +226,11 @@
   }
 
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
+  $: Sol            = get_solution(dt, N, I0,E0, R0s, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
-  retardo,R0t, duration,interpolation_steps,110)
+  retardo,duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
+  $: R0func        = Sol["R0func"].slice(0,100)
   $: rm = sumactivos(P);
   $: timestep       = dt
   $: tmax           = dt*100
@@ -331,6 +340,8 @@
     drag_callback_y(selectAll("#yAxisDrag"))
     var drag_callback_x = drag_x()
     drag_callback_x(selectAll("#xAxisDrag"))
+    var drag_callback_x2 = drag_x()
+    drag_callback_x2(selectAll("#xAxisDrag2"))
     var drag_callback_intervention = drag_intervention()
     // drag_callback_intervention(selectAll("#interventionDrag"))
     drag_callback_intervention(selectAll("#dottedline"))
@@ -374,6 +385,7 @@
 
   let width  = 750;
   let height = 500;
+  let height2 = 200;
 
   $: xScaleTime = scaleLinear()
     .domain([0, tmax])
@@ -434,8 +446,8 @@
      //    Dead   Hospital          Recovered        Infected   Exposed
     var milestones = []
     for (var i = 0; i < P.length; i++) {
-      if (P[i][0] >= 0.5) {
-        milestones.push([i*dt, "Primera muerte"])
+      if (P[i][0] >= 99.5) {
+        milestones.push([i*dt, "100 Muertos"])
         break
       }
     }
@@ -443,6 +455,7 @@
     var i = argmax(P, 1)
     milestones.push([i*dt, "Pico: " + format(",")(Math.round(P[i][1])) + " internados"])
 
+    milestones.push([0, "Iinicio 3/3 - "+retardo+" días"])
     return milestones
   }
 
@@ -523,9 +536,9 @@
 
   function download_all_csv(){
 
-     var Soln            = get_solution(1, N, I0,E0, R0,R0p, D_incbation,
+     var Soln            = get_solution(1, N, I0,E0, R0s, D_incbation,
      D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-     InterventionTime,retardo, R0t, duration,40,365)
+     InterventionTime,retardo, duration,40,365)
     var Pn              = Soln["P"]
     var dias              = Soln["dias"]
     download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
@@ -923,18 +936,24 @@
         <Checkbox color="{colors[5]}" bind:checked={checked[5]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Confirmados Arg.</div>
+          <div class="legendtextnum"><i>(a t - {retardo} días)</i></div>
         </div>
       </div>
-      <div style="position:absolute; left:0px; top:{legendheight*4+240}px; width: 180px; height: 100px">
+      <div style="position:absolute; left:0px; top:{legendheight*4+260}px; width: 180px; height: 100px">
         <Checkbox color="{colors[6]}" bind:checked={checked[6]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Decesos Arg.</div>
         </div>
       </div>
 
-
-
-
+      <div style="position:absolute; left:0px; top:{legendheight*8 + 120+2}px; width: 180px; height: 100px">
+        <div class="legend" style="position:absolute;">
+          <div align="right" class="legendtitle">Ritmo reroductivo <br> básico {@html math_inline("\\mathcal{R}_0")}</div>
+          <div style="padding-top: 3px; padding-bottom: 1px">          
+          <div align="right" class="legendtextnum"><i> parámetros de control <br> abajo</i> </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -953,7 +972,6 @@
              tmax={tmax}
              N={N}
              ymax={lock ? Plock: Pmax}
-             InterventionTime={InterventionTime}
 	           retardo={retardo}
              colors={colors}
              log={log}/>
@@ -982,90 +1000,58 @@
                   height:425px;
                   cursor:row-resize">
       </div>
-
-      <!-- Intervention Line -->
-      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:100px; left:10px; pointer-events: none">
-        <div id="dottedline"  style="pointer-events: all;
-                    position: absolute;
-                    top:-38px;
-                    left:{xScaleTime(InterventionTime)}px;
-                    visibility: {(xScaleTime(InterventionTime) < (width - padding.right)) ? 'visible':'hidden'};
-                    width:2px;
-                    background-color:#FFF;
-                    border-right: 1px dashed black;
-                    pointer-events: all;
-                    cursor:col-resize;
-                    height:{height+19}px">
-
-        {#if xScaleTime(InterventionTime) >= 100}
-          <div style="position:absolute; opacity: 0.5; top:-2px; left:-97px; width: 120px">
-          <span style="font-size: 13px">⟵ {@html math_inline("\\mathcal{R}_0=" + (R0).toFixed(2) )}</span>
-          </div>      
-        {/if}
-
-        <div id="interventionDrag" class="legendtext" style="flex: 0 0 160px; width:120px; position:relative;  top:-70px; height: 60px; padding-right: 15px; left: -125px; pointer-events: all;cursor:col-resize;" >
-          <div class="paneltitle" style="top:9px; position: relative; text-align: right">Día
-	  de intervención {format("d")(InterventionTime)}</div>
-          <span></span><div style="top:9px; position: relative; text-align: right">
-          (deslizar)</div>
-          <div style="top:43px; left:40px; position: absolute; text-align: right; width: 20px; height:20px; opacity: 0.3">
-            <svg width="20" height="20">
-              <g transform="rotate(90)">
-                <g transform="translate(0,-20)">
-                  <path d="M2 11h16v2H2zm0-4h16v2H2zm8 11l3-3H7l3 3zm0-16L7 5h6l-3-3z"/>
-                 </g>  
-              </g>
-            </svg>
-          </div>
-        </div>
-
-
-        <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
-
-        </div>
-
-
-        </div>
-      </div>
-
-      <!-- Intervention End Line -->
-      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:50px; left:10px; pointer-events: none">
-        <div id="dottedline"  style="pointer-events: all;
-                    position: absolute;
-                    top:-38px;
-                    left:{xScaleTime(InterventionTime+duration)}px;
-                    visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-                    width:2px;
-                    background-color:#FFF;
-                    border-right: 1px dashed black;
-                    pointer-events: all;
-                    cursor:col-resize;
-                    height:{height+69}px">
-
-        {#if xScaleTime(InterventionTime+duration) >= 100}
-          <div style="position:absolute; opacity: 1.0; top:-25px; right:-125px; width: 120px">
-	  <span style="font-size: 13px; color:#777777">{@html math_inline("\\mathcal{R}_0=" + (R0p).toFixed(2) )}→ </span>
-          </div>      
-        {/if}
-
-	  <div style="font-size: 13px; color:#777777 ; position:absolute; top:105px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
-	   </div>
-
-
-       <!-- <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
-
-	</div> -->
-
-      </div>
-
-
-      <!-- Intervention Line slider -->
+      <!-- Medidas previas -->
       <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
         <div style="
             position: absolute;
             top:-38px;
-            left:{xScaleTime(InterventionTime)}px;
-            visibility: {(xScaleTime(InterventionTime) < (width - padding.right)) ? 'visible':'hidden'};
+            left:{xScaleTime(IntervPrevia+retardo)}px;
+            visibility: {(xScaleTime(IntervPrevia+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: -111px" >
+              <div class="caption" align="right" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-right: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                Medidas <br>Previas (13/3)
+              </div>
+            </div>
+            <div style="flex: 0 0 10px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="left" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; padding: 5px 7px 7px 7px; ">      
+                 &nbsp;→
+              </div>
+            </div>
+
+          </div>
+      </div>
+      <!-- Cuarentena inicio -->
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="center" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                Cuarentena Social<br>
+                ←&nbsp;→
+              </div>
+            </div>
+          </div>
+      </div>
+      <!-- Cuarentena final -->
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+duration+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+duration+retardo) < (width - padding.right)) ? 'visible':'hidden'};
             width:2px;
             background-color:#FFF;
             border-right: 1px dashed black;
@@ -1074,69 +1060,13 @@
             <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
               <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
               <div style="pointer-events: all">
-                <!--<div class="slidertext" on:mousedown={lock_yaxis}>Disminución: {100*(InterventionAmt).toFixed(2)}%-->
-                <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0t).toFixed(2))}
-                <input class="range" type=range bind:value={R0t} min=0 max=5 step=0.01 on:mousedown={lock_yaxis}>
-	        </div>
-                <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)} días
-                <input class="range" type=range bind:value={duration} min=0 max=60 step=1 on:mousedown={lock_yaxis}>
-                </div>
-                <div class="slidertext" on:mousedown={lock_yaxis}>Retardo:{(retardo).toFixed(0)} días
-                <input class="range" type=range bind:value={retardo} min=0 max=10 step=1 on:mousedown={lock_yaxis}>
-                </div>
+                Fin Cuarentena <br>
+                {duration-12}/4→
                 </div>
               </div>
             </div>
           </div>
       </div>
-
-<!-- 
-      {#if xScaleTime(InterventionTime+duration) < (width - padding.right)}
-        <div id="dottedline2" style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:105px; left:10px; pointer-events: none;">
-          <div style="
-              position: absolute;
-              top:-38px;
-              left:{xScaleTime(InterventionTime+duration)}px;
-              visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-              width:3px;
-              background-color:white;
-              border-right: 1px dashed black;
-              cursor:col-resize;
-              opacity: 0.3;
-              pointer-events: all;
-              height:{height+13}px">
-            <div style="position:absolute; opacity: 0.5; top:-10px; left:10px; width: 120px">
-            <span style="font-size: 13px">{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2) )}</span> ⟶ 
-            </div>
-          </div>
-        </div>
-
-        <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
-          <div style="
-              opacity: 0.5;
-              position: absolute;
-              top:-38px;
-              left:{xScaleTime(InterventionTime+duration)}px;
-              visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-              width:2px;
-              background-color:#FFF;
-              cursor:col-resize;
-              height:{height}px">
-              <div style="flex: 0 0 160px; width:200px; position:relative; top:-125px; left: 1px" >
-                <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:150px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
-                <div class="paneltext"  style="height:20px; text-align: right">
-                <div class="paneldesc">decrease transmission by<br></div>
-                </div>
-                <div style="pointer-events: all">
-                <div class="slidertext" on:mousedown={lock_yaxis}>{(InterventionAmt).toFixed(2)}</div>
-                <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
-                </div>
-                </div>
-              </div>
-            </div>
-        </div>
-      {/if} -->
-
 
       <div style="pointer-events: none;
                   position: absolute;
@@ -1163,14 +1093,15 @@
    </div>
 
 </div>
+
+
 <div class="chart" style="display: flex; max-width: 1120px">
   <div style="flex: 0 0 270px; width:270px;"> </div>
   <div style="flex: 0 0 890px; width:890px; height: 200px; position:relative;">
       <div style="position:relative; top:0px; left: 10px">
         <Polys2 bind:checked={checked}
              bind:active={active}
-             y = {P} 
-             toto = {rm} 
+             y = {R0func} 
              xmax = {Xmax} 
              total_infected = {total_infected} 
              deaths = {deaths} 
@@ -1178,16 +1109,72 @@
              timestep={timestep}
              tmax={tmax}
              N={N}
-             ymax={lock ? Plock: Pmax}
+             ymax={Math.max(...R0s.values)}
              InterventionTime={InterventionTime}
 	           retardo={retardo}
              colors={colors}
              log={false}/>
+
       </div>
-  </div>
-  </div>
+      <div id="xAxisDrag2"
+           style="pointer-events: all;
+                  position: absolute;
+                  top:{height2}px;
+                  left:{0}px;
+                  width:{780}px;
+                  background-color:#222;
+                  opacity: 0;
+                  height:25px;
+                  cursor:col-resize">
+      </div>
 
+      <!-- Medidas previas -->
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(IntervPrevia+retardo)}px;
+            visibility: {(xScaleTime(IntervPrevia+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+       
+          </div>
+      </div>
+      <!-- Cuarentena inicio -->
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+        </div>
+      </div>
+      <!-- Cuarentena final -->
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+duration+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+duration+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+          </div>
+      </div>
 
+      </div>
+
+  </div>
 
 <!-- <div style="height:220px;">
   <div class="minorTitle">
@@ -1209,10 +1196,10 @@
       <input class="range" style="margin-bottom: 8px" type=range bind:value={logN} min={5} max=25 step=0.01>
       <input style="margin-bottom: 8px" type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
       <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales<br></div>
-      <div class="slidertext">{I0}</div>
+      <div class="slidertext"style="padding-top: 15px">{I0}</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={I0} min={1} max=100 step=1>
       <input style="margin-bottom: 8px" type=number bind:value={I0} min={1} max=100 step=1>
-      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales<br></div>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Número de expuestos iniciales<br></div>
       <div class="slidertext">{E0}</div>
       <input class="range" type=range bind:value={E0} min={1} max=100 step=1>
       <input type=number bind:value={E0} min={1} max=100 step=1>
@@ -1234,28 +1221,34 @@
       <input type=number bind:value={R0t} min=0.01 max={R0} step=0.01>
     </div>
     <div class="column">
-      <div class="paneldesc"style="padding-top: 47px">Duración de cuarentena <br></div>
-      <div class="slidertext">{(duration).toFixed(0)} días</div>
+      <div class="paneltitle" style="padding-top: 10px">Intervenciones sobre {@html math_inline("\\mathcal{R}_0")} </div>
+      <div class="paneldesc" >Duración de cuarentena <br></div>
+      <div class="slidertext"  style="margin-bottom: 7px" >{(duration).toFixed(0)} días</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={duration} min=0 max=120 step=1> 
       <input style="margin-bottom: 8px" type=number bind:value={duration} min=0 max=120 step=1>
-    <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">{@html math_inline("\\mathcal{R}_0")} Luego del fin de la cuarentena <br></div>
+    <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 11px">{@html math_inline("\\mathcal{R}_0")} Luego del fin de la cuarentena <br></div>
       <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0p}</div>
-      <input class="range" type=range bind:value={R0p} min=0.01 max={R0} step=0.01> 
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={R0p} min=0.01 max={R0} step=0.01> 
       <input type=number bind:value={R0p} min=0.01 max={R0} step=0.01>
 
     </div>
 
 
     <div class="column">
-      <div class="paneltitle" style="padding-top: 10px">Tiempos de Transmisión</div>
-      <div class="paneldesc" style="height:50px">Duración del periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
-      <div class="slidertext">{(D_incbation).toFixed(2)} días</div>
+      <div class="paneltitle" style="padding-top: 10px">Tiempos</div>
+      <div class="paneldesc">Periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
+      <div class="slidertext" style="margin-bottom: 6px">{(D_incbation).toFixed(2)} días</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={D_incbation} min={0.15} max=24 step=0.0001>
       <input style="margin-bottom: 8px"type=number bind:value={D_incbation} min={0.15} max=24 step=0.0001>
-      <div class="paneldesc" style="height:50px; border-top: 1px solid #EEE; padding-top: 10px">Intervalo donde el paciente es infeccioso, {@html math_inline("T_{\\text{inf}}")}.<br></div>
+      <div class="paneldesc" style="height:28px; border-top: 1px solid #EEE; padding-top: 10px">Periodo infeccioso, {@html math_inline("T_{\\text{inf}}")}.<br></div>
       <div class="slidertext">{D_infectious} días</div>
-      <input class="range" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
-      <input type=number bind:value={D_infectious} min={0} max=24 step=0.01>
+      <input class="range"style="margin-bottom: 8px" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
+      <input style="margin-bottom: 8px"type=number bind:value={D_infectious} min={0} max=24 step=0.01>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Intervalo entre síntomas y confirmación del test<br></div>
+      <div class="slidertext">{retardo} días</div>
+      <input class="range" type=range bind:value={retardo} min={1} max=20 step=1>
+      <input style="margin-bottom: 8px"type=number bind:value={retardo} min={1} max=20 step=1>
+
     </div>
 
 </div>
@@ -1268,7 +1261,7 @@
    <div style="flex: 0 0 20; width:20px"></div> 
 
     <div class="column">
-      <div class="paneltitle">Estadística de Morbilidad</div>
+      <div class="paneltitle"style="padding-top: 10px">Estadística de Morbilidad</div>
       <div class="paneldesc" style="height:30px">Tasa de mortandad.<br></div>
       <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
@@ -1280,7 +1273,7 @@
     </div>
 
     <div class="column">
-      <div class="paneltitle">Tiempos de Recuperación</div>
+      <div class="paneltitle"style="padding-top: 10px">Tiempos de Recuperación</div>
       <div class="paneldesc" style="height:30px">Duración de la estadía en el hospital<br></div>
       <div class="slidertext">{D_recovery_severe} días</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={D_recovery_severe} min={0.1} max=100 step=0.01>
@@ -1292,7 +1285,7 @@
     </div>
 
     <div class="column">
-      <div class="paneltitle">Estadística hospitalaria</div>
+      <div class="paneltitle"style="padding-top: 10px">Estadística hospitalaria</div>
       <div class="paneldesc" style="height:30px">Tasa de hospitalización.<br></div>
       <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>      
@@ -1389,7 +1382,7 @@ A continuación se presenta una muestra de estimaciones de parámetros epidémic
     <th></th>
     <th>Lugar</th>
     <th>Ritmo reproductivo<br> {@html math_inline("\\mathcal{R}_0")}</th>
-    <th>Periodo de incubacion<br> {@html math_inline("T_{\\text{inc}}")} (días)</th>
+    <th>Periodo de incubación<br> {@html math_inline("T_{\\text{inc}}")} (días)</th>
     <th>Periodo infeccioso<br> {@html math_inline("T_{\\text{inf}}")} (días)</th>
   </tr>
   <tr>

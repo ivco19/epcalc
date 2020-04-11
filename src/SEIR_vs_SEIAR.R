@@ -154,7 +154,7 @@ library(minpack.lm)
  InterventionAmt_value   = 1.78/R0_value
  p_severe_value          = 0.2
  duration_value          = 30
- N                       = 44.0e4
+ N                       = 44.0e6
  I0                      = 1   # infectious hosts
  timepoints = seq (0, 364, by=1)
 
