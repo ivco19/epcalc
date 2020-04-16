@@ -63,10 +63,10 @@
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
   $: I0                = 1
-  $: E0                = 15 
+  $: E0                = 21 
   $: R0                = 3.2
-  $: R0i               = 2.5
-  $: R0t               = 1.12
+  $: R0i               = 2.67
+  $: R0t               = 0.98
   $: R0p               = 3.2
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
@@ -74,10 +74,10 @@
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.021
+  $: CFR               = 0.05
   $: InterventionTime  = 18
   $: IntervPrevia      = 10
-  $: retardo           = 8
+  $: retardo           = 4
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -1062,7 +1062,7 @@
               <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
               <div style="pointer-events: all">
                 Fin Cuarentena <br>
-                {duration-12}/4→
+                a los {duration} días→
                 </div>
               </div>
             </div>
@@ -1291,7 +1291,7 @@
       <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>      
       <input style="margin-bottom: 8px"type=number bind:value={P_SEVERE} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo de hospitalización.<br></div>
+      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo hasta ser hospitalizado.<br></div>
       <div class="slidertext">{D_hospital_lag} días</div>
       <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01>
       <input type=number bind:value={D_hospital_lag} min={0.5} max=100 step=0.01/>
