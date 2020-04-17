@@ -123,7 +123,7 @@
     function bata(t){
       var beta = R0s.values[0]/(D_infectious);
       for(var ii = 0; ii < R0s.values.length; ii++){
-         if (t >= R0s.dias[ii]+retardo && t < R0s.dias[ii+1]+retardo + duration){
+         if (t >= R0s.dias[ii]+retardo && t < R0s.dias[ii+1]+retardo){
            beta = R0s.values[ii]/(D_infectious)
          }
       }
@@ -465,7 +465,7 @@
 
   function retrieve_backend_csv(){
 
-      alert("Esta función requiere utilizar un servidor backend con nuestro modelo en R. Es posible\n correr una versión full funcional en su propio computador corriendo epcalc y el backend (Ver más\n detalles en https://github.com/ivco19/epyRba). Esta web pública no dispone de acceso, si\n usted forma parte de algún organismo que utiliza esta versión de la calculadora y necesita\n acceder a datos con precisión numérica alta, le pedimos que nos contacte\n (información de contacto en https://ivco19.github.io/). ")
+ alert("Esta función requiere utilizar un servidor backend con nuestro modelo en R. Es posible\n correr una versión full funcional en su propio computador corriendo epcalc y el backend (Ver más\n detalles en https://github.com/ivco19/epyRba). Esta web pública no dispone de acceso, si\n usted forma parte de algún organismo que utiliza esta versión de la calculadora y necesita\n acceder a datos con precisión numérica alta, le pedimos que nos contacte\n (información de contacto en https://ivco19.github.io/). ")
 
 // descomentar este bloque de codigo para poder descargar desde el backend
 // puede ser necesario cambiar el url del query dependiendo donde este el servidor funcionando.
@@ -478,8 +478,7 @@
 //    'Time_to_death': Time_to_death,
 //    'D_incbation'  : D_incbation,
 //    'D_infectious' : D_infectious,
-//    'R0'           : R0,
-//    'R0p'          : R0p,
+//    'R0s'           : R0s,
 //    'D_recovery_mild'  : D_recovery_mild,
 //    'D_recovery_severe': D_recovery_severe,
 //    'D_hospital_lag'   : D_hospital_lag,
@@ -487,7 +486,6 @@
 //    'D_death': D_death,
 //    'p_fatal': CFR,
 //    'InterventionTime': InterventionTime,
-//    'InterventionAmt': InterventionAmt,
 //    'p_severe': P_SEVERE,
 //    'E0': E0,
 //    'duration': duration,
@@ -531,7 +529,7 @@
 //}).catch(err => {
 //    throw new Error('Error!!');
 //});
-//
+
   }
 
 
