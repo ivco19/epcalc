@@ -58,15 +58,16 @@
     return r;
   }
 
+// http://localhost:5000/?CFR=0.0556&D_hospital_lag=5&D_incbation=5.2&D_infectious=2.9&D_recovery_mild=5.1&D_recovery_severe=10.1&E0=15&I0=1&InterventionTime=18&P_SEVERE=0.2&R0=3.2&R0p=3.2&R0t=1&Time_to_death=17&duration=38&interpolation_steps=40&logN=17.599700191882537&retardo=4
 
   $: Time_to_death     = 17
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
   $: I0                = 1
-  $: E0                = 21 
+  $: E0                = 15 
   $: R0                = 3.2
-  $: R0i               = 2.67
-  $: R0t               = 0.98
+  $: R0i               = 3.2
+  $: R0t               = 1.0
   $: R0p               = 3.2
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
@@ -74,7 +75,7 @@
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.05
+  $: CFR               = 0.0556
   $: InterventionTime  = 18
   $: IntervPrevia      = 10
   $: retardo           = 4

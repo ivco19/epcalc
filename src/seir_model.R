@@ -76,12 +76,12 @@ get_def_params <- function()
         D_hospital_lag    = 5,
         retardo           = 4,
         D_death           = Time_to_death - D_infectious0,
-        p_fatal           = 0.021,
+        p_fatal           = 0.05,
         p_severe          = 0.2,
-        duration          = 30,
+        duration          = 38,
         N                 = 44.0e4,
         I0                = 1,
-        E0                = 17,
+        E0                = 21,
         timepoints        = seq(0, 50, by=1)
     )
  }
