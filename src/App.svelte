@@ -493,7 +493,7 @@ var data = {
 
 //para un deploy local actualizar url
 //fetch('http://localhost:5001/seir', {
-fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
+fetch('https://epyrba.herokuapp.com/seir',{
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
