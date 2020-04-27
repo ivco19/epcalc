@@ -83,7 +83,7 @@
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 38
+  $: duration          = 52
   $: interpolation_steps  = 40
   $: R0s = {
     values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena

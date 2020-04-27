@@ -12,6 +12,10 @@
 
 
  dd=load_data()
+ load("data.Rdata")
+ fis=datafis$casos_fis
+
+
  ta=dd$activos
 
  dat=ta
@@ -63,6 +67,32 @@
  line=paste0(line,end)
  outa=c(outa,line)
  outa=c(outa,"],")
+
+ dat=fis
+ h=" fis: ["
+ outa=c(outa,h)
+ ll=length(dat)
+ for(i in 1:(ll-1))
+ {
+     hx="{ x: "
+     line=paste0(hx,as.character(i-1))
+     hy=", y: "
+     line=paste0(line,hy)
+     line=paste0(line,as.character(dat[i]))
+     end="},"
+     line=paste0(line,end)
+     outa=c(outa,line)
+ }
+ hx="{ x: "
+ line=paste0(hx,as.character(ll-1))
+ hy=", y: "
+ line=paste0(line,hy)
+ line=paste0(line,as.character(dat[ll]))
+ end="}"
+ line=paste0(line,end)
+ outa=c(outa,line)
+ outa=c(outa,"],")
+
 
  tm=dd$muertos
  dat=tm
