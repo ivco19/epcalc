@@ -78,7 +78,7 @@
   $: CFR               = 0.0556
   $: InterventionTime  = 18
   $: IntervPrevia      = 10
-  $: retardo           = 4
+  $: retardo           = 8
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -247,8 +247,8 @@
 
   // var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
   //var colors = [ "#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854","#ffd92f","#e5c494","#b3b3b3"]
-  var colors = [ "#8dd3c7","#d1d128","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9"]
-
+ // var colors = [ "#8dd3c7","#d1d128","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9"]
+ var colors =["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a"]
   var Plock = 1
 
   var drag_y = function (){
@@ -403,7 +403,7 @@
 
   window.addEventListener('mouseup', unlock_yaxis);
 
-  $: checked = [true, true, false, true, true,true,true,true]
+  $: checked = [true, true, false, true, true,true,true,true,true]
   $: active  = 0
   $: active_ = active >= 0 ? active : Iters.length - 1
 
@@ -940,11 +940,20 @@
         </div>
       </div>
       <div style="position:absolute; left:0px; top:{legendheight*4+260}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[8]}" bind:checked={checked[8]}/>
+        <div class="legend" style="position:absolute;">
+          <div class="legendtitle">Por inicio de sintomas</div>
+          <div class="legendtextnum"><i>(consolidados luego de {retardo} días)</i></div>
+        </div>
+      </div>
+      <div style="position:absolute; left:0px; top:{legendheight*4+312}px; width: 180px; height: 100px">
         <Checkbox color="{colors[6]}" bind:checked={checked[6]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Decesos Arg.</div>
         </div>
       </div>
+
+
 
       <div style="position:absolute; left:0px; top:{legendheight*8 + 120+2}px; width: 180px; height: 100px">
         <div class="legend" style="position:absolute;">
