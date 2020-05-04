@@ -24,7 +24,7 @@ Puede ser necesario instalar *npm*, Para instalarlo segun tu distro usar
 
 # Nuevos features:
 Se añadieron nuevos parámetros para:
-- Definir una función en el tiempo del ritmo repdroductivo, esto permite modelar las intervanciones realizadas,
+- Definir una función en el tiempo del ritmo repdroductivo, esto permite modelar las intervenciones realizadas,
 tanto en su duración como en su magnitud. 
 - Controlar el ritmo reproductivo a la salida del período de intervención.
 - También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
@@ -34,7 +34,7 @@ en el número de casos confirmados.
 - Se añadió un boton de descarga para obtener un archivo csv con los resultados del modelo.
 - Se añadió como scatter plot los casos confirmados y las muertes de COVID-19 en Argentina (datos acumulados), para permitir
 visualizar con la applet como la variación de parámetros impacta en la predicción de los mismos.
--Los parámetros por defecto son obtenidos mediante un ajuste en los incrementos (ya que ajustar datos acumulados no es correcto en estadística), este se realiza mediante una exploración mediante cadenas de markov (aunque el likelihood de las mediciones es estimado asumiendo shot noise, lo cual puede no ser correcto).
+- Los parámetros por defecto son obtenidos mediante un ajuste en los incrementos (ya que ajustar datos acumulados no es correcto en estadística), este se realiza mediante una exploración mediante cadenas de markov (aunque el likelihood de las mediciones es estimado asumiendo shot noise, lo cual puede no ser correcto).
 - El ajuste de la curva de casos se realiza a partir del día 5, ya que como muchos
 ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
 Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
