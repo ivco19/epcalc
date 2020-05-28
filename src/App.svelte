@@ -60,12 +60,15 @@
 
 // http://localhost:5000/?CFR=0.0556&D_hospital_lag=5&D_incbation=5.2&D_infectious=2.9&D_recovery_mild=5.1&D_recovery_severe=10.1&E0=15&I0=1&InterventionTime=18&P_SEVERE=0.2&R0=3.2&R0p=3.2&R0t=1&Time_to_death=17&duration=38&interpolation_steps=40&logN=17.599700191882537&retardo=4
 
+//http://localhost:5000/?CFR=0.1&D_hospital_lag=5&D_incbation=5.2&D_infectious=2.9&D_recovery_mild=5.1&
+//D_recovery_severe=10.1&E0=23&I0=1&InterventionTime=22&P_SEVERE=0.2&R0=3.42&R0p=3.2&R0t=1&Time_to_death=17
+//&duration=52&interpolation_steps=40&logN=17.599700191882537
   $: Time_to_death     = 17
   $: logN              = Math.log(44e6)
   $: N                 = Math.exp(logN)
   $: I0                = 1
-  $: E0                = 15 
-  $: R0                = 3.2
+  $: E0                = 23 
+  $: R0                = 3.42
   $: R0i               = 3.2
   $: R0t               = 1.0
   $: R0p               = 3.2
@@ -75,10 +78,10 @@
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.0556
-  $: InterventionTime  = 18
-  $: IntervPrevia      = 10
-  $: retardo           = 8
+  $: CFR               = 0.1
+  $: InterventionTime  = 22 //18 //mas 4 dias por la fecha de inicio
+  $: IntervPrevia      = 14 //10
+  $: retardo           = 0
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
@@ -103,7 +106,7 @@
                "D_recovery_severe":D_recovery_severe,
                "CFR":CFR,
                "InterventionTime":InterventionTime,
-               "retardo":retardo,
+               //"retardo":retardo,
                "R0t":R0t,
                "duration":duration,
                "interpolation_steps":interpolation_steps,
@@ -457,7 +460,7 @@
     var i = argmax(P, 1)
     milestones.push([i*dt, "Pico: " + format(",")(Math.round(P[i][1])) + " internados"])
 
-    milestones.push([0, "Iinicio 3/3 - "+retardo+" días"])
+    milestones.push([0, "Inicio 27/2 "])//poner fecha
     return milestones
   }
 
@@ -936,16 +939,16 @@
         <Checkbox color="{colors[5]}" bind:checked={checked[5]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Confirmados Arg.</div>
-          <div class="legendtextnum"><i>(a t - {retardo} días)</i></div>
+         <div class="legendtextnum"><i>según FIS</i></div> 
         </div>
       </div>
-      <div style="position:absolute; left:0px; top:{legendheight*4+260}px; width: 180px; height: 100px">
+      <!-- <div style="position:absolute; left:0px; top:{legendheight*4+260}px; width: 180px; height: 100px">
         <Checkbox color="{colors[8]}" bind:checked={checked[8]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Por inicio de sintomas</div>
           <div class="legendtextnum"><i>(consolidados luego de {retardo} días)</i></div>
         </div>
-      </div>
+      </div> -->
       <div style="position:absolute; left:0px; top:{legendheight*4+312}px; width: 180px; height: 100px">
         <Checkbox color="{colors[6]}" bind:checked={checked[6]}/>
         <div class="legend" style="position:absolute;">
@@ -1253,11 +1256,11 @@
       <div class="slidertext">{D_infectious} días</div>
       <input class="range"style="margin-bottom: 8px" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
       <input style="margin-bottom: 8px"type=number bind:value={D_infectious} min={0} max=24 step=0.01>
-      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Intervalo entre síntomas y confirmación del test<br></div>
+     <!-- <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Intervalo entre síntomas y confirmación del test<br></div>
       <div class="slidertext">{retardo} días</div>
       <input class="range" type=range bind:value={retardo} min={1} max=20 step=1>
       <input style="margin-bottom: 8px"type=number bind:value={retardo} min={1} max=20 step=1>
-
+      --> 
     </div>
 
 </div>

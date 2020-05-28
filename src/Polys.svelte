@@ -56,12 +56,7 @@
   export let log = false;
   export let confirmados=pnts.c;
   export let muertos=pnts.m;
-  export let fist=pnts.fis;
   export let retardo;
-
-
-  let fis=fist.slice(0,(fist.length-1 - retardo));
-
 
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
@@ -330,23 +325,6 @@
       {/each}
     </g>
     {/if}
-
-   {#if checked[8]}
-   <g class="points">
-      {#each fis as point}
-          {#if !log}
-    	        <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[8]}" style="opacity: 0.9" />
-          {:else}
-            {#if point.y>0}
-    	          <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[8]}" style="opacity: 0.9" />
-            {/if}
-          {/if}
-
-      {/each}
-    </g>
-    {/if}
-
-
 
 <!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
 
