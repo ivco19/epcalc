@@ -65,7 +65,7 @@
   $: E0                = 7
   $: R0                = 3.31
   $: R0i               = R0 //2.67
-  $: R0t               = 1.21
+  $: R0t               = 1.18
   $: R0p               = 2.72
   $: D_incbation       = 5.2442
   $: D_infectious      = 2.9
@@ -73,7 +73,7 @@
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.01
+  $: CFR               = 0.019
   $: InterventionTime  = 19
   $: IntervPrevia      = 10
   $: retardo           = 0
@@ -81,7 +81,7 @@
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 38
+  $: duration          = 70
   $: interpolation_steps  = 40
   $: R0s = {
     values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena
@@ -538,8 +538,9 @@ fetch('https://epyrba.herokuapp.com/seir',{
      InterventionTime,retardo, duration,40,365)
     var Pn              = Soln["P"]
     var dias              = Soln["dias"]
-    download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
-    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
+    download_csv({
+    filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infectado','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infectado', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
@@ -835,7 +836,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
         <Arrow height="41"/>   
 
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Infecciosos</div>
+          <div class="legendtitle">Infectados</div>
           <div style="padding-top: 5px; padding-bottom: 1px">
           <div class="legendtextnum"><span style="font-size:12px; padding-right:3px; color:#CCC">∑</span> <i>{formatNumber(Math.round(N*Iters[active_][2]))} 
                                   ({ (100*Iters[active_][2]).toFixed(2) }%)</div>
@@ -919,18 +920,18 @@ fetch('https://epyrba.herokuapp.com/seir',{
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 10px; position:relative;">Muertes.</div>
       </div>
 
-     <!-- <div style="position:absolute; left:0px; top:{legendheight*5 + 120+2}px; width: 180px; height: 100px">
+     <div style="position:absolute; left:0px; top:{legendheight*5 + 120+2}px; width: 180px; height: 100px">
         <Checkbox color="{colors[7]}" bind:checked={checked[7]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">I+R+D</div>
         </div>
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 1px; position:relative;">Confirmados por el modelo.</div>
-      </div>-->
+      </div>
 
 
      <!-- Data points 
       <div style="position:absolute; left:0px; top:{legendheight*4+220}px; width: 180px; height: 100px">-->
-      <div style="position:absolute; left:0px; top:{legendheight*5+122}px; width: 180px; height: 100px">
+      <div style="position:absolute; left:0px; top:{legendheight*6+122}px; width: 180px; height: 100px">
         <Checkbox color="{colors[5]}" bind:checked={checked[5]}/>
         <div class="legend" style="position:absolute;">
           <div class="legendtitle">Infectados Cba.</div>
@@ -947,7 +948,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
 
       <div style="position:absolute; left:0px; top:{legendheight*8 + 120+2}px; width: 180px; height: 100px">
         <div class="legend" style="position:absolute;">
-          <div align="right" class="legendtitle">Ritmo reroductivo <br> básico {@html math_inline("\\mathcal{R}_0")}</div>
+          <div align="right" class="legendtitle">Ritmo reroductivo <br> básico {@html math_inline("\\mathcal{R}_t")}</div>
           <div style="padding-top: 3px; padding-bottom: 1px">          
           <div align="right" class="legendtextnum"><i> parámetros de control <br> abajo</i> </div>
           </div>

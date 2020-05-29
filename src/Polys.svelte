@@ -54,7 +54,7 @@
   export let InterventionTime;
   export let colors; 
   export let log = false;
-  export let confirmados=pnts.c;
+  export let activos=pnts.a;
   export let muertos=pnts.m;
   export let retardo;
 
@@ -298,7 +298,7 @@
     </g>
 
     <g class="points">
-      {#each confirmados as point}
+      {#each activos as point}
           {#if !log}
     	        <circle cx="{xScaleTime(point.x)}" cy="{yScale(point.y)}" r='4' fill="{colors[5]}" style="opacity: 0.9" />
           {:else}

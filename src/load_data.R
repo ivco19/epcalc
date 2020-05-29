@@ -1,6 +1,6 @@
 load_data <- function()
 {
-	#Esta funcion parsea el csv producido por ivco19 Libraries
+	#Esta funcion parsea el csv producido por Arcovid19 Libraries
 	#https://github.com/ivco19/libs
 	#descarga la base de datos en formato csv con los datos de Argentina
 	#DOI: 10.13140/RG.2.2.22519.78246
