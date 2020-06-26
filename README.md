@@ -24,16 +24,18 @@ Puede ser necesario instalar *npm*, Para instalarlo segun tu distro usar
 
 # Nuevos features:
 Se añadieron nuevos parámetros para:
-- Definir la duración de la cuarentena 
-- Controlar el ritmo reproductivo a la salida de la cuarentena.
+- Definir una función en el tiempo del ritmo repdroductivo, esto permite modelar las intervenciones realizadas,
+tanto en su duración como en su magnitud. 
+- Controlar el ritmo reproductivo a la salida del período de intervención.
 - También debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
 días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
 en el número de casos confirmados.
-
-- Se añadió con circulos verdes los casos confirmados de COVID-19 en Argentina, para permitir
-visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
-
-- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
+- Se cambio el sistema de slides por el de curvas poligonales para mayor claridad.
+- Se añadió un boton de descarga para obtener un archivo csv con los resultados del modelo.
+- Se añadió como scatter plot los casos confirmados y las muertes de COVID-19 en Argentina (datos acumulados), para permitir
+visualizar con la applet como la variación de parámetros impacta en la predicción de los mismos.
+- Los parámetros por defecto son obtenidos mediante un ajuste en los incrementos (ya que ajustar datos acumulados no es correcto en estadística), este se realiza mediante una exploración mediante cadenas de markov (aunque el likelihood de las mediciones es estimado asumiendo shot noise, lo cual puede no ser correcto).
+- El ajuste de la curva de casos se realiza a partir del día 5, ya que como muchos
 ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
 Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
 un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
