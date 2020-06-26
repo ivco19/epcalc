@@ -68,7 +68,7 @@
   $: R0                = 3.2
   $: R0i               = 3.2
   $: R0t               = 1.0
-  $: R0p               = 3.2
+  $: R0p               = 1.86
   $: D_incbation       = 5.2
   $: D_infectious      = 2.9
   $: D_recovery_mild   = (8 - 2.9)
@@ -83,7 +83,7 @@
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.2
-  $: duration          = 52
+  $: duration          = 40
   $: interpolation_steps  = 40
   $: R0s = {
     values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena
