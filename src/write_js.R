@@ -2,11 +2,17 @@
  ## https://github.com/ivco19/libs
  ## DOI: 10.13140/RG.2.2.22519.78246
  ##dd <- read.csv("casos_Covid19_20200416.csv")
- dd <- read.csv("data_to_fit_BM.csv")
 
- tc = dd$confirmados_menores_acumulados+dd$confirmados_mayores_acumulados
- tr = dd$recuperados_menores_acumulados+dd$recuperados_mayores_acumulados
- tm = dd$fallecidos_menores_acumulados + dd$fallecidos_mayores_acumulados
+ ##dd <- read.csv("data_to_fit_BM.csv")
+ ##tc = dd$confirmados_menores_acumulados+dd$confirmados_mayores_acumulados
+ ##tr = dd$recuperados_menores_acumulados+dd$recuperados_mayores_acumulados
+ ##tm = dd$fallecidos_menores_acumulados + dd$fallecidos_mayores_acumulados
+
+ dd <- read.csv("data_to_fit_BM-sin_edad.csv")
+ dd = dd[12:length(dd[[1]]),]
+ tc = dd$confirmados_acumulados
+ tr = dd$recuperados_acumulados
+ tm = dd$fallecidos_acumulados 
  dat=tc
  outa="export default { c: ["
  ll=length(dat)

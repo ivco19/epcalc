@@ -58,23 +58,24 @@
     return r;
   }
 
-  $: Time_to_death     = 22.5
+  $: Time_to_death     = 30
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 1
-  $: E0                = 7
-  $: R0                = 3.31
-  $: R0i               = R0 //2.67
-  $: R0t               = 1.18
-  $: R0p               = 2.72
+  $: I0                = 5
+  $: E0                = 35
+  $: R0                = 1.71
+  $: R0_min             = 1.2
+  $: R0_max             = 2.19
   $: D_incbation       = 5.2442
   $: D_infectious      = 2.9
   $: D_recovery_mild   = (8 - 2.9)
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.019
-  $: InterventionTime  = 19
+  $: CFR               = 0.015
+  $: DCFR               = 0.9
+//  $: InterventionTime  = 19
+  $: InterventionTime  = 8
   $: IntervPrevia      = 10
   $: retardo           = 0
   $: Time              = 220
@@ -83,9 +84,18 @@
   $: P_SEVERE          = 0.2
   $: duration          = 70
   $: interpolation_steps  = 40
+  $: laststep = 112
   $: R0s = {
-    values: [R0,R0i,R0t,R0p],           //R0s antes de intervenir, medidas intermedias, cuarentena, postcuarentena
-    dias:   [0,IntervPrevia,InterventionTime,InterventionTime+duration,1500]  // intervalos de tiempo: 0 , 12/3, 20/3 , 20/3+duracion, infinito
+    values: [2.77,1.3,1.09,1.16, R0],
+    dias: [0,  13, 34,  98, laststep,1500]
+  }
+  $: max_R0s = {
+    values: [2.77,1.3,1.09,1.16, R0_max],
+    dias: [0,  13, 34,  98, laststep,1500]
+  }
+  $: min_R0s = {
+    values: [2.77,1.3,1.09,1.16, R0_min],
+    dias: [0,  13, 34,  98, laststep,1500]
   }
 
 
@@ -94,22 +104,23 @@
                "I0":I0,
                "E0":E0,
                "R0":R0,
-               "R0p":R0p,
+               "R0_max":R0_max,
+               "R0_min":R0_min,
                "D_incbation":D_incbation,
                "D_infectious":D_infectious,
                "D_recovery_mild":D_recovery_mild,
                "D_recovery_severe":D_recovery_severe,
                "CFR":CFR,
+               "DCFR":DCFR,
                "InterventionTime":InterventionTime,
                "retardo":retardo,
-               "R0t":R0t,
                "duration":duration,
                "interpolation_steps":interpolation_steps,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0s, D_incbation,
-  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+  function get_solution(dt, N, I0,E0, R0ss, D_incbation,
+  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR,
   InterventionTime,  retardo, duration, interpolation_steps,rango) {
 
     // var interpolation_steps = 40
@@ -120,10 +131,10 @@
     var method = Integrators["RK4"]
 
     function bata(t){
-      var beta = R0s.values[0]/(D_infectious);
-      for(var ii = 0; ii < R0s.values.length; ii++){
-         if (t >= R0s.dias[ii]+retardo && t < R0s.dias[ii+1]+retardo){
-           beta = R0s.values[ii]/(D_infectious)
+      var beta = R0ss.values[0]/(D_infectious);
+      for(var ii = 0; ii < R0ss.values.length; ii++){
+         if (t >= R0ss.dias[ii]+retardo && t < R0ss.dias[ii+1]+retardo){
+           beta = R0ss.values[ii]/(D_infectious)
          }
       }
       return beta
@@ -148,6 +159,8 @@
 
       var p_severe = P_SEVERE
       var p_fatal  = CFR
+      if(t>=50) p_fatal=p_fatal*(1-DCFR);
+
       var p_mild   = 1 - P_SEVERE - CFR
 
       var dS        = -beta*I*S
@@ -225,12 +238,22 @@
   }
 
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0s, D_incbation, D_infectious,
-  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
+  $: Sol     = get_solution(dt, N, I0,E0, R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
+  retardo,duration,interpolation_steps,110)
+  $: Sol_max = get_solution(dt, N, I0,E0, max_R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
+  retardo,duration,interpolation_steps,110)
+  $: Sol_min = get_solution(dt, N, I0,E0, min_R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
   retardo,duration,interpolation_steps,110)
   $: P              = Sol["P"].slice(0,100)
+  $: P_max         = Sol_max["P"].slice(0,100)
+  $: P_min         = Sol_min["P"].slice(0,100)
   $: R0func        = Sol["R0func"].slice(0,100)
   $: rm = sumactivos(P);
+  $: rm1 = sumactivos(P_max);
+  $: rm2 = sumactivos(P_min);
   $: timestep       = dt
   $: tmax           = dt*100
   $: deaths         = Sol["deaths"]
@@ -354,15 +377,16 @@
       if (!(parsed.I0 === undefined)) {I0 = parseFloat(parsed.I0)}
       if (!(parsed.E0 === undefined)) {E0 = parseFloat(parsed.E0)}
       if (!(parsed.R0 === undefined)) {R0 = parseFloat(parsed.R0)}
-      if (!(parsed.R0p === undefined)) {R0p = parseFloat(parsed.R0p)}
+      if (!(parsed.R0_max === undefined)) {R0_max = parseFloat(parsed.R0_max)}
+      if (!(parsed.R0_min === undefined)) {R0_min = parseFloat(parsed.R0_min)}
       if (!(parsed.D_incbation === undefined)) {D_incbation = parseFloat(parsed.D_incbation)}
       if (!(parsed.D_infectious === undefined)) {D_infectious = parseFloat(parsed.D_infectious)}
       if (!(parsed.D_recovery_mild === undefined)) {D_recovery_mild = parseFloat(parsed.D_recovery_mild)}
       if (!(parsed.D_recovery_severe === undefined)) {D_recovery_severe = parseFloat(parsed.D_recovery_severe)}
       if (!(parsed.CFR === undefined)) {CFR = parseFloat(parsed.CFR)}
+      if (!(parsed.DCFR === undefined)) {DCFR = parseFloat(parsed.DCFR)}
       if (!(parsed.InterventionTime === undefined)) {InterventionTime = parseFloat(parsed.InterventionTime)}
       if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
-      if (!(parsed.R0t === undefined)) {R0t = parseFloat(parsed.R0t)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.interpolation_steps === undefined)) {interpolation_steps = parseFloat(parsed.interpolation_steps)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
@@ -455,7 +479,7 @@
     var i = argmax(P, 1)
     milestones.push([i*dt, "Pico: " + format(",")(Math.round(P[i][1])) + " internados"])
 
-    milestones.push([0, "Iinicio 3/3 - "+retardo+" días"])
+    milestones.push([0, "Iinicio 14/3 - "+retardo+" días"])
     return milestones
   }
 
@@ -464,69 +488,69 @@
 
   function retrieve_backend_csv(){
 
-   var dias=[]
-   for (var i = 0; i < 365; i++) {
-      dias.push(i)
-   }
+    alert('Falta actualizar el Backend')
 
-var data = {
-    'Time_to_death': Time_to_death,
-    'D_incbation'  : D_incbation,
-    'D_infectious' : D_infectious,
-    'R0'           : R0,
-    'R0p'          : R0p,
-    'D_recovery_mild'  : D_recovery_mild,
-    'D_recovery_severe': D_recovery_severe,
-    'D_hospital_lag'   : D_hospital_lag,
-    'retardo': retardo,
-    'D_death': D_death,
-    'p_fatal': CFR,
-    'InterventionTime': InterventionTime,
-    'InterventionAmt': R0t/R0,
-    'p_severe': P_SEVERE,
-    'E0': E0,
-    'duration': duration,
-    'N': N,
-    'I0': I0,
-    'timepoints': dias
-}
-
-//para un deploy local actualizar url
-//fetch('http://localhost:5001/seir', {
-fetch('https://epyrba.herokuapp.com/seir',{
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
-    body: "query=" + JSON.stringify(data)
-}).then(res => {
-    if(!res.ok)
-    {
-        alert('Backend error o query bad formed')
-        throw new Error('Error en backend!');
-    }
-    return res;
-}).then(data => {
-    data.text().then(text => {
-    filename = 'resultados_precisos.csv';
-
-    if (!text.match(/^data:text\/csv/i)) {
-      text = 'data:text/csv;charset=utf-8,' + text;
-    }
-
-    var data, filename, link;
-    data = encodeURI(text);
-    link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', filename);
-    document.body.appendChild(link); // Required for FF
-    link.click();
-    document.body.removeChild(link);
-
-    });
-}).catch(err => {
-    throw new Error('Error!!');
-});
+///   var dias=[]
+///   for (var i = 0; i < 365; i++) {
+///      dias.push(i)
+///   }
+///
+///var data = {
+///    'Time_to_death': Time_to_death,
+///    'D_incbation'  : D_incbation,
+///    'D_infectious' : D_infectious,
+///    'R0'           : R0,
+///    'D_recovery_mild'  : D_recovery_mild,
+///    'D_recovery_severe': D_recovery_severe,
+///    'D_hospital_lag'   : D_hospital_lag,
+///    'retardo': retardo,
+///    'D_death': D_death,
+///    'p_fatal': CFR,
+///    'InterventionTime': InterventionTime,
+///    'p_severe': P_SEVERE,
+///    'E0': E0,
+///    'duration': duration,
+///    'N': N,
+///    'I0': I0,
+///    'timepoints': dias
+///}
+///
+/////para un deploy local actualizar url
+/////fetch('http://localhost:5001/seir', {
+///fetch('https://epyrba.herokuapp.com/seir',{
+///    method: 'POST',
+///    headers: {
+///        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+///    },
+///    body: "query=" + JSON.stringify(data)
+///}).then(res => {
+///    if(!res.ok)
+///    {
+///        alert('Backend error o query bad formed')
+///        throw new Error('Error en backend!');
+///    }
+///    return res;
+///}).then(data => {
+///    data.text().then(text => {
+///    filename = 'resultados_precisos.csv';
+///
+///    if (!text.match(/^data:text\/csv/i)) {
+///      text = 'data:text/csv;charset=utf-8,' + text;
+///    }
+///
+///    var data, filename, link;
+///    data = encodeURI(text);
+///    link = document.createElement('a');
+///    link.setAttribute('href', data);
+///    link.setAttribute('download', filename);
+///    document.body.appendChild(link); // Required for FF
+///    link.click();
+///    document.body.removeChild(link);
+///
+///    });
+///}).catch(err => {
+///    throw new Error('Error!!');
+///});
 
   }
 
@@ -534,7 +558,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
   function download_all_csv(){
 
      var Soln            = get_solution(1, N, I0,E0, R0s, D_incbation,
-     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
+     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR,
      InterventionTime,retardo, duration,40,365)
     var Pn              = Soln["P"]
     var dias              = Soln["dias"]
@@ -963,6 +987,8 @@ fetch('https://epyrba.herokuapp.com/seir',{
         <Polys bind:checked={checked}
              bind:active={active}
              y = {P} 
+             y_max = {P_max} 
+             y_min = {P_min} 
              toto = {rm} 
              xmax = {Xmax} 
              total_infected = {total_infected} 
@@ -1045,7 +1071,27 @@ fetch('https://epyrba.herokuapp.com/seir',{
             </div>
           </div>
       </div>
-      <!-- Cuarentena final -->
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(50)}px;
+            visibility: {(xScaleTime(50) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="left" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                Mortalidad disminuye<br>
+                ({DCFR*100}%)→
+              </div>
+            </div>
+          </div>
+      </div>
+ 
+      <!-- Cuarentena final
       <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
         <div style="
             position: absolute;
@@ -1066,7 +1112,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
               </div>
             </div>
           </div>
-      </div>
+      </div> -->
 
       <div style="pointer-events: none;
                   position: absolute;
@@ -1102,6 +1148,10 @@ fetch('https://epyrba.herokuapp.com/seir',{
         <Polys2 bind:checked={checked}
              bind:active={active}
              y = {R0func} 
+             y_max = {R0_max}
+             y_min = {R0_min}
+             x_max = 1500
+             x_min = {laststep}
              xmax = {Xmax} 
              total_infected = {total_infected} 
              deaths = {deaths} 
@@ -1157,7 +1207,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
             height:{height2}px">
         </div>
       </div>
-      <!-- Cuarentena final -->
+      <!-- Cuarentena final 
       <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
         <div style="
             position: absolute;
@@ -1170,7 +1220,7 @@ fetch('https://epyrba.herokuapp.com/seir',{
             cursor:col-resize;
             height:{height2}px">
           </div>
-      </div>
+      </div>-->
 
       </div>
 
@@ -1206,33 +1256,20 @@ fetch('https://epyrba.herokuapp.com/seir',{
     </div>
 
     <div class="column">
-      <div class="paneltitle" style="padding-top: 10px">Intervenciones sobre {@html math_inline("\\mathcal{R}_0")} </div>
-      <div class="paneldesc"> Al comenzar la epidemia en el país. <br></div>
-      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0}</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0} min=0.01 max=10 step=0.01> 
-      <input style="margin-bottom: 8px" type=number bind:value={R0} min=0.01 max=10 step=0.01>
-      <!--<div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Por medidas previas a la cuarentena (desde el 12/3) <br></div>
-      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0i}</div>
-      <input class="range" style="margin-bottom: 8px" type=range bind:value={R0i} min=0.01 max={R0} step=0.01> 
-      <input  style="margin-bottom: 8px" type=number bind:value={R0i} min=0.01 max={R0} step=0.01>-->
-      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Durante la cuarentena (desde 20/3) <br></div>
-      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0t}</div>
-      <input class="range" type=range bind:value={R0t} min=0.01 max={R0} step=0.01> 
-      <input type=number bind:value={R0t} min=0.01 max={R0} step=0.01>
+      <div class="paneltitle" style="padding-top: 10px">Escenario futuro de propagacion {@html math_inline("\\mathcal{R}_t")} </div>
+      <div class="paneldesc"> Intervalo de confianza (zona sombreada)<br></div>
+      <div class="slidertext">Min({@html math_inline("\\mathcal{R}_t")})={R0_min}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0_min} min=0.01 max=10 step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0_min} min=0.01 max=10 step=0.01>
+      <div class="slidertext">Max({@html math_inline("\\mathcal{R}_t")})={R0_max}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0_max} min=0.01 max=10 step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0_max} min=0.01 max=10 step=0.01>
+ 
+      <div class="paneldesc"> Ritmo reproductivo medio<br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_t")}={R0}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0} min={R0_min} max={R0_max} step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0} min={R0_min} max={R0_max} step=0.01>
     </div>
-    <div class="column">
-      <div class="paneltitle" style="padding-top: 10px">Intervenciones sobre {@html math_inline("\\mathcal{R}_0")} </div>
-      <div class="paneldesc" >Duración de cuarentena <br></div>
-      <div class="slidertext"  style="margin-bottom: 7px" >{(duration).toFixed(0)} días</div>
-      <input class="range" style="margin-bottom: 8px" type=range bind:value={duration} min=0 max=120 step=1> 
-      <input style="margin-bottom: 8px" type=number bind:value={duration} min=0 max=120 step=1>
-    <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 11px">{@html math_inline("\\mathcal{R}_0")} Luego del fin de la cuarentena <br></div>
-      <div class="slidertext">{@html math_inline("\\mathcal{R}_0")}={R0p}</div>
-      <input class="range" style="margin-bottom: 8px" type=range bind:value={R0p} min=0.01 max={R0} step=0.01> 
-      <input type=number bind:value={R0p} min=0.01 max={R0} step=0.01>
-
-    </div>
-
 
     <div class="column">
       <div class="paneltitle" style="padding-top: 10px">Tiempos</div>
@@ -1244,11 +1281,6 @@ fetch('https://epyrba.herokuapp.com/seir',{
       <div class="slidertext">{D_infectious} días</div>
       <input class="range"style="margin-bottom: 8px" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
       <input style="margin-bottom: 8px"type=number bind:value={D_infectious} min={0} max=24 step=0.01>
-      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Intervalo entre síntomas y confirmación del test<br></div>
-      <div class="slidertext">{retardo} días</div>
-      <input class="range" type=range bind:value={retardo} min={0} max=20 step=1>
-      <input style="margin-bottom: 8px"type=number bind:value={retardo} min={0} max=20 step=1>
-
     </div>
 
 </div>
@@ -1266,6 +1298,11 @@ fetch('https://epyrba.herokuapp.com/seir',{
       <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
       <input style="margin-bottom: 8px" type=number bind:value={CFR} min={0} max=1 step=0.0001>
+      <div class="paneldesc" style="height:30px">Disminución de mortandad observada<br></div>
+      <div class="slidertext">{(DCFR*100).toFixed(2)} %</div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={DCFR} min={0} max=1 step=0.0001>
+      <input style="margin-bottom: 8px" type=number bind:value={DCFR} min={0} max=1 step=0.01>
+
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo desde el final de la incubación a la muerte.<br></div>
       <div class="slidertext">{Time_to_death} días</div>
       <input class="range" type=range bind:value={Time_to_death} min={(D_infectious)+0.1} max=100 step=0.01>

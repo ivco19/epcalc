@@ -41,6 +41,8 @@
 
 
   export let y;
+  export let y_max;
+  export let y_min;
   export let toto;
   export let tmax;
   export let xmax; 
@@ -63,6 +65,55 @@
   let width  = 750;
   let height = 520;
 
+  //let pato = y_max.concat(y_min.reverse());
+
+  $: pato = (function () {
+          let pat=[];
+          for(var i = 0; i < y_max.length; i++){
+              if(y_max[i][3]>1)
+              {
+                var element= {};
+                element.x=i;
+                element.y=y_max[i][3];
+                pat.push(element);
+              }
+          }
+
+          for(var i = y_min.length -1 ; i >=0 ; i--){
+              if(y_min[i][3]>1)
+              {
+                var element= {};
+                element.x=i;
+                element.y=y_min[i][3];
+                pat.push(element);
+              }
+          }
+          return pat
+  })()
+ 
+ $: pato2 = (function () {
+          let pat=[];
+          for(var i = 0; i < y_max.length; i++){
+              if(y_max[i][0]>1)
+              {
+                var element= {};
+                element.x=i;
+                element.y=y_max[i][0];
+                pat.push(element);
+              }
+          }
+
+          for(var i = y_min.length -1 ; i >=0 ; i--){
+              if(y_min[i][0]>1)
+              {
+                var element= {};
+                element.x=i;
+                element.y=y_min[i][0];
+                pat.push(element);
+              }
+          }
+          return pat
+  })()
 
   $: xScale = scaleLinear()
     .domain([0, y.length])
@@ -110,6 +161,9 @@
   })()
   export let active;
   export let checked;
+
+  $: path = `M${pato.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
+  $: path2 = `M${pato2.map(p => `${xScale(p.x)},${yScale(p.y)}`).join('L')}`;
 
   // var data = [[2   , 2  ], [5   , 2  ], [18  , 4  ], [28  , 6  ], [43  , 8  ], [61  , 12 ], [95  , 16 ], [139 , 19 ], [245 , 26 ], [388 , 34 ], [593 , 43 ], [978 , 54 ], [1501, 66 ], [2336, 77 ], [2922, 92 ], [3513, 107], [4747, 124]]
   var data = []
@@ -164,7 +218,6 @@
     stroke-width:12.5;
   }
 
-
   .x-axis .tick text {
     text-anchor: middle;
   }
@@ -181,7 +234,6 @@
     font-weight: 200;
   }
 
-
   a.tip span:before{
       content:'';
       display:block;
@@ -195,6 +247,17 @@
       left:-8px;
 
       top:7px;
+  }
+
+  .path-line {
+      fill: rgba(251,128,114,0.2);
+      stroke: none; 
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-width: 2; 	
+  }
+  .path-area {
+     fill: rgba(0,100,100,0.2);
   }
 
 </style>
@@ -221,22 +284,13 @@
       {/each}
     </g>
 
+    <g>
+        <path class="path-line" style="fill:rgba(251,128,114,0.2);" d={path}></path>
+        <path class="path-line" style="fill:rgba(141,211,199,0.2);" d={path2}></path>
+    </g>
 
-    <g class='bars'>
-
+    <g>
       {#each range(y.length -1 ) as i}
-        <rect
-          on:mouseover={() => showTip(i)}
-          on:mouseout={() => showTip(-1)}
-          on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
-          class="bar"
-          x="{xScale(i) + 2}"
-          y="{0}"
-          width="{barWidth+3}"
-          height="{height}"
-          style="fill:white; opacity: 0.3">     
-        </rect>
-
         {#each range(5) as j}
           {#if !log}
               <line
@@ -297,6 +351,7 @@
       {/each}
     </g>
 
+
     <g class="points">
       {#each activos as point}
           {#if !log}
@@ -318,6 +373,24 @@
     	          <circle cx="{xScaleTime(point.x+retardo)}" cy="{yScale(point.y)}" r='4' fill="{colors[6]}" style="opacity: 0.9" />
             {/if}
           {/if}
+
+      {/each}
+    </g>
+
+    <g class='bars'>
+
+      {#each range(y.length -1 ) as i}
+        <rect
+          on:mouseover={() => showTip(i)}
+          on:mouseout={() => showTip(-1)}
+          on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
+          class="bar"
+          x="{xScale(i) + 2}"
+          y="{0}"
+          width="{barWidth+3}"
+          height="{height}"
+          style="fill:white; opacity: 0.0">     
+        </rect>
 
       {/each}
     </g>

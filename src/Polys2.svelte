@@ -55,9 +55,11 @@
   export let confirmados=pnts.c;
   export let muertos=pnts.m;
   export let retardo;
-
-  const padding = { top: 20, right: 0, bottom: 20, left: 25 };
-
+  export let y_max;
+  export let y_min;
+  export let x_max;
+  export let x_min;
+ 
   let width  = 750;
   let height = 200;
 
@@ -85,6 +87,12 @@
   $: yScaleL = scaleLog()
     .domain([1,  ymax/1])
     .range([0, height - padding.bottom - padding.top]);
+
+  $: pato = [{x: x_min, y: y_max },{x: tmax, y: y_max },{x: tmax, y: y_min },{x: x_min, y: y_min }];
+  $: path = `M${pato.map(p => `${xScaleTime(p.x)},${yScale(p.y)}`).join('L')}`;
+
+  const padding = { top: 20, right: 0, bottom: 20, left: 25 };
+
 
 
   $: innerWidth = width - (padding.left + padding.right);
@@ -194,6 +202,13 @@
 
       top:7px;
   }
+  .path-line {
+      fill: rgba(251,128,114,0.2);
+      stroke: none; 
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-width: 2; 	
+  }
 
 </style>
 
@@ -220,6 +235,8 @@
     </g>
 
 
+    <path class="path-line" style="fill:rgba(251,128,114,0.2);" d={path}></path>
+
     <g class='bars'>
 
       {#each range(y.length -1 ) as i}
@@ -232,7 +249,7 @@
           y="{0}"
           width="{barWidth+3}"
           height="{height}"
-          style="fill:white; opacity: 0.3">     
+          style="fill:white; opacity: 0.0">     
         </rect>
 
           {#if !log}
