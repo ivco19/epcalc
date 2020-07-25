@@ -1359,50 +1359,58 @@ suplementaria como la tasa de mortalidad y la carga de atención médica.
 </p>
 <p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos varias mejoras, el
 código fuente es libre y puede descargarse desde el siguiente <a
-href="https://github.com/ivco19/epcalc"> repositorio GIT</a>. Algunas de las modificaciones son:</p>
+href="https://github.com/ivco19/epcalc"> repositorio GIT</a>, el Dr. Dante Paz del IATE-OAC es el principal manteiner. Algunas de las modificaciones son:</p>
 <p class ="center">- Definir la duración de la cuarentena 
 </p>
-<p class ="center">- Controlar el ritmo reproductivo durante y a la salida de la cuarentena.
+<p class ="center">- Controlar el ritmo reproductivo en función del tiempo.
 </p>
 <p class ="center">- Debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
 días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
 en el número de casos activos (ver figura 1 en <a
-href="https://jamanetwork.com/journals/jama/fullarticle/2762130">Wu y McGoogan</a>). Si dispusieramos en los datos oficiales del día cuando se desarrollaron los
+href="https://jamanetwork.com/journals/jama/fullarticle/2762130">Wu y McGoogan</a>). En la última versión
+de la calculadora este tiempo de retardo no es necesario gracias a que se utiliza como datos la fecha
+de inicio de sintomas. Se añadió en forma de puntos los casos activos y las muertes de COVID-20 en la provincia, para permitir
+visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
+<!--Si dispusieramos en los datos oficiales del día cuando se desarrollaron los
 síntomas de cada caso ésta traslación del eje temporal no sería necesaria. Debido a esto la
 serie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo (ya que los
-fallecidos se supone que no tienen demora en ser informados).
+fallecidos se supone que no tienen demora en ser informados).-->
 </p>
 
-<p class ="center">- Se añadió en forma de puntos los casos activos y las muertes de COVID-19 en Argentina, para permitir
-visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
-Los datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.
-El código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en
-python se encuentra en este <a href="https://github.com/ivco19/libs">repositorio</a>
-Los datos poseen el siguiente DOI:
+<p class ="center"> En los parámetros por defecto se ajustó la curva de casos a
+partir del día 5, ya que como muchos notaron a partir de ese momento empieza a
+evidenciarse el comportamiento exponencial.  Encontré que no solo debía ajustar
+el número reporductivo básico R, si no que además era necesiario asumir un
+número de casos expuestos mayor a los casos infectados de ese día, lo cual es
+razonable, ya que uno espera que antes de presentar síntomas o de ser detectado
+el caso, éste pueda exponer a más personas. Los valores históricos de numero
+reproductivo medio se han ido corrigiendo y ajustando en intervalos mínimos de
+7 días para producir un ajuste en el número de casos. La Dra. Maria del Pilar
+Díaz (Universidad Nacional de Córdoba), nos provee de los ajustes del numero
+reproductivo medio para los últimos 7 días en la serie temporal de datos junto
+con el intervalo de confianza correspondiente al 95% de nivel de confidencia.
+Con una área sombreada representamos la varianza esperada de las predicciones
+del modelo dado este intervalo de confianza, no obstante estas proyecciones no
+deben extrapolarse mas allá de unos pocos días, ya que debido a la dinámica que
+ha demostrado la epidemia en Córdoba y en el país, la ocurrencia de brotes y
+las medidas de cuarentena las predicciones de evolución de contagios del modelo
+SEIR son mas bien inestables. Pode obtenerse una idea de esto al mirar las
+fluctuaciónes históricas que presentan los ajustes al parámetro R con el tiempo
+(ver gráfico del panel inferior).</p>
 
-Luczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. 
-<a href="https://doi.org/10.13140/RG.2.2.22519.78246">https://doi.org/10.13140/RG.2.2.22519.78246</a>
-</p>
-
-<p class ="center">- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
-ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
-Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
-un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
-ya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer
-a más personas. 
-</p>
-
-<p class ="center">
-Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de
-CONAE, se añadió la facilidad de poder descargar los datos del modelo implementado en java script a un archivo csv, que facilita 
-su manipulacion en planillas de cálculo. Los resultados este modelo tienen un error relativo
-por debajo del 1%. Gracias al proyecto <a href="https://github.com/ivco19/epyRba">EPyRBa</a> pudimos implementar una versión en R del modelo que permite
-descargar en archivo csv con una precisión mayor al 0.000001%. El desarrollo de esta
-calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga,
-y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el
-apoyo y asesoría de Mario Lamfri. Este proyecto público da soporte a una versión desarrollada para
-el Ministerio de Salud de la Provincia de Córdoba.
-</p>
+<p class ="center"> Gracias a la generosidad de Exequiel Aguirre de la Unidad
+de Emergencias y Alertas Tempranas de CONAE, se añadió la facilidad de poder
+descargar los datos del modelo implementado en java script a un archivo csv,
+que facilita su manipulacion en planillas de cálculo. Los resultados este
+modelo tienen un error relativo por debajo del 1%. Gracias al proyecto <a
+href="https://github.com/ivco19/epyRba">EPyRBa</a> pudimos implementar una
+versión en R del modelo que permite descargar en archivo csv con una precisión
+mayor al 0.000001%. El desarrollo de esta calculadora no hubiese sido posible
+sin los aportes significativos de Juan Cabral, Rodrigo Quiroga, y todo el
+equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial
+agradecemos el apoyo y asesoría de Mario Lamfri. Este proyecto público da
+soporte a una versión desarrollada para el Ministerio de Salud de la Provincia
+de Córdoba.  </p>
 
 
 
