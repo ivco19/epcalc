@@ -58,21 +58,21 @@
     return r;
   }
 
-  $: Time_to_death     = 30
+  $: Time_to_death     = 17
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
   $: I0                = 5
   $: E0                = 35
-  $: R0                = 1.71
-  $: R0_min             = 1.2
-  $: R0_max             = 2.19
+  $: R0                = 1.39 //1.71
+  $: R0_min            = 1.10 //1.2
+  $: R0_max            = 1.66 //2.19
   $: D_incbation       = 5.2442
   $: D_infectious      = 2.9
   $: D_recovery_mild   = (8 - 2.9)
   $: D_recovery_severe = (13 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.015
+  $: CFR               = 0.012
   $: DCFR               = 0.9
 //  $: InterventionTime  = 19
   $: InterventionTime  = 8
@@ -84,19 +84,21 @@
   $: P_SEVERE          = 0.2
   $: duration          = 70
   $: interpolation_steps  = 40
-  $: laststep = 112
+  $: laststep = 125 //112
   $: R0s = {
-    values: [2.77,1.3,1.09,1.16, R0],
-    dias: [0,  13, 34,  98, laststep,1500]
+    values: [2.77,1.3,1.09,1.16,1.47, R0],
+    dias: [0,  13, 34,  98, 112, laststep,1500]
   }
   $: max_R0s = {
-    values: [2.77,1.3,1.09,1.16, R0_max],
-    dias: [0,  13, 34,  98, laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,R0_max],
+    dias: [0,  13, 34,  98, 112, laststep,1500]
   }
   $: min_R0s = {
-    values: [2.77,1.3,1.09,1.16, R0_min],
-    dias: [0,  13, 34,  98, laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,R0_min],
+    dias: [0,  13, 34,  98, 112, laststep,1500]
   }
+  $: fecha = ["14/3/20","22/7/20"]
+  $: lastdata = 130;
 
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
@@ -461,7 +463,8 @@
     return dIters(indexToTime(i), Iters[i])
   }
 
-  function get_milestones(P){
+
+  function get_milestones(P,fecha,lastdata){
 
     function argmax(x, index) {
       return x.map((x, i) => [x[index], i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
@@ -479,11 +482,12 @@
     var i = argmax(P, 1)
     milestones.push([i*dt, "Pico: " + format(",")(Math.round(P[i][1])) + " internados"])
 
-    milestones.push([0, "Iinicio 14/3 - "+retardo+" días"])
+    milestones.push([0, fecha[0]])
+    milestones.push([lastdata, fecha[1]])
     return milestones
   }
 
-  $: milestones = get_milestones(P)
+  $: milestones = get_milestones(P,fecha,lastdata)
   $: log = true
 
   function retrieve_backend_csv(){

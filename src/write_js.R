@@ -13,6 +13,8 @@
  tc = dd$confirmados_acumulados
  tr = dd$recuperados_acumulados
  tm = dd$fallecidos_acumulados 
+ fm = paste0(paste0('"',dd$fecha),'"')
+
  dat=tc
  outa="export default { c: ["
  ll=length(dat)
@@ -90,6 +92,32 @@
 
  dat=tm
  h=" m: ["
+ outa=c(outa,h)
+ ll=length(dat)
+ for(i in 1:(ll-1))
+ {
+     hx="{ x: "
+     line=paste0(hx,as.character(i-1))
+     hy=", y: "
+     line=paste0(line,hy)
+     line=paste0(line,as.character(dat[i]))
+     end="},"
+     line=paste0(line,end)
+     outa=c(outa,line)
+ }
+ hx="{ x: "
+ line=paste0(hx,as.character(ll-1))
+ hy=", y: "
+ line=paste0(line,hy)
+ line=paste0(line,as.character(dat[ll]))
+ end="}"
+ line=paste0(line,end)
+ outa=c(outa,line)
+ outa=c(outa,"],")
+
+
+ dat=fm
+ h=" fecha: ["
  outa=c(outa,h)
  ll=length(dat)
  for(i in 1:(ll-1))
