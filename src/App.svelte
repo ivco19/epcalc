@@ -58,21 +58,21 @@
     return r;
   }
 
-  $: Time_to_death     = 17
+  $: Time_to_death     = 16
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 5
+  $: I0                = 7
   $: E0                = 35
-  $: R0                = 1.39 //1.71
-  $: R0_min            = 1.10 //1.2
-  $: R0_max            = 1.66 //2.19
+  $: R0                = 1.39 //1.39 //1.71
+  $: R0_min            = 1.12  //1.10 //1.2
+  $: R0_max            = 1.73  //1.66 //2.19
   $: D_incbation       = 5.2442
   $: D_infectious      = 2.9
-  $: D_recovery_mild   = (8 - 2.9)
-  $: D_recovery_severe = (13 - 2.9)
-  $: D_hospital_lag    = 5
+  $: D_recovery_mild   = 10.0 //(8 - 2.9)
+  $: D_recovery_severe = 24  //(13 - 2.9)
+  $: D_hospital_lag    = 3
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.012
+  $: CFR               = 0.004
   $: DCFR               = 0.9
 //  $: InterventionTime  = 19
   $: InterventionTime  = 8
@@ -81,24 +81,24 @@
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
-  $: P_SEVERE          = 0.2
+  $: P_SEVERE          = 0.04 //0.2 (263 hospitalizados / 6310 casos activos)
   $: duration          = 70
   $: interpolation_steps  = 40
-  $: laststep = 125 //112
+  $: laststep = 158 //112
   $: R0s = {
-    values: [2.77,1.3,1.09,1.16,1.47, R0],
-    dias: [0,  13, 34,  98, 112, laststep,1500]
+    values: [2.77,1.3,1.09,1.16,1.47, 1.39, R0],
+    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
   }
   $: max_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,R0_max],
-    dias: [0,  13, 34,  98, 112, laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.39,R0_max],
+    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
   }
   $: min_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,R0_min],
-    dias: [0,  13, 34,  98, 112, laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.39,R0_min],
+    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
   }
-  $: fecha = ["14/3/20","22/7/20"]
-  $: lastdata = 130;
+  $: fecha = ["14/3/20","26/8/20"]
+  $: lastdata = 165;
 
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
@@ -161,7 +161,8 @@
 
       var p_severe = P_SEVERE
       var p_fatal  = CFR
-      if(t>=50) p_fatal=p_fatal*(1-DCFR);
+      if(t>=50 && t<=132) p_fatal= 0.0109*(0.1) //p_fatal*(1-DCFR);
+      if( t<50) p_fatal = 0.0109
 
       var p_mild   = 1 - P_SEVERE - CFR
 
@@ -1079,7 +1080,7 @@
         <div style="
             position: absolute;
             top:-38px;
-            left:{xScaleTime(50)}px;
+            left:{xScaleTime(132)}px;
             visibility: {(xScaleTime(50) < (width - padding.right)) ? 'visible':'hidden'};
             width:2px;
             background-color:#FFF;
@@ -1088,8 +1089,8 @@
             height:{height}px">
             <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
               <div class="caption" align="left" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
-                Mortalidad disminuye<br>
-                ({DCFR*100}%)→
+                CFR actual<br> (la anterior está fija)
+                ({CFR*100}%)→
               </div>
             </div>
           </div>
@@ -1298,14 +1299,14 @@
 
     <div class="column">
       <div class="paneltitle"style="padding-top: 10px">Estadística de Morbilidad</div>
-      <div class="paneldesc" style="height:30px">Tasa de mortandad.<br></div>
+      <div class="paneldesc" style="height:30px">CFR*100<br></div>
       <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
       <input style="margin-bottom: 8px" type=number bind:value={CFR} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:30px">Disminución de mortandad observada<br></div>
+     <!-- <div class="paneldesc" style="height:30px">Disminución de mortandad observada<br></div>
       <div class="slidertext">{(DCFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={DCFR} min={0} max=1 step=0.0001>
-      <input style="margin-bottom: 8px" type=number bind:value={DCFR} min={0} max=1 step=0.01>
+      <input style="margin-bottom: 8px" type=number bind:value={DCFR} min={0} max=1 step=0.01> -->
 
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo desde el final de la incubación a la muerte.<br></div>
       <div class="slidertext">{Time_to_death} días</div>
@@ -1327,7 +1328,7 @@
 
     <div class="column">
       <div class="paneltitle"style="padding-top: 10px">Estadística hospitalaria</div>
-      <div class="paneldesc" style="height:30px">Tasa de hospitalización.<br></div>
+      <div class="paneldesc" style="height:30px">Tasa de hospitalización (Rate).<br></div>
       <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>      
       <input style="margin-bottom: 8px"type=number bind:value={P_SEVERE} min={0} max=1 step=0.0001>
