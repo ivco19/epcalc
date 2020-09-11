@@ -61,7 +61,7 @@
   $: Time_to_death     = 16
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 7
+  $: I0                = 9
   $: E0                = 35
   $: R0                = 1.39 //1.39 //1.71
   $: R0_min            = 1.12  //1.10 //1.2
