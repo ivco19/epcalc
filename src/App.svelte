@@ -58,14 +58,15 @@
     return r;
   }
 
+  $: fact = 1.3
   $: Time_to_death     = 16
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
   $: I0                = 9
   $: E0                = 35
-  $: R0                = 1.39 //1.39 //1.71
-  $: R0_min            = 1.12  //1.10 //1.2
-  $: R0_max            = 1.73  //1.66 //2.19
+  $: R0                = 1.19 //1.39 //1.39 //1.71
+  $: R0_min            = 1.08 //1.12  //1.10 //1.2
+  $: R0_max            = 1.45 //1.73  //1.66 //2.19
   $: D_incbation       = 5.2442
   $: D_infectious      = 2.9
   $: D_recovery_mild   = 10.0 //(8 - 2.9)
@@ -78,24 +79,24 @@
   $: InterventionTime  = 8
   $: IntervPrevia      = 10
   $: retardo           = 0
-  $: Time              = 220
+  $: Time              = 220*fact
   $: Xmax              = 110000
   $: dt                = 2
   $: P_SEVERE          = 0.03 //0.2 (263 hospitalizados / 6310 casos activos)
   $: duration          = 70
   $: interpolation_steps  = 40
-  $: laststep = 158 //112
+  $: laststep = 185 //158 //112
   $: R0s = {
-    values: [2.77,1.3,1.09,1.16,1.47, 1.39, R0],
-    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
+    values: [2.77,1.3,1.09,1.16,1.47, 1.39,1.39, R0],
+    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
   }
   $: max_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,1.39,R0_max],
-    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.39,1.39,R0_max],
+    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
   }
   $: min_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,1.39,R0_min],
-    dias: [0,  13, 34,  98, 112, 125,laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.39,1.39,R0_min],
+    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
   }
   $: fecha = ["14/3/20","26/8/20"]
   $: lastdata = 165;
@@ -243,25 +244,25 @@
 
   $: Sol     = get_solution(dt, N, I0,E0, R0s, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
-  retardo,duration,interpolation_steps,110)
+  retardo,duration,interpolation_steps,110*fact)
   $: Sol_max = get_solution(dt, N, I0,E0, max_R0s, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
-  retardo,duration,interpolation_steps,110)
+  retardo,duration,interpolation_steps,110*fact)
   $: Sol_min = get_solution(dt, N, I0,E0, min_R0s, D_incbation, D_infectious,
   D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
-  retardo,duration,interpolation_steps,110)
-  $: P              = Sol["P"].slice(0,100)
-  $: P_max         = Sol_max["P"].slice(0,100)
-  $: P_min         = Sol_min["P"].slice(0,100)
-  $: R0func        = Sol["R0func"].slice(0,100)
+  retardo,duration,interpolation_steps,110*fact)
+  $: P              = Sol["P"].slice(0,100*fact)
+  $: P_max         = Sol_max["P"].slice(0,100*fact)
+  $: P_min         = Sol_min["P"].slice(0,100*fact)
+  $: R0func        = Sol["R0func"].slice(0,100*fact)
   $: rm = sumactivos(P);
   $: rm1 = sumactivos(P_max);
   $: rm2 = sumactivos(P_min);
   $: timestep       = dt
-  $: tmax           = dt*100
+  $: tmax           = dt*100*fact
   $: deaths         = Sol["deaths"]
   $: total          = Sol["total"]
-  $: total_infected = Sol["total_infected"].slice(0,100)
+  $: total_infected = Sol["total_infected"].slice(0,100*fact)
   $: Iters          = Sol["Iters"]
   $: dIters         = Sol["dIters"]
   $: Pmax           = max(P, rm, checked)
