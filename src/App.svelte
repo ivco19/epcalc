@@ -72,7 +72,7 @@
   $: D_recovery_severe = 24  //(13 - 2.9)
   $: D_hospital_lag    = 3
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.004
+  $: CFR               = 0.003
   $: DCFR               = 0.9
 //  $: InterventionTime  = 19
   $: InterventionTime  = 8
@@ -81,7 +81,7 @@
   $: Time              = 220
   $: Xmax              = 110000
   $: dt                = 2
-  $: P_SEVERE          = 0.04 //0.2 (263 hospitalizados / 6310 casos activos)
+  $: P_SEVERE          = 0.03 //0.2 (263 hospitalizados / 6310 casos activos)
   $: duration          = 70
   $: interpolation_steps  = 40
   $: laststep = 158 //112
