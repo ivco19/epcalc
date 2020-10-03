@@ -62,19 +62,19 @@
   $: Time_to_death     = 16
   $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 9
-  $: E0                = 35
-  $: R0                = 1.19 //1.39 //1.39 //1.71
-  $: R0_min            = 1.08 //1.12  //1.10 //1.2
-  $: R0_max            = 1.45 //1.73  //1.66 //2.19
-  $: D_incbation       = 5.2442
-  $: D_infectious      = 2.9
+  $: I0                = 4
+  $: E0                = 55
+  $: R0                = 1.32 // 1.5 // 1.19 //1.39 //1.39 //1.71
+  $: R0_min            = 1.16 // 1.08 //1.12  //1.10 //1.2
+  $: R0_max            = 1.47 // 1.45 //1.73  //1.66 //2.19
+  $: D_incbation       = 6   // 5.2442
+  $: D_infectious      = 2.5 // 4 //2.9
   $: D_recovery_mild   = 10.0 //(8 - 2.9)
   $: D_recovery_severe = 24  //(13 - 2.9)
   $: D_hospital_lag    = 3
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.003
-  $: DCFR               = 0.9
+  $: CFR               = 0.0025 //0.004 //0.003
+  $: DCFR               = 1.0
 //  $: InterventionTime  = 19
   $: InterventionTime  = 8
   $: IntervPrevia      = 10
@@ -85,18 +85,21 @@
   $: P_SEVERE          = 0.03 //0.2 (263 hospitalizados / 6310 casos activos)
   $: duration          = 70
   $: interpolation_steps  = 40
-  $: laststep = 185 //158 //112
+  $: laststep = 197 // 185 //158 //112
   $: R0s = {
-    values: [2.77,1.3,1.09,1.16,1.47, 1.39,1.39, R0],
-    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
+    values: [2.77,1.3,1.09,1.16,1.47, 1.47,1.39, 1.65,R0],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //  values: [2.77,1.3,1.16,1.16,1.5,   1.5,1.5, R0],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
   }
   $: max_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,1.39,1.39,R0_max],
-    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_max],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_max],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
   }
   $: min_R0s = {
-    values: [2.77,1.3,1.09,1.16, 1.47,1.39,1.39,R0_min],
-    dias: [0,  13, 34,  98, 112, 125,158,laststep,1500]
+    values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_min],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_min],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
   }
   $: fecha = ["14/3/20","26/8/20"]
   $: lastdata = 165;
@@ -162,8 +165,10 @@
 
       var p_severe = P_SEVERE
       var p_fatal  = CFR
-      if(t>=50 && t<=132) p_fatal= 0.0109*(0.1) //p_fatal*(1-DCFR);
-      if( t<50) p_fatal = 0.0109
+
+      if(t <=50) p_fatal = 0.008;
+      if(t>=50 && t<=84) p_fatal= 0.002; //p_fatal*(1-DCFR);
+      if(t>=84 && t<=134) p_fatal= 0.002; //p_fatal*(1-DCFR);
 
       var p_mild   = 1 - P_SEVERE - CFR
 
@@ -1081,7 +1086,7 @@
         <div style="
             position: absolute;
             top:-38px;
-            left:{xScaleTime(132)}px;
+            left:{xScaleTime(134)}px;
             visibility: {(xScaleTime(50) < (width - padding.right)) ? 'visible':'hidden'};
             width:2px;
             background-color:#FFF;
@@ -1283,7 +1288,7 @@
       <div class="slidertext" style="margin-bottom: 6px">{(D_incbation).toFixed(2)} días</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={D_incbation} min={0.15} max=24 step=0.0001>
       <input style="margin-bottom: 8px"type=number bind:value={D_incbation} min={0.15} max=24 step=0.0001>
-      <div class="paneldesc" style="height:28px; border-top: 1px solid #EEE; padding-top: 10px">Periodo infeccioso, {@html math_inline("T_{\\text{inf}}")}.<br></div>
+      <div class="paneldesc" style="height:28px; border-top: 1px solid #EEE; padding-top: 10px">Periodo infeccioso (desde inicio de síntomas), {@html math_inline("T_{\\text{inf}}")}.<br></div>
       <div class="slidertext">{D_infectious} días</div>
       <input class="range"style="margin-bottom: 8px" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
       <input style="margin-bottom: 8px"type=number bind:value={D_infectious} min={0} max=24 step=0.01>
