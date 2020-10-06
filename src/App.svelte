@@ -2,7 +2,8 @@
   
   import { scaleLinear } from "d3-scale";
   // import { Date } from "d3-time"
-  import Chart from './Chart.svelte';
+  import Polys from './Polys.svelte';
+  import Polys2 from './Polys2.svelte';
   import { onMount } from 'svelte';
   import { selectAll } from 'd3-selection'
   import { drag } from 'd3-drag';
@@ -58,52 +59,79 @@
   }
 
 
-  $: Time_to_death     = 17
-  $: logN              = Math.log(44e6)
+  $: fact = 1.3
+  $: Time_to_death     = 16
+  $: logN              = Math.log(3.7e6)
   $: N                 = Math.exp(logN)
-  $: I0                = 1
-  $: E0                = 15 
-  $: R0                = 3.57
-  $: R0p               = 3.57
-  $: D_incbation       = 5.2       
-  $: D_infectious      = 2.9 
-  $: D_recovery_mild   = (8 - 2.9)  
-  $: D_recovery_severe = (13 - 2.9)
-  $: D_hospital_lag    = 5
-  $: D_death           = Time_to_death - D_infectious 
-  $: CFR               = 0.021  
-  $: InterventionTime  = 18  
-  $: retardo  = 2  
-  $: InterventionAmt   = 2.407/R0 //0.3331385
-  $: Time              = 220
+  $: I0                = 4
+  $: E0                = 55
+  $: R0                = 1.65 //1.32 // 1.5 // 1.19 //1.39 //1.39 //1.71
+  $: R0_min            = 1.45 //1.16 // 1.08 //1.12  //1.10 //1.2
+  $: R0_max            = 1.7  //1.47 // 1.45 //1.73  //1.66 //2.19
+  $: D_incbation       = 6    // 5.2442
+  $: D_infectious      = 3.35 //2.5  // 4 //2.9
+  $: D_recovery_mild   = 10.0 //(8 - 2.9)
+  $: D_recovery_severe = 15.6 //24  //(13 - 2.9)
+  $: D_hospital_lag    = 4.38 //3
+  $: D_death           = Time_to_death - D_infectious
+  $: CFR               = 0.003 //0.004 //0.003
+  $: DCFR               = 1.0
+//  $: InterventionTime  = 19
+  $: InterventionTime  = 8
+  $: IntervPrevia      = 10
+  $: retardo           = 0
+  $: Time              = 220*fact
   $: Xmax              = 110000
   $: dt                = 2
-  $: P_SEVERE          = 0.2
-  $: duration          = 30
+  $: P_SEVERE          = 0.03 //0.2 (263 hospitalizados / 6310 casos activos)
+  $: duration          = 70
   $: interpolation_steps  = 40
+  $: laststep = 197 // 185 //158 //112
+  $: R0s = {
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0],// infeccioso 3.35 
+    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //  values: [2.77,1.3,1.16,1.16,1.5,   1.5,1.5, R0],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+  }
+  $: max_R0s = {
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0_max],// infeccioso 3.35 
+    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_max],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_max],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+  }
+  $: min_R0s = {
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0_min],// infeccioso 3.35 
+    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_min],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_min],
+    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+  }
+  $: fecha = ["14/3/20","26/8/20"]
+  $: lastdata = 165;
+
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
                "I0":I0,
                "E0":E0,
                "R0":R0,
-               "R0p":R0p,
+               "R0_max":R0_max,
+               "R0_min":R0_min,
                "D_incbation":D_incbation,
                "D_infectious":D_infectious,
                "D_recovery_mild":D_recovery_mild,
                "D_recovery_severe":D_recovery_severe,
                "CFR":CFR,
+               "DCFR":DCFR,
                "InterventionTime":InterventionTime,
                "retardo":retardo,
-               "InterventionAmt":InterventionAmt,
                "duration":duration,
                "interpolation_steps":interpolation_steps,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
 
-  function get_solution(dt, N, I0,E0, R0,R0p, D_incbation,
-  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-  InterventionTime,  retardo, InterventionAmt, duration, interpolation_steps,rango) {
+  function get_solution(dt, N, I0,E0, R0ss, D_incbation,
+  D_infectious,D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR,
+  InterventionTime,  retardo, duration, interpolation_steps,rango) {
 
     // var interpolation_steps = 40
     var steps = rango*interpolation_steps
@@ -111,16 +139,20 @@
     var sample_step = interpolation_steps
 
     var method = Integrators["RK4"]
+
+    function bata(t){
+      var beta = R0ss.values[0]/(D_infectious);
+      for(var ii = 0; ii < R0ss.values.length; ii++){
+         if (t >= R0ss.dias[ii]+retardo && t < R0ss.dias[ii+1]+retardo){
+           beta = R0ss.values[ii]/(D_infectious)
+         }
+      }
+      return beta
+    }
+ 
     function f(t, x){
 
-      // SEIR ODE
-      if (t > InterventionTime+retardo && t < InterventionTime+retardo + duration){
-        var beta = (InterventionAmt)*R0/(D_infectious)
-      } else if (t > InterventionTime+retardo + duration) {
-        var beta = R0p/(D_infectious)        
-      } else {
-        var beta = R0/(D_infectious)
-      }
+      var beta = bata(t);
       var a     = 1/D_incbation
       var gamma = 1/D_infectious
       
@@ -137,6 +169,11 @@
 
       var p_severe = P_SEVERE
       var p_fatal  = CFR
+
+      if(t <=50) p_fatal = 0.01;
+      if(t>=50 && t<=84) p_fatal= 0.002; //p_fatal*(1-DCFR);
+      if(t>=84 && t<=134) p_fatal= 0.002; //p_fatal*(1-DCFR);
+
       var p_mild   = 1 - P_SEVERE - CFR
 
       var dS        = -beta*I*S
@@ -161,13 +198,15 @@
     var TI = []
     var Iters = []
     var tata = []
+    var roro = []
     while (steps--) { 
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infected   Exposed
         P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
         Iters.push(v)
         TI.push(N*(1-v[0]))
-	tata.push(t)
+        tata.push(t)
+        roro.push(bata(t)*D_infectious)
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
@@ -175,34 +214,74 @@
       t+=dt
     }
     return {"P": P, 
-            "deaths": N*v[6], 
+            "deaths": N*v[9], 
             "total": 1-v[0],
             "total_infected": TI,
             "Iters":Iters,
             "dIters": f,
-            "dias": tata
+            "dias": tata,
+            "R0func": roro
 	    }
   }
 
-  function max(P, checked) {
-    return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
+  function max(P, rm,checked) {
+    var maxi=-1.0
+    for(var i = 0; i < P.length; i++){
+      for(var j=0;j< P[i].length;j++){
+        if(P[i][j]*checked[j]>maxi)
+        {
+          maxi=P[i][j];
+        }
+      }
+      if(rm[i]*checked[7]>maxi)
+      {
+          maxi=rm[i];
+      }
+
+    }
+    return maxi;
   }
 
-  $: Sol            = get_solution(dt, N, I0,E0, R0,R0p, D_incbation, D_infectious,
-  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime,
-  retardo,InterventionAmt, duration,interpolation_steps,110)
-  $: P              = Sol["P"].slice(0,100)
+  function sumactivos(P) {
+     var rmt=[]
+     for (var i = 0; i < P.length; i++) {
+        rmt.push(P[i][0]+P[i][2]+P[i][3]);
+     }
+    return(rmt);
+  }
+
+
+  $: Sol     = get_solution(dt, N, I0,E0, R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
+  retardo,duration,interpolation_steps,110*fact)
+  $: Sol_max = get_solution(dt, N, I0,E0, max_R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
+  retardo,duration,interpolation_steps,110*fact)
+  $: Sol_min = get_solution(dt, N, I0,E0, min_R0s, D_incbation, D_infectious,
+  D_recovery_mild,D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR, InterventionTime,
+  retardo,duration,interpolation_steps,110*fact)
+  $: P              = Sol["P"].slice(0,100*fact)
+  $: P_max         = Sol_max["P"].slice(0,100*fact)
+  $: P_min         = Sol_min["P"].slice(0,100*fact)
+  $: R0func        = Sol["R0func"].slice(0,100*fact)
+  $: rm = sumactivos(P);
+  $: rm1 = sumactivos(P_max);
+  $: rm2 = sumactivos(P_min);
   $: timestep       = dt
-  $: tmax           = dt*100
+  $: tmax           = dt*100*fact
   $: deaths         = Sol["deaths"]
   $: total          = Sol["total"]
-  $: total_infected = Sol["total_infected"].slice(0,100)
+  $: total_infected = Sol["total_infected"].slice(0,100*fact)
   $: Iters          = Sol["Iters"]
   $: dIters         = Sol["dIters"]
-  $: Pmax           = max(P, checked)
+  $: Pmax           = max(P, rm, checked)
+  $: r0max          = Math.max(...R0s.values)
   $: lock           = false
 
-  var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
+
+  // var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
+  //var colors = [ "#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+  var colors = [ "#8dd3c7","#d1d128","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9"]
 
   var Plock = 1
 
@@ -297,6 +376,8 @@
     drag_callback_y(selectAll("#yAxisDrag"))
     var drag_callback_x = drag_x()
     drag_callback_x(selectAll("#xAxisDrag"))
+    var drag_callback_x2 = drag_x()
+    drag_callback_x2(selectAll("#xAxisDrag2"))
     var drag_callback_intervention = drag_intervention()
     // drag_callback_intervention(selectAll("#interventionDrag"))
     drag_callback_intervention(selectAll("#dottedline"))
@@ -309,15 +390,16 @@
       if (!(parsed.I0 === undefined)) {I0 = parseFloat(parsed.I0)}
       if (!(parsed.E0 === undefined)) {E0 = parseFloat(parsed.E0)}
       if (!(parsed.R0 === undefined)) {R0 = parseFloat(parsed.R0)}
-      if (!(parsed.R0p === undefined)) {R0p = parseFloat(parsed.R0p)}
+      if (!(parsed.R0_max === undefined)) {R0_max = parseFloat(parsed.R0_max)}
+      if (!(parsed.R0_min === undefined)) {R0_min = parseFloat(parsed.R0_min)}
       if (!(parsed.D_incbation === undefined)) {D_incbation = parseFloat(parsed.D_incbation)}
       if (!(parsed.D_infectious === undefined)) {D_infectious = parseFloat(parsed.D_infectious)}
       if (!(parsed.D_recovery_mild === undefined)) {D_recovery_mild = parseFloat(parsed.D_recovery_mild)}
       if (!(parsed.D_recovery_severe === undefined)) {D_recovery_severe = parseFloat(parsed.D_recovery_severe)}
       if (!(parsed.CFR === undefined)) {CFR = parseFloat(parsed.CFR)}
+      if (!(parsed.DCFR === undefined)) {DCFR = parseFloat(parsed.DCFR)}
       if (!(parsed.InterventionTime === undefined)) {InterventionTime = parseFloat(parsed.InterventionTime)}
       if (!(parsed.retardo === undefined)) {retardo = parseFloat(parsed.retardo)}
-      if (!(parsed.InterventionAmt === undefined)) {InterventionAmt = parseFloat(parsed.InterventionAmt)}
       if (!(parsed.duration === undefined)) {duration = parseFloat(parsed.duration)}
       if (!(parsed.interpolation_steps === undefined)) {interpolation_steps = parseFloat(parsed.interpolation_steps)}
       if (!(parsed.D_hospital_lag === undefined)) {D_hospital_lag = parseFloat(parsed.D_hospital_lag)}
@@ -339,7 +421,8 @@
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
   let width  = 750;
-  let height = 400;
+  let height = 500;
+  let height2 = 200;
 
   $: xScaleTime = scaleLinear()
     .domain([0, tmax])
@@ -355,7 +438,7 @@
 
   window.addEventListener('mouseup', unlock_yaxis);
 
-  $: checked = [true, true, false, true, true]
+  $: checked = [true, true, false, true, true,true,true,false]
   $: active  = 0
   $: active_ = active >= 0 ? active : Iters.length - 1
 
@@ -391,7 +474,8 @@
     return dIters(indexToTime(i), Iters[i])
   }
 
-  function get_milestones(P){
+
+  function get_milestones(P,fecha,lastdata){
 
     function argmax(x, index) {
       return x.map((x, i) => [x[index], i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
@@ -400,8 +484,8 @@
      //    Dead   Hospital          Recovered        Infected   Exposed
     var milestones = []
     for (var i = 0; i < P.length; i++) {
-      if (P[i][0] >= 0.5) {
-        milestones.push([i*dt, "Primera muerte"])
+      if (P[i][0] >= 99.5) {
+        milestones.push([i*dt, "100 Muertos"])
         break
       }
     }
@@ -409,91 +493,93 @@
     var i = argmax(P, 1)
     milestones.push([i*dt, "Pico: " + format(",")(Math.round(P[i][1])) + " internados"])
 
+    milestones.push([0, fecha[0]])
+    milestones.push([lastdata, fecha[1]])
     return milestones
   }
 
-  $: milestones = get_milestones(P)
+  $: milestones = get_milestones(P,fecha,lastdata)
   $: log = true
 
   function retrieve_backend_csv(){
 
-   var dias=[]
-   for (var i = 0; i < 365; i++) {
-      dias.push(i)
-   }
+    alert('Falta actualizar el Backend')
 
-var data = {
-    'Time_to_death': Time_to_death,
-    'D_incbation'  : D_incbation,
-    'D_infectious' : D_infectious,
-    'R0'           : R0,
-    'R0p'          : R0p,
-    'D_recovery_mild'  : D_recovery_mild,
-    'D_recovery_severe': D_recovery_severe,
-    'D_hospital_lag'   : D_hospital_lag,
-    'retardo': retardo,
-    'D_death': D_death,
-    'p_fatal': CFR,
-    'InterventionTime': InterventionTime,
-    'InterventionAmt': InterventionAmt,
-    'p_severe': P_SEVERE,
-    'E0': E0,
-    'duration': duration,
-    'N': N,
-    'I0': I0,
-    'timepoints': dias
-}
-
-//para un deploy local actualizar url
-//fetch('http://localhost:5001/seir', {
-fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
-    body: "query=" + JSON.stringify(data)
-}).then(res => {
-    if(!res.ok)
-    {
-        alert('Backend error o query bad formed')
-        throw new Error('Error en backend!');
-    }
-    return res;
-}).then(data => {
-    data.text().then(text => {
-    filename = 'resultados_precisos.csv';
-
-    if (!text.match(/^data:text\/csv/i)) {
-      text = 'data:text/csv;charset=utf-8,' + text;
-    }
-
-    var data, filename, link;
-    data = encodeURI(text);
-    link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', filename);
-    document.body.appendChild(link); // Required for FF
-    link.click();
-    document.body.removeChild(link);
-
-    });
-}).catch(err => {
-    throw new Error('Error!!');
-});
+///   var dias=[]
+///   for (var i = 0; i < 365; i++) {
+///      dias.push(i)
+///   }
+///
+///var data = {
+///    'Time_to_death': Time_to_death,
+///    'D_incbation'  : D_incbation,
+///    'D_infectious' : D_infectious,
+///    'R0'           : R0,
+///    'D_recovery_mild'  : D_recovery_mild,
+///    'D_recovery_severe': D_recovery_severe,
+///    'D_hospital_lag'   : D_hospital_lag,
+///    'retardo': retardo,
+///    'D_death': D_death,
+///    'p_fatal': CFR,
+///    'InterventionTime': InterventionTime,
+///    'p_severe': P_SEVERE,
+///    'E0': E0,
+///    'duration': duration,
+///    'N': N,
+///    'I0': I0,
+///    'timepoints': dias
+///}
+///
+/////para un deploy local actualizar url
+/////fetch('http://localhost:5001/seir', {
+///fetch('https://epyrba.herokuapp.com/seir',{
+///    method: 'POST',
+///    headers: {
+///        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+///    },
+///    body: "query=" + JSON.stringify(data)
+///}).then(res => {
+///    if(!res.ok)
+///    {
+///        alert('Backend error o query bad formed')
+///        throw new Error('Error en backend!');
+///    }
+///    return res;
+///}).then(data => {
+///    data.text().then(text => {
+///    filename = 'resultados_precisos.csv';
+///
+///    if (!text.match(/^data:text\/csv/i)) {
+///      text = 'data:text/csv;charset=utf-8,' + text;
+///    }
+///
+///    var data, filename, link;
+///    data = encodeURI(text);
+///    link = document.createElement('a');
+///    link.setAttribute('href', data);
+///    link.setAttribute('download', filename);
+///    document.body.appendChild(link); // Required for FF
+///    link.click();
+///    document.body.removeChild(link);
+///
+///    });
+///}).catch(err => {
+///    throw new Error('Error!!');
+///});
 
   }
 
 
   function download_all_csv(){
 
-     var Soln            = get_solution(1, N, I0,E0, R0,R0p, D_incbation,
-     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,
-     InterventionTime,retardo, InterventionAmt, duration,40,365)
+     var Soln            = get_solution(1, N, I0,E0, R0s, D_incbation,
+     D_infectious,D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR,DCFR,
+     InterventionTime,retardo, duration,40,365)
     var Pn              = Soln["P"]
-    var dias            = Soln["dias"]
-    var Itersn          = Soln["Iters"]
-    //download_csv({ filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infeccioso','Expuesto'],data:Pn, scale_factor:1, dias:dias });
-    download_csv({ filename:"resultados_aproximados.csv" ,header:['Susceptible', 'Expuesto','Infeccioso', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ','Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Itersn, scale_factor:N, dias:dias});
+    var dias              = Soln["dias"]
+    download_csv({
+    filename:"resultados_aproximados.csv",header:['Fatalidades','Hospitalizado','Recuperado','Infectado','Expuesto'],data:Pn, scale_factor:1, dias:dias });
+    //download_csv({ filename: ,header:['Susceptible', 'Expuesto', 'Infectado', 'Recuperándose (caso leve)', 'Recuperándose (caso severo en el hogar)  ', 'Recuperándose (caso severo en el hospital)', 'Recuperándose (caso fatal)', 'Recuperado (caso leve)', 'Recuperado ( caso severo)', 'Fatalidades'], data:Iters, scale_factor:N, dias:dias});
   }
   function download_csv(args) {
     var data, filename, link;
@@ -603,6 +689,7 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
   .minorTitleColumn{
     flex: 60px;
     padding: 3px;
+    font-size: 20px;
     border-bottom: 2px solid #999;
   }
 
@@ -788,7 +875,7 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
         <Arrow height="41"/>   
 
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Infecciosos</div>
+          <div class="legendtitle">Infectados</div>
           <div style="padding-top: 5px; padding-bottom: 1px">
           <div class="legendtextnum"><span style="font-size:12px; padding-right:3px; color:#CCC">∑</span> <i>{formatNumber(Math.round(N*Iters[active_][2]))} 
                                   ({ (100*Iters[active_][2]).toFixed(2) }%)</div>
@@ -803,7 +890,6 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
 
       <!-- Removed -->
       <div style="position:absolute; left:0px; top:{legendheight*3}px; width: 180px; height: 100px">
-
         <Checkbox color="grey" callback={(s) => {checked[1] = s; checked[0] = s; checked[2] = s} }/>
         <Arrow height="56" arrowhead="" dasharray="3 2"/>
 
@@ -873,34 +959,52 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
         <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 10px; position:relative;">Muertes.</div>
       </div>
 
+     <div style="position:absolute; left:0px; top:{legendheight*5 + 120+2}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[7]}" bind:checked={checked[7]}/>
+        <div class="legend" style="position:absolute;">
+          <div class="legendtitle">I+R+D</div>
+        </div>
+        <div class="legendtext" style="text-align: right; width:105px; left:-111px; top: 1px; position:relative;">Confirmados por el modelo.</div>
+      </div>
+
+
      <!-- Data points 
-      <div style="position:absolute; left:0px; top:{legendheight*4+180}px; width: 180px; height: 100px">
-      <svg>
-	<circle cx=7px cy=10px r='4' fill="{colors[2]}"/></svg>
+      <div style="position:absolute; left:0px; top:{legendheight*4+220}px; width: 180px; height: 100px">-->
+      <div style="position:absolute; left:0px; top:{legendheight*6+122}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[5]}" bind:checked={checked[5]}/>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Confirmados Arg.</div>
+          <div class="legendtitle">Infectados Cba.</div>
+	  <!--<div class="legendtextnum"><i>(a t - {retardo} días)</i></div>-->
         </div>
       </div>
-      <div style="position:absolute; left:0px; top:{legendheight*4+200}px; width: 180px; height: 100px">
-      <svg>
-	<circle cx=7px cy=10px r='4' fill="{colors[1]}"/></svg>
+      <!--<div style="position:absolute; left:0px; top:{legendheight*4+260}px; width: 180px; height:100px">-->
+      <div style="position:absolute; left:0px; top:{legendheight*5+144}px; width: 180px; height: 100px">
+        <Checkbox color="{colors[6]}" bind:checked={checked[6]}/>
         <div class="legend" style="position:absolute;">
-          <div class="legendtitle">Decesos Arg.</div>
+          <div class="legendtitle">Decesos Cba.</div>
         </div>
       </div>
--->
 
-
-
+      <div style="position:absolute; left:0px; top:{legendheight*8 + 120+2}px; width: 180px; height: 100px">
+        <div class="legend" style="position:absolute;">
+          <div align="right" class="legendtitle">Ritmo reroductivo <br> básico {@html math_inline("\\mathcal{R}_t")}</div>
+          <div style="padding-top: 3px; padding-bottom: 1px">          
+          <div align="right" class="legendtextnum"><i> parámetros de control <br> abajo</i> </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div style="flex: 0 0 890px; width:890px; height: {height+128}px; position:relative;">
 
-    <div style="position:relative; top:60px; left: 10px">
-      <Chart bind:checked={checked}
+      <div style="position:relative; top:60px; left: 10px">
+        <Polys bind:checked={checked}
              bind:active={active}
              y = {P} 
+             y_max = {P_max} 
+             y_min = {P_min} 
+             toto = {rm} 
              xmax = {Xmax} 
              total_infected = {total_infected} 
              deaths = {deaths} 
@@ -909,10 +1013,9 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
              tmax={tmax}
              N={N}
              ymax={lock ? Plock: Pmax}
-             InterventionTime={InterventionTime}
-	     retardo={retardo}
+	           retardo={retardo}
              colors={colors}
-             log={!log}/>
+             log={log}/>
       </div>
 
       <div id="xAxisDrag"
@@ -938,90 +1041,78 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
                   height:425px;
                   cursor:row-resize">
       </div>
-
-      <!-- Intervention Line -->
-      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:100px; left:10px; pointer-events: none">
-        <div id="dottedline"  style="pointer-events: all;
-                    position: absolute;
-                    top:-38px;
-                    left:{xScaleTime(InterventionTime)}px;
-                    visibility: {(xScaleTime(InterventionTime) < (width - padding.right)) ? 'visible':'hidden'};
-                    width:2px;
-                    background-color:#FFF;
-                    border-right: 1px dashed black;
-                    pointer-events: all;
-                    cursor:col-resize;
-                    height:{height+19}px">
-
-        {#if xScaleTime(InterventionTime) >= 100}
-          <div style="position:absolute; opacity: 0.5; top:-2px; left:-97px; width: 120px">
-          <span style="font-size: 13px">⟵ {@html math_inline("\\mathcal{R}_0=" + (R0).toFixed(2) )}</span>
-          </div>      
-        {/if}
-
-        <div id="interventionDrag" class="legendtext" style="flex: 0 0 160px; width:120px; position:relative;  top:-70px; height: 60px; padding-right: 15px; left: -125px; pointer-events: all;cursor:col-resize;" >
-          <div class="paneltitle" style="top:9px; position: relative; text-align: right">Día
-	  de intervención {format("d")(InterventionTime)}</div>
-          <span></span><div style="top:9px; position: relative; text-align: right">
-          (deslizar)</div>
-          <div style="top:43px; left:40px; position: absolute; text-align: right; width: 20px; height:20px; opacity: 0.3">
-            <svg width="20" height="20">
-              <g transform="rotate(90)">
-                <g transform="translate(0,-20)">
-                  <path d="M2 11h16v2H2zm0-4h16v2H2zm8 11l3-3H7l3 3zm0-16L7 5h6l-3-3z"/>
-                 </g>  
-              </g>
-            </svg>
-          </div>
-        </div>
-
-
-        <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
-
-        </div>
-
-
-        </div>
-      </div>
-
-      <!-- Intervention End Line -->
-      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:50px; left:10px; pointer-events: none">
-        <div id="dottedline"  style="pointer-events: all;
-                    position: absolute;
-                    top:-38px;
-                    left:{xScaleTime(InterventionTime+duration)}px;
-                    visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-                    width:2px;
-                    background-color:#FFF;
-                    border-right: 1px dashed red;
-                    pointer-events: all;
-                    cursor:col-resize;
-                    height:{height+69}px">
-
-        {#if xScaleTime(InterventionTime+duration) >= 100}
-          <div style="position:absolute; opacity: 0.5; top:-25px; right:-125px; width: 120px">
-	  <span style="font-size: 13px; color:#FF0000">{@html math_inline("\\mathcal{R}_0=" + (R0p).toFixed(2) )}→ </span>
-          </div>      
-        {/if}
-
-	  <div style="font-size: 13px; color:#FF0000; position:absolute; top:105px; right: -65px; text-align: right; width: 120px" >Final {format("d")(InterventionTime+duration)}</div>
-	   </div>
-
-
-       <!-- <div style="width:150px; position:relative; top:-85px; height: 80px; padding-right: 15px; left: 0px; ;cursor:col-resize; background-color: white; position:absolute" >
-
-	</div> -->
-
-      </div>
-
-
-      <!-- Intervention Line slider -->
+      <!-- Medidas previas 
       <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
         <div style="
             position: absolute;
             top:-38px;
-            left:{xScaleTime(InterventionTime)}px;
-            visibility: {(xScaleTime(InterventionTime) < (width - padding.right)) ? 'visible':'hidden'};
+            left:{xScaleTime(IntervPrevia+retardo)}px;
+            visibility: {(xScaleTime(IntervPrevia+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: -111px" >
+              <div class="caption" align="right" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-right: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                Medidas <br>Previas (13/3)
+              </div>
+            </div>
+            <div style="flex: 0 0 10px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="left" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; padding: 5px 7px 7px 7px; ">      
+                 &nbsp;→
+              </div>
+            </div>
+
+          </div>
+      </div>-->
+      <!-- Cuarentena inicio -->
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="center" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                Cuarentena Social<br>
+                ←&nbsp;→
+              </div>
+            </div>
+          </div>
+      </div>
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(134)}px;
+            visibility: {(xScaleTime(50) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height}px">
+            <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
+              <div class="caption" align="left" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
+                CFR actual<br> (la anterior está fija)
+                ({CFR*100}%)→
+              </div>
+            </div>
+          </div>
+      </div>
+ 
+      <!-- Cuarentena final
+      <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+duration+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+duration+retardo) < (width - padding.right)) ? 'visible':'hidden'};
             width:2px;
             background-color:#FFF;
             border-right: 1px dashed black;
@@ -1030,69 +1121,13 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
             <div style="flex: 0 0 160px; flex-direction:row width:120px; position:relative; top:-125px; left: 1px" >
               <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:100px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
               <div style="pointer-events: all">
-                <!--<div class="slidertext" on:mousedown={lock_yaxis}>Disminución: {100*(InterventionAmt).toFixed(2)}%-->
-                <div class="slidertext" on:mousedown={lock_yaxis}>{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2))}
-                <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
-	        </div>
-                <div class="slidertext" on:mousedown={lock_yaxis}>Duración:{(duration).toFixed(0)} días
-                <input class="range" type=range bind:value={duration} min=0 max=60 step=1 on:mousedown={lock_yaxis}>
-                </div>
-                <div class="slidertext" on:mousedown={lock_yaxis}>Retardo:{(retardo).toFixed(0)} días
-                <input class="range" type=range bind:value={retardo} min=0 max=10 step=1 on:mousedown={lock_yaxis}>
-                </div>
+                Fin Cuarentena <br>
+                a los {duration} días→
                 </div>
               </div>
             </div>
           </div>
-      </div>
-
-<!-- 
-      {#if xScaleTime(InterventionTime+duration) < (width - padding.right)}
-        <div id="dottedline2" style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:105px; left:10px; pointer-events: none;">
-          <div style="
-              position: absolute;
-              top:-38px;
-              left:{xScaleTime(InterventionTime+duration)}px;
-              visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-              width:3px;
-              background-color:white;
-              border-right: 1px dashed black;
-              cursor:col-resize;
-              opacity: 0.3;
-              pointer-events: all;
-              height:{height+13}px">
-            <div style="position:absolute; opacity: 0.5; top:-10px; left:10px; width: 120px">
-            <span style="font-size: 13px">{@html math_inline("\\mathcal{R}_t=" + (R0*InterventionAmt).toFixed(2) )}</span> ⟶ 
-            </div>
-          </div>
-        </div>
-
-        <div style="position: absolute; width:{width+15}px; height: {height}px; position: absolute; top:120px; left:10px; pointer-events: none">
-          <div style="
-              opacity: 0.5;
-              position: absolute;
-              top:-38px;
-              left:{xScaleTime(InterventionTime+duration)}px;
-              visibility: {(xScaleTime(InterventionTime+duration) < (width - padding.right)) ? 'visible':'hidden'};
-              width:2px;
-              background-color:#FFF;
-              cursor:col-resize;
-              height:{height}px">
-              <div style="flex: 0 0 160px; width:200px; position:relative; top:-125px; left: 1px" >
-                <div class="caption" style="pointer-events: none; position: absolute; left:0; top:40px; width:150px; border-left: 2px solid #777; padding: 5px 7px 7px 7px; ">      
-                <div class="paneltext"  style="height:20px; text-align: right">
-                <div class="paneldesc">decrease transmission by<br></div>
-                </div>
-                <div style="pointer-events: all">
-                <div class="slidertext" on:mousedown={lock_yaxis}>{(InterventionAmt).toFixed(2)}</div>
-                <input class="range" type=range bind:value={InterventionAmt} min=0 max=1 step=0.01 on:mousedown={lock_yaxis}>
-                </div>
-                </div>
-              </div>
-            </div>
-        </div>
-      {/if} -->
-
+      </div> -->
 
       <div style="pointer-events: none;
                   position: absolute;
@@ -1110,9 +1145,9 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
             {/each}
       </div>
     
-     <div style="opacity:{xScaleTime(InterventionTime) >= 192? 1.0 : 0.2}">  -->
-      <div class="tick" style="color: #AAA; position:absolute; pointer-events:all; left:10px; top: 10px">
-        <Checkbox color="#CCC" bind:checked={log}/><div style="position: relative; top: 4px; left:20px">escala lineal</div>
+     <div style="opacity:{xScaleTime(InterventionTime) >= 550? 0.2 : 1.0}"> 
+      <div class="tick" style="color: #AAA; position:absolute; pointer-events:all; left:690px; top: 10px">
+        <Checkbox color="#CCC" bind:checked={log}/><div style="position: relative; top: 4px; left:20px">escala logarítmica</div>
      </div>
     </div>
 
@@ -1121,6 +1156,91 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
 </div>
 
 
+<div class="chart" style="display: flex; max-width: 1120px">
+  <div style="flex: 0 0 270px; width:270px;"> </div>
+  <div style="flex: 0 0 890px; width:890px; height: 200px; position:relative;">
+      <div style="position:relative; top:0px; left: 10px">
+        <Polys2 bind:checked={checked}
+             bind:active={active}
+             y = {R0func} 
+             y_max = {R0_max}
+             y_min = {R0_min}
+             x_max = 1500
+             x_min = {laststep}
+             xmax = {Xmax} 
+             total_infected = {total_infected} 
+             deaths = {deaths} 
+             total = {total} 
+             timestep={timestep}
+             tmax={tmax}
+             N={N}
+             ymax={r0max}
+             InterventionTime={InterventionTime}
+	           retardo={retardo}
+             colors={colors}
+             log={false}/>
+
+      </div>
+      <div id="xAxisDrag2"
+           style="pointer-events: all;
+                  position: absolute;
+                  top:{height2}px;
+                  left:{0}px;
+                  width:{780}px;
+                  background-color:#222;
+                  opacity: 0;
+                  height:25px;
+                  cursor:col-resize">
+      </div>
+
+      <!-- Medidas previas
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(IntervPrevia+retardo)}px;
+            visibility: {(xScaleTime(IntervPrevia+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+       
+          </div>
+      </div> -->
+      <!-- Cuarentena inicio -->
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+        </div>
+      </div>
+      <!-- Cuarentena final 
+      <div style="position: absolute; width:{width+15}px; height: {height2}px; position: absolute; top:40px; left:10px; pointer-events: none">
+        <div style="
+            position: absolute;
+            top:-38px;
+            left:{xScaleTime(InterventionTime+duration+retardo)}px;
+            visibility: {(xScaleTime(InterventionTime+duration+retardo) < (width - padding.right)) ? 'visible':'hidden'};
+            width:2px;
+            background-color:#FFF;
+            border-right: 1px dashed black;
+            cursor:col-resize;
+            height:{height2}px">
+          </div>
+      </div>-->
+
+      </div>
+
+  </div>
+
 <!-- <div style="height:220px;">
   <div class="minorTitle">
     <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Dinámica de transmisión</div>
@@ -1128,67 +1248,76 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
     <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
   </div>-->
   <p class = "center">
-    <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Dinámica de transmisión</div>
+  <div class="row">
+    <div style="flex: 0 0 20 width:948px" class="minorTitleColumn">Dinámica de transmisión</div>
+  </div>
   <div class="row">
     <div style="flex: 0 0 20; width:20px"></div>
 
     <div class="column">
-      <div class="paneltitle">Parámetros de Población</div>
-      <div class="paneldesc" style="height:30px">Tamaño poblacional.<br></div>
+      <div class="paneltitle" style="padding-top: 10px">Parámetros de Población</div>
+      <div class="paneldesc" style="height:26px">Tamaño poblacional</div>
       <div class="slidertext">{format(",")(Math.round(N))}</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={logN} min={5} max=25 step=0.01>
-      <input style="margin-bottom: 8px"type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales.<br></div>
-      <div class="slidertext">{I0}</div>
-      <input class="range" type=range bind:value={I0} min={1} max=100 step=1>
-      <input type=number bind:value={I0} min={1} max=100 step=1>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Número de expuestos iniciales.<br></div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={logN} min={5} max=25 step=0.01>
+      <input style="margin-bottom: 8px" type=integer bind:value={N} min={Math.exp(5)} max={Math.exp(25)} step=1.0>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px">Número de infecciones iniciales<br></div>
+      <div class="slidertext"style="padding-top: 15px">{I0}</div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={I0} min={1} max=100 step=1>
+      <input style="margin-bottom: 8px" type=number bind:value={I0} min={1} max=100 step=1>
+      <div class="paneldesc" style="height:20px; border-top: 1px solid #EEE; padding-top: 10px; margin-bottom: 8px">Número de expuestos iniciales<br></div>
       <div class="slidertext">{E0}</div>
       <input class="range" type=range bind:value={E0} min={1} max=100 step=1>
       <input type=number bind:value={E0} min={1} max=100 step=1>
     </div>
 
     <div class="column">
-      <div class="paneltitle">Ritmo reproductivo básico {@html math_inline("\\mathcal{R}_0")} </div>
-      <div class="paneldesc">Número promedio de casos nuevos que genera un individuo a lo largo de un período infeccioso. <br></div>
-      <div class="slidertext">{R0}</div>
-      <input class="range" type=range bind:value={R0} min=0.01 max=10 step=0.01> 
-      <input type=number bind:value={R0} min=0.01 max=10 step=0.01>
+      <div class="paneltitle" style="padding-top: 10px">Escenario futuro de propagacion {@html math_inline("\\mathcal{R}_t")} </div>
+      <div class="paneldesc"> Intervalo de confianza (zona sombreada)<br></div>
+      <div class="slidertext">Min({@html math_inline("\\mathcal{R}_t")})={R0_min}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0_min} min=0.01 max=10 step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0_min} min=0.01 max=10 step=0.01>
+      <div class="slidertext">Max({@html math_inline("\\mathcal{R}_t")})={R0_max}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0_max} min=0.01 max=10 step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0_max} min=0.01 max=10 step=0.01>
+ 
+      <div class="paneldesc"> Ritmo reproductivo medio<br></div>
+      <div class="slidertext">{@html math_inline("\\mathcal{R}_t")}={R0}</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={R0} min={R0_min} max={R0_max} step=0.01> 
+      <input style="margin-bottom: 8px" type=number bind:value={R0} min={R0_min} max={R0_max} step=0.01>
     </div>
-
 
     <div class="column">
-      <div class="paneltitle">Tiempos de Transmisión</div>
-      <div class="paneldesc" style="height:50px">Duración del periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
-      <div class="slidertext">{(D_incbation).toFixed(2)} días</div>
+      <div class="paneltitle" style="padding-top: 10px">Tiempos</div>
+      <div class="paneldesc">Periodo de incubación, {@html math_inline("T_{\\text{inc}}")}.<br></div>
+      <div class="slidertext" style="margin-bottom: 6px">{(D_incbation).toFixed(2)} días</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={D_incbation} min={0.15} max=24 step=0.0001>
       <input style="margin-bottom: 8px"type=number bind:value={D_incbation} min={0.15} max=24 step=0.0001>
-      <div class="paneldesc" style="height:50px; border-top: 1px solid #EEE; padding-top: 10px">Intervalo donde el paciente es infeccioso, {@html math_inline("T_{\\text{inf}}")}.<br></div>
+      <div class="paneldesc" style="height:28px; border-top: 1px solid #EEE; padding-top: 10px">Periodo infeccioso (desde inicio de síntomas), {@html math_inline("T_{\\text{inf}}")}.<br></div>
       <div class="slidertext">{D_infectious} días</div>
-      <input class="range" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
-      <input type=number bind:value={D_infectious} min={0} max=24 step=0.01>
+      <input class="range"style="margin-bottom: 8px" type=range bind:value={D_infectious} min={0} max=24 step=0.01>
+      <input style="margin-bottom: 8px"type=number bind:value={D_infectious} min={0} max=24 step=0.01>
     </div>
 
-   <div class="column">
-      <div class="paneltitle">{@html math_inline("\\mathcal{R}_0")} post-intervención </div>
-      <div class="paneldesc" style="height:30px">Tasa luego de la cuarentena </div>
-      <div class="slidertext">{R0p}</div>
-      <input class="range" type=range bind:value={R0p} min=0.01 max=10 step=0.01> 
-      <input type=number bind:value={R0p} min={0.01} max=10 step=0.01>
-    </div>
 </div>
 
   <p class = "center">
-    <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Dinámica Clínica</div>
+  <div class="row">
+    <div style="flex: 0 0 20 width:948px" class="minorTitleColumn">Dinámica Clínica</div>
+  </div>
   <div class="row">
    <div style="flex: 0 0 20; width:20px"></div> 
 
     <div class="column">
-      <div class="paneltitle">Estadística de Morbilidad</div>
-      <div class="paneldesc" style="height:30px">Tasa de mortandad.<br></div>
+      <div class="paneltitle"style="padding-top: 10px">Estadística de Morbilidad</div>
+      <div class="paneldesc" style="height:30px">CFR*100<br></div>
       <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
       <input style="margin-bottom: 8px" type=number bind:value={CFR} min={0} max=1 step=0.0001>
+     <!-- <div class="paneldesc" style="height:30px">Disminución de mortandad observada<br></div>
+      <div class="slidertext">{(DCFR*100).toFixed(2)} %</div>
+      <input class="range" style="margin-bottom: 8px" type=range bind:value={DCFR} min={0} max=1 step=0.0001>
+      <input style="margin-bottom: 8px" type=number bind:value={DCFR} min={0} max=1 step=0.01> -->
+
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo desde el final de la incubación a la muerte.<br></div>
       <div class="slidertext">{Time_to_death} días</div>
       <input class="range" type=range bind:value={Time_to_death} min={(D_infectious)+0.1} max=100 step=0.01>
@@ -1196,7 +1325,7 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
     </div>
 
     <div class="column">
-      <div class="paneltitle">Tiempos de Recuperación</div>
+      <div class="paneltitle"style="padding-top: 10px">Tiempos de Recuperación</div>
       <div class="paneldesc" style="height:30px">Duración de la estadía en el hospital<br></div>
       <div class="slidertext">{D_recovery_severe} días</div>
       <input class="range" style="margin-bottom: 8px" type=range bind:value={D_recovery_severe} min={0.1} max=100 step=0.01>
@@ -1208,12 +1337,12 @@ fetch('https://murmuring-wave-61022.herokuapp.com/seir', {
     </div>
 
     <div class="column">
-      <div class="paneltitle">Estadística hospitalaria</div>
-      <div class="paneldesc" style="height:30px">Tasa de hospitalización.<br></div>
+      <div class="paneltitle"style="padding-top: 10px">Estadística hospitalaria</div>
+      <div class="paneldesc" style="height:30px">Tasa de hospitalización (Rate).<br></div>
       <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>      
       <input style="margin-bottom: 8px"type=number bind:value={P_SEVERE} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo de hospitalización.<br></div>
+      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Tiempo hasta ser hospitalizado.<br></div>
       <div class="slidertext">{D_hospital_lag} días</div>
       <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01>
       <input type=number bind:value={D_hospital_lag} min={0.5} max=100 step=0.01/>
@@ -1241,50 +1370,58 @@ suplementaria como la tasa de mortalidad y la carga de atención médica.
 </p>
 <p class ="center"> Con respecto a la versión del Dr. Goh se añadieron nuevos varias mejoras, el
 código fuente es libre y puede descargarse desde el siguiente <a
-href="https://github.com/ivco19/epcalc"> repositorio GIT</a>. Algunas de las modificaciones son:</p>
+href="https://github.com/ivco19/epcalc"> repositorio GIT</a>, el Dr. Dante Paz del IATE-OAC es el principal manteiner. Algunas de las modificaciones son:</p>
 <p class ="center">- Definir la duración de la cuarentena 
 </p>
-<p class ="center">- Controlar el ritmo reproductivo durante y a la salida de la cuarentena.
+<p class ="center">- Controlar el ritmo reproductivo en función del tiempo.
 </p>
 <p class ="center">- Debido a que la detección de nuevos casos es un procedimiento que puede tardar varios
 días, se añadió un tiempo de retardo para modelar la demora del efecto que tiene la cuarentena
 en el número de casos activos (ver figura 1 en <a
-href="https://jamanetwork.com/journals/jama/fullarticle/2762130">Wu y McGoogan</a>). Si dispusieramos en los datos oficiales del día cuando se desarrollaron los
+href="https://jamanetwork.com/journals/jama/fullarticle/2762130">Wu y McGoogan</a>). En la última versión
+de la calculadora este tiempo de retardo no es necesario gracias a que se utiliza como datos la fecha
+de inicio de sintomas. Se añadió en forma de puntos los casos activos y las muertes de COVID-20 en la provincia, para permitir
+visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
+<!--Si dispusieramos en los datos oficiales del día cuando se desarrollaron los
 síntomas de cada caso ésta traslación del eje temporal no sería necesaria. Debido a esto la
 serie temporal de fallecidos se encuentra desplazada en el mismo intervalo de tiempo (ya que los
-fallecidos se supone que no tienen demora en ser informados).
+fallecidos se supone que no tienen demora en ser informados).-->
 </p>
 
-<p class ="center">- Se añadió en forma de puntos los casos activos y las muertes de COVID-19 en Argentina, para permitir
-visualizar con la applet como la variación de parámetros impacta en el ajuste de los mismos.
-Los datos se cargan automáticamente de un repositorio digital que se genera a partir del parseo de los informes oficiales de la nación.
-El código fuente del software que genera el repositorio y las librerias para maniuplación de los datos en
-python se encuentra en este <a href="https://github.com/ivco19/libs">repositorio</a>
-Los datos poseen el siguiente DOI:
+<p class ="center"> En los parámetros por defecto se ajustó la curva de casos a
+partir del día 5, ya que como muchos notaron a partir de ese momento empieza a
+evidenciarse el comportamiento exponencial.  Encontré que no solo debía ajustar
+el número reporductivo básico R, si no que además era necesiario asumir un
+número de casos expuestos mayor a los casos infectados de ese día, lo cual es
+razonable, ya que uno espera que antes de presentar síntomas o de ser detectado
+el caso, éste pueda exponer a más personas. Los valores históricos de numero
+reproductivo medio se han ido corrigiendo y ajustando en intervalos mínimos de
+7 días para producir un ajuste en el número de casos. La Dra. Maria del Pilar
+Díaz (Universidad Nacional de Córdoba), nos provee de los ajustes del numero
+reproductivo medio para los últimos 7 días en la serie temporal de datos junto
+con el intervalo de confianza correspondiente al 95% de nivel de confidencia.
+Con una área sombreada representamos la varianza esperada de las predicciones
+del modelo dado este intervalo de confianza, no obstante estas proyecciones no
+deben extrapolarse mas allá de unos pocos días, ya que debido a la dinámica que
+ha demostrado la epidemia en Córdoba y en el país, la ocurrencia de brotes y
+las medidas de cuarentena las predicciones de evolución de contagios del modelo
+SEIR son mas bien inestables. Pode obtenerse una idea de esto al mirar las
+fluctuaciónes históricas que presentan los ajustes al parámetro R con el tiempo
+(ver gráfico del panel inferior).</p>
 
-Luczywo, N. A., Daza, V., Koraj, M., Dominguez, M., Lares, M., Paz, D. J., Quiroga, R., Rios, M. E. D. L., Sánchez, B. O., Stasyszyn, F., & Cabral, J. B. (2020). Infecciones de COVID-19 en Argentina. Unpublished. 
-<a href="https://doi.org/10.13140/RG.2.2.22519.78246">https://doi.org/10.13140/RG.2.2.22519.78246</a>
-</p>
-
-<p class ="center">- En los parámetros por default se ajustó la curva de casos a partir del día 5, ya que como muchos
-ya notaron a partir de ese momento empieza a evidenciarse el comportamiento exponencial.
-Encontré que no solo debía ajustar el parámetro R0, si no que además era necesiario asumir
-un número de casos expuestos mayor a los 9 casos infectados de ese día, lo cual es razonable,
-ya que uno espera que antes de presentar síntomas o de ser detectado el caso, éste pueda exponer
-a más personas. 
-</p>
-
-<p class ="center">
-Gracias a la generosidad de Exequiel Aguirre de la Unidad de Emergencias y Alertas Tempranas de
-CONAE, se añadió la facilidad de poder descargar los datos del modelo implementado en java script a un archivo csv, que facilita 
-su manipulacion en planillas de cálculo. Los resultados este modelo tienen un error relativo
-por debajo del 1%. Gracias al proyecto <a href="https://github.com/ivco19/epyRba">EPyRBa pudimos</a> implementar una versión en R del modelo que permite
-descargar en archivo csv con una precisión mayor al 0.0000001%. El desarrollo de esta
-calculadora no hubiese sido posible sin los aportes significativos de Juan Cabral, Rodrigo Quiroga,
-y todo el equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial agradecemos el
-apoyo y asesoría de Mario Lamfri. Este proyecto público da soporte a una versión desarrollada para
-el Ministerio de Salud de la Provincia de Córdoba.
-</p>
+<p class ="center"> Gracias a la generosidad de Exequiel Aguirre de la Unidad
+de Emergencias y Alertas Tempranas de CONAE, se añadió la facilidad de poder
+descargar los datos del modelo implementado en java script a un archivo csv,
+que facilita su manipulacion en planillas de cálculo. Los resultados este
+modelo tienen un error relativo por debajo del 1%. Gracias al proyecto <a
+href="https://github.com/ivco19/epyRba">EPyRBa</a> pudimos implementar una
+versión en R del modelo que permite descargar en archivo csv con una precisión
+mayor al 0.000001%. El desarrollo de esta calculadora no hubiese sido posible
+sin los aportes significativos de Juan Cabral, Rodrigo Quiroga, y todo el
+equipo de <a href="https://github.com/ivco19">Arcovid19</a>. En especial
+agradecemos el apoyo y asesoría de Mario Lamfri. Este proyecto público da
+soporte a una versión desarrollada para el Ministerio de Salud de la Provincia
+de Córdoba.  </p>
 
 
 
@@ -1305,7 +1442,7 @@ A continuación se presenta una muestra de estimaciones de parámetros epidémic
     <th></th>
     <th>Lugar</th>
     <th>Ritmo reproductivo<br> {@html math_inline("\\mathcal{R}_0")}</th>
-    <th>Periodo de incubacion<br> {@html math_inline("T_{\\text{inc}}")} (días)</th>
+    <th>Periodo de incubación<br> {@html math_inline("T_{\\text{inc}}")} (días)</th>
     <th>Periodo infeccioso<br> {@html math_inline("T_{\\text{inf}}")} (días)</th>
   </tr>
   <tr>
@@ -1408,6 +1545,16 @@ hospitalizados pero sobreviven) y <i>fatales</i> (pacientes que son internados y
 Cada una de estas variables sigue su propia trayectoria hasta el resultado final, y la suma de estos compartimentos
 se suman a los valores predichos por SEIR. Tenga en cuenta que suponemos, por simplicidad, que todas las muertes 
 provienen de hospitales, y que todos los casos fatales son ingresados en hospitales inmediatamente después del período infeccioso.
+</p>
+
+<p class= "center">
+ESTE SOFTWARE (C&Oacute;DIGO FUENTE, BINARIOS E INTERFACE WEB) SE SUMINISTRA POR EL PROYECTO ARCOVID19 Y SUS INTEGRANTES “COMO EST&Aacute;” Y CUALQUIER GARANT&Iacute;AS EXPRESA 
+O IMPL&Iacute;CITA, INCLUYENDO, PERO NO LIMITADO A, LAS GARANT&Iacute;AS IMPL&Iacute;CITAS DE COMERCIALIZACI&Oacute;N Y APTITUD PARA UN PROP&Oacute;SITO PARTICULAR SON RECHAZADAS.
+EN NING&Uacute;N CASO LOS INTEGRANTES DE ARCOVID19 SER&Aacute;N RESPONSABLES POR NINGÚN DA&Ntilde;O DIRECTO, INDIRECTO, INCIDENTAL, ESPECIAL, EJEMPLAR O COSECUENCIAL 
+(INCLUYENDO, PERO NO LIMITADO A, LA ADQUISICI&Oacute;N O SUSTITUCI&Oacute;N DE BIENES O SERVICIOS; 
+LA P&Eacute;RDIDA DE USO, DE DATOS O DE BENEFICIOS; O INTERRUPCI&Oacute;N DE LA ACTIVIDAD EMPRESARIAL) O POR CUALQUIER TEOR&Iacute;A DE RESPONSABILIDAD, YA SEA POR CONTRATO, 
+RESPONSABILIDAD ESTRICTA O AGRAVIO (INCLUYENDO NEGLIGENCIA O CUALQUIER OTRA CAUSA) QUE SURJA DE CUALQUIER MANERA DEL USO DE ESTE SOFTWARE, 
+INCLUSO SI SE HA ADVERTIDO DE LA POSIBILIDAD DE TALES DA&Ntilde;OS.
 </p>
 
 <!-- Input data -->
