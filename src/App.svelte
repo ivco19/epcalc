@@ -65,16 +65,16 @@
   $: N                 = Math.exp(logN)
   $: I0                = 4
   $: E0                = 55
-  $: R0                = 1.65 //1.32 // 1.5 // 1.19 //1.39 //1.39 //1.71
-  $: R0_min            = 1.45 //1.16 // 1.08 //1.12  //1.10 //1.2
-  $: R0_max            = 1.7  //1.47 // 1.45 //1.73  //1.66 //2.19
+  $: R0                = 1.75 //1.55 //1.65 //1.32 // 1.5 // 1.19 //1.39 //1.39 //1.71
+  $: R0_min            = 1.75 // 1.4 //1.16 // 1.08 //1.12  //1.10 //1.2
+  $: R0_max            = 1.75  //1.47 // 1.45 //1.73  //1.66 //2.19
   $: D_incbation       = 6    // 5.2442
   $: D_infectious      = 3.35 //2.5  // 4 //2.9
   $: D_recovery_mild   = 10.0 //(8 - 2.9)
-  $: D_recovery_severe = 15.6 //24  //(13 - 2.9)
-  $: D_hospital_lag    = 4.38 //3
+  $: D_recovery_severe = 13 //15.6 //24  //(13 - 2.9)
+  $: D_hospital_lag    = 5//4.38 //3
   $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.003 //0.004 //0.003
+  $: CFR               = 0.0037 //0.004 //0.003
   $: DCFR               = 1.0
 //  $: InterventionTime  = 19
   $: InterventionTime  = 8
@@ -86,24 +86,19 @@
   $: P_SEVERE          = 0.03 //0.2 (263 hospitalizados / 6310 casos activos)
   $: duration          = 70
   $: interpolation_steps  = 40
-  $: laststep = 197 // 185 //158 //112
+  $: laststep = 240 //220 //197 // 185 //158 //112
   $: R0s = {
-    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0],// infeccioso 3.35 
-    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
-    //  values: [2.77,1.3,1.16,1.16,1.5,   1.5,1.5, R0],
-    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,1.55,1.6,R0],// infeccioso 3.35 
+    dias: [0,  13, 35,  98, 112, 125,158,185,197,220,laststep,1500]
   }
   $: max_R0s = {
-    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0_max],// infeccioso 3.35 
-    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_max],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
-    //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_max],
-    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,1.55,1.6,R0_max],// infeccioso 3.35 
+    dias: [0,  13, 35,  98, 112, 125,158,185,197,220,laststep,1500]
   }
   $: min_R0s = {
-    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,R0_min],// infeccioso 3.35 
-    //values: [2.77,1.3,1.09,1.16, 1.47,1.47,1.39,1.65,R0_min],//con los tiempos anteriores de incubacion e infecciosos de 2.9 y 5.1
+    values: [2.77,1.3,1.16,1.12,1.47, 1.47,1.39, 1.65,1.55,1.6,R0_min],// infeccioso 3.35 
     //values: [2.77,1.3,1.16,1.16,1.5, 1.5,1.5, R0_min],
-    dias: [0,  13, 35,  98, 112, 125,158,185,laststep,1500]
+    dias: [0,  13, 35,  98, 112, 125,158,185,197,220,laststep,1500]
   }
   $: fecha = ["14/3/20","26/8/20"]
   $: lastdata = 165;
